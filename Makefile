@@ -1,9 +1,9 @@
-default: run-macos
+default: macos
 
-run-macos:
+macos:
 	(sleep 1 && open http://localhost:731/index.html) & (cd claycode && python3 -m http.server 731)
 
-run-linux:
+linux:
 	cd claycode && sudo python -m SimpleHTTPServer 731 &
 	sleep 1
 	xdg-open http://localhost:731/index.html
