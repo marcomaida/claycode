@@ -1,0 +1,108 @@
+input {
+    background-color:rgba(0, 0, 0, 0);
+    color:white;
+    border: none;
+    outline:none;
+    font-size: 40pt;
+    text-align: center;
+    width: auto;
+    height: auto;
+    transition:height 1s;
+    -webkit-transition:height 1s;
+    font-family: Helvetica, sans-serif;
+}
+
+html, body {
+    background-color:#000000;
+    margin: 0;
+    height: 100%;
+}
+
+h1 {
+    font-family: Helvetica, sans-serif;
+    font-size: 26pt;
+    margin-left: 12%;
+    background-color:rgba(0, 0, 0, 0);
+    color:white;
+}
+
+.questionmark {
+    font-family: Helvetica, sans-serif;
+    margin-left: 91%;
+    margin-top: 2.8%;
+}
+
+a {
+    text-decoration: none;
+    color:white;
+}
+
+/* Landing page */
+
+.about {
+    font-family: Helvetica, sans-serif;
+    font-size: 13pt;
+    margin-top: 6%;
+    margin-left: 25%;
+    margin-right: 25%;
+    color:white;
+}
+
+.clip-circle {
+    width: 100%;
+    clip-path: circle(40%);
+}
+
+.clip-circle-small {
+    width: 15%;
+    clip-path: circle(40%);
+}
+
+.gimage {
+    grid-area: image;
+}
+
+.gheader { grid-area: header;
+    font-size: 14pt;
+    text-align: left;
+}
+
+.gdesc { grid-area: desc;
+    margin-left: 7pt;
+    font-size: 12pt;
+    text-align: left;
+    vertical-align: center;
+    height: 100%;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'header header'
+        'image desc';
+    grid-template-columns: 90px auto auto;
+    grid-template-rows: auto auto auto;
+    margin-top: 10pt;
+    margin-left: 10pt;
+}
+
+.grid-container-simple {
+    display: grid;
+    grid-gap: 1px 1px;
+    grid-template-areas:
+        'image header';
+    grid-template-columns: 90px auto;
+    margin-top: 10pt;
+    margin-left: 10pt;
+}
+
+.small_text {
+    font-size: 11pt;
+    font-style: italic;
+    text-align: left;
+}
+
+.inline-text {
+    max-width:15pt;
+    max-height:15pt;
+}

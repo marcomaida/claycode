@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://pixijs.download/release/pixi.min.js"></script>
+  <!-- <script src="http://localhost:731/pixi.mini.js"></script>  -->
+  <script type="module" src="scenes.js"></script>
+</head>
+
+<body>
+  <div id="canvasDiv" style="z-index:1;position: absolute;"></div>
+  <div id="headerDiv" style="z-index:2;position: absolute;">
+    <a href="index.html">
+      <div class="grid-container-simple">
+        <div class="gimage"> <img src='/images/claycode.png' class='clip-circle'> </div>
+        <div class="gheader">
+          <h1>Claycode.</h1>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="questionmark" id="creditsDiv" style="z-index:2;position: absolute;">
+    <a href="about.html">
+      <img src='/images/questionmark.png' width="40" height="40">
+    </a>
+  </div>
+  <div id="footerDiv" style="z-index:2;position: absolute; bottom:0%;left:50%;
+                               transform: translate(-50%, -50%);" align="center" vertical_align="bottom">
+    <input type="text" id="inputText" name="inputText" maxlength="16" value="" placeholder="> write here <">
+  </div>
+</body>
+
+</html>
