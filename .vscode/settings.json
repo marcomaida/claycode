@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "**/*.log": true,
+        "**/*.out": true,
+        "**/*.run.xml": true
+    }
+}
