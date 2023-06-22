@@ -98,19 +98,27 @@ function updateCode() {
     const window_height = window.innerHeight
 
     const shorter = Math.min(window_width, window_height)
-    const bar_width = shorter / 1.5
-    const bar_height = shorter / 1.5
+    var bar_width = shorter / 2
+    var bar_height = shorter / 2
 
     const bar_left = window_width / 2 - bar_width / 2
-    const bar_top = window_height / 2 - bar_height / 2
+    var bar_top = window_height / 2 - bar_height / 1.2
 
-    var bar_frame = [new PIXI.Vector(bar_left, bar_top),
-    new PIXI.Vector(bar_left + bar_width, bar_top),
-    new PIXI.Vector(bar_left + bar_width, bar_top + bar_height),
-    new PIXI.Vector(bar_left, bar_top + bar_height)]
+    const code_frame_square = [new PIXI.Vector(bar_left, bar_top),
+        new PIXI.Vector(bar_left + bar_width, bar_top),
+        new PIXI.Vector(bar_left + bar_width, bar_top + bar_height),
+        new PIXI.Vector(bar_left, bar_top + bar_height)]
 
-    clearDebug()
-    drawTree(current_tree.root, bar_frame, WHITE)
+    bar_top += bar_height+15
+    bar_height /= 2.5
+
+    const code_frame_rect = [new PIXI.Vector(bar_left, bar_top),
+        new PIXI.Vector(bar_left + bar_width, bar_top),
+        new PIXI.Vector(bar_left + bar_width, bar_top + bar_height),
+        new PIXI.Vector(bar_left, bar_top + bar_height)]
+
+    drawTree(current_tree.root, code_frame_square, WHITE)
+    drawTree(current_tree.root, code_frame_rect, WHITE)
 }
 
 inputTextBox.addEventListener('input', updateCode)
