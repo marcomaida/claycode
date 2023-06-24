@@ -1,23 +1,4 @@
-import { } from "../geometry/vector.js"
-import { } from "../geometry/math.js"
-import { clearDebug, drawDebugPolygon, initDebug } from "../drawing/debug.js"
-import { bitsToTree } from "../conversion/converter.js"
-import { BitStreamText } from "../conversion/bit_stream.js"
-
-const app = new PIXI.Application({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    resolution: 1
-})
-initDebug(app)
-
-const canvasDiv = document.getElementById("canvasDiv")
-
-const inputTextBox = document.getElementById("inputText")
-inputTextBox.select()
-inputTextBox.focus()
-
-document.body.appendChild(app.view)
+import { drawRoundedDebugRect } from "../drawing/debug.js"
 
 const BLACK = 0x000000
 const WHITE = 0xFFFFFF
@@ -29,14 +10,18 @@ function inverse_color(color) {
         return WHITE
 }
 
-function drawTree(node, bar_frame, color) {
-    drawDebugPolygon(bar_frame, color)
-
-    if (node.isLeaf()) return;
-
+export function drawClaycode(node, bar_frame, color=WHITE) {
     /* Bar is expected in the form [top_left, top_right, bottom_right, bottom_left] */
     const bar_width = bar_frame[1].x - bar_frame[0].x
     const bar_height = bar_frame[3].y - bar_frame[0].y
+
+    const shorter = Math.min(bar_width,bar_height)
+    const round = Math.min(shorter/5, 15)
+
+    drawRoundedDebugRect(bar_frame[0].x, bar_frame[0].y, bar_width, bar_height, round, color)
+
+    if (node.isLeaf()) return;
+
 
     /* A node should take exactly as much horizontal and vertical space as 1/numDescendants */
     const parent_rel_space = (1 / node.numDescendants) ** (0.65)
@@ -60,7 +45,7 @@ function drawTree(node, bar_frame, color) {
                 top_left.clone().add(new PIXI.Vector(0, child_height))
             ]
 
-            drawTree(c, child_frame, inverse_color(color))
+            drawClaycode(c, child_frame, inverse_color(color))
             top_left.add(new PIXI.Vector(child_width + inter_margin, 0))
         }
     }
@@ -82,45 +67,8 @@ function drawTree(node, bar_frame, color) {
                 top_left.clone().add(new PIXI.Vector(0, child_height))
             ]
 
-            drawTree(c, child_frame, inverse_color(color))
+            drawClaycode(c, child_frame, inverse_color(color))
             top_left.add(new PIXI.Vector(0, child_height + inter_margin))
         }
     }
 }
-
-
-function updateCode() {
-    var inputText = document.getElementById("inputText").value
-    var stream = new BitStreamText(inputText)
-    let current_tree = bitsToTree(stream)
-
-    const window_width = window.innerWidth
-    const window_height = window.innerHeight
-
-    const shorter = Math.min(window_width, window_height)
-    var bar_width = shorter / 2
-    var bar_height = shorter / 2
-
-    const bar_left = window_width / 2 - bar_width / 2
-    var bar_top = window_height / 2 - bar_height / 1.2
-
-    const code_frame_square = [new PIXI.Vector(bar_left, bar_top),
-        new PIXI.Vector(bar_left + bar_width, bar_top),
-        new PIXI.Vector(bar_left + bar_width, bar_top + bar_height),
-        new PIXI.Vector(bar_left, bar_top + bar_height)]
-
-    bar_top += bar_height+15
-    bar_height /= 2.5
-
-    const code_frame_rect = [new PIXI.Vector(bar_left, bar_top),
-        new PIXI.Vector(bar_left + bar_width, bar_top),
-        new PIXI.Vector(bar_left + bar_width, bar_top + bar_height),
-        new PIXI.Vector(bar_left, bar_top + bar_height)]
-
-    drawTree(current_tree.root, code_frame_square, WHITE)
-    drawTree(current_tree.root, code_frame_rect, WHITE)
-}
-
-inputTextBox.addEventListener('input', updateCode)
-
-updateCode()

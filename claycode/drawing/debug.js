@@ -19,6 +19,12 @@ export function drawDebugPolygon(points, color = DEBUG_COLOR) {
     graphics.endFill();
 }
 
+export function drawRoundedDebugRect(x, y, width, height, radius=3, color = DEBUG_COLOR) {
+    graphics.beginFill(color);
+    graphics.drawRoundedRect(x, y, width, height, radius)
+    graphics.endFill();
+}
+
 export function drawDebugRegularPolygon(center, radius, sides, color = DEBUG_COLOR) {
     var points = []
     for (var i = 0; i < sides; i++) {
