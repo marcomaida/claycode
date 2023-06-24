@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spinning Coin with Texture</title>
+  <style>
+    body {
+      background-image: url('background.jpg');
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .coin {
+      width: 300px;
+      height: 300px;
+      position: relative;
+      animation: spin 10s infinite linear;
+      background-image: url('codecut.png');
+      background-size: cover;
+    }
+
+    .coin:before {
+      transform: translateX(120%);
+    }
+
+    .coin:after {
+      transform: translateX(-120%);
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotateY(0deg);
+      }
+      100% {
+        transform: rotateY(1turn);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="coin"></div>
+</body>
+</html>
