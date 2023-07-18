@@ -29,7 +29,7 @@ export function drawDebugRegularPolygon(center, radius, sides, color = DEBUG_COL
     var points = []
     for (var i = 0; i < sides; i++) {
         const angle = i / sides * 2 * Math.PI
-        var p = new PIXI.Vector(Math.cos(angle), Math.sin(angle))
+        var p = new PIXI.Vec(Math.cos(angle), Math.sin(angle))
         p.multiplyScalar(radius)
         p.add(center)
         points.push(p)

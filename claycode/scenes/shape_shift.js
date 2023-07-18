@@ -42,10 +42,10 @@ function updateDrawing() {
     const bar_left = window.innerWidth / 2 - bar_width / 2
     var bar_top = window.innerHeight / 2 - bar_height / 2
 
-    const code_frame_square = [new PIXI.Vector(bar_left, bar_top),
-        new PIXI.Vector(bar_left + bar_width, bar_top),
-        new PIXI.Vector(bar_left + bar_width, bar_top + bar_height),
-        new PIXI.Vector(bar_left, bar_top + bar_height)]
+    const code_frame_square = [new PIXI.Vec(bar_left, bar_top),
+        new PIXI.Vec(bar_left + bar_width, bar_top),
+        new PIXI.Vec(bar_left + bar_width, bar_top + bar_height),
+        new PIXI.Vec(bar_left, bar_top + bar_height)]
 
     clearDebug();
     drawClaycode(current_tree.root, code_frame_square)

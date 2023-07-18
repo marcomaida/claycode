@@ -20,11 +20,11 @@ export function rectangleMesh(from, to, thickness) {
 }
 
 export function circlePolygon(center, radius, numSegments) {
-    const circle = Array(numSegments).fill(new PIXI.Vector(0,0))
+    const circle = Array(numSegments).fill(new PIXI.Vec(0,0))
 
     for (var i = 0; i < numSegments; i ++) {
         const angle = i / numSegments * 2 * Math.PI
-        circle[i] = new PIXI.Vector(Math.cos(angle)*radius,
+        circle[i] = new PIXI.Vec(Math.cos(angle)*radius,
                                     Math.sin(angle)*radius)
         circle[i].add(center)
     }
@@ -95,7 +95,7 @@ export function doPolygonsIntersect (a, b) {
 };
 
 export function centroid(polygon) {
-    const centroid = new PIXI.Vector(0,0)
+    const centroid = new PIXI.Vec(0,0)
 
     for (const point of polygon)
         centroid.add(point)

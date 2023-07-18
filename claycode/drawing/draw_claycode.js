@@ -32,7 +32,7 @@ export function drawClaycode(node, bar_frame, color=WHITE) {
         const inter_margin = parent_rel_space * bar_width / (1 + node.children.length) // num of vertical bars
         const side_margin = parent_rel_space * bar_height / 2 // There are always two side margins
 
-        let top_left = bar_frame[0].clone().add(new PIXI.Vector(inter_margin, side_margin))
+        let top_left = bar_frame[0].clone().add(new PIXI.Vec(inter_margin, side_margin))
 
         for (let c of node.children) {
             const child_weight = c.numDescendants / (node.numDescendants - 1)
@@ -40,13 +40,13 @@ export function drawClaycode(node, bar_frame, color=WHITE) {
             const child_height = bar_height * (1. - parent_rel_space)
             var child_frame = [
                 top_left.clone(),
-                top_left.clone().add(new PIXI.Vector(child_width, 0)),
-                top_left.clone().add(new PIXI.Vector(child_width, child_height)),
-                top_left.clone().add(new PIXI.Vector(0, child_height))
+                top_left.clone().add(new PIXI.Vec(child_width, 0)),
+                top_left.clone().add(new PIXI.Vec(child_width, child_height)),
+                top_left.clone().add(new PIXI.Vec(0, child_height))
             ]
 
             drawClaycode(c, child_frame, inverse_color(color))
-            top_left.add(new PIXI.Vector(child_width + inter_margin, 0))
+            top_left.add(new PIXI.Vec(child_width + inter_margin, 0))
         }
     }
     else {
@@ -54,7 +54,7 @@ export function drawClaycode(node, bar_frame, color=WHITE) {
         const side_margin = parent_rel_space * bar_width / 2 // There are always two side margins
         const inter_margin = parent_rel_space * bar_height / (1 + node.children.length) // num of horizontal bars
 
-        let top_left = bar_frame[0].clone().add(new PIXI.Vector(side_margin, inter_margin))
+        let top_left = bar_frame[0].clone().add(new PIXI.Vec(side_margin, inter_margin))
 
         for (let c of node.children) {
             const child_weight = c.numDescendants / (node.numDescendants - 1)
@@ -62,13 +62,13 @@ export function drawClaycode(node, bar_frame, color=WHITE) {
             const child_width = bar_width * (1. - parent_rel_space)
             var child_frame = [
                 top_left.clone(),
-                top_left.clone().add(new PIXI.Vector(child_width, 0)),
-                top_left.clone().add(new PIXI.Vector(child_width, child_height)),
-                top_left.clone().add(new PIXI.Vector(0, child_height))
+                top_left.clone().add(new PIXI.Vec(child_width, 0)),
+                top_left.clone().add(new PIXI.Vec(child_width, child_height)),
+                top_left.clone().add(new PIXI.Vec(0, child_height))
             ]
 
             drawClaycode(c, child_frame, inverse_color(color))
-            top_left.add(new PIXI.Vector(0, child_height + inter_margin))
+            top_left.add(new PIXI.Vec(0, child_height + inter_margin))
         }
     }
 }

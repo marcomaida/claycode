@@ -4,7 +4,7 @@
  * @param x {Number} position of the point
  * @param y {Number} position of the point
  */
-PIXI.Vector = function(x, y)
+PIXI.Vec = function(x, y)
 {
     /**
      * @property x 
@@ -27,36 +27,36 @@ PIXI.Vector = function(x, y)
  * @method clone
  * @return {Vector} a copy of the point
  */
-PIXI.Vector.prototype.clone = function()
+PIXI.Vec.prototype.clone = function()
 {
-    return new PIXI.Vector(this.x, this.y);
+    return new PIXI.Vec(this.x, this.y);
 };
 
-PIXI.Vector.prototype.add = function(v) {
+PIXI.Vec.prototype.add = function(v) {
     this.x += v.x;
     this.y += v.y;
     return this;
 };
 
-PIXI.Vector.prototype.sub = function(v) {
+PIXI.Vec.prototype.sub = function(v) {
     this.x -= v.x;
     this.y -= v.y;
     return this;
 };
 
-PIXI.Vector.prototype.invert = function(v) {
+PIXI.Vec.prototype.invert = function(v) {
     this.x *= -1;
     this.y *= -1;
     return this;
 };
 
-PIXI.Vector.prototype.multiplyScalar = function(s) {
+PIXI.Vec.prototype.multiplyScalar = function(s) {
     this.x *= s;
     this.y *= s;
     return this;
 };
 
-PIXI.Vector.prototype.divideScalar = function(s) {
+PIXI.Vec.prototype.divideScalar = function(s) {
     if(s === 0) {
         this.x = 0;
         this.y = 0;
@@ -68,48 +68,48 @@ PIXI.Vector.prototype.divideScalar = function(s) {
     return this;
 };
 
-PIXI.Vector.prototype.dot = function(v) {
+PIXI.Vec.prototype.dot = function(v) {
     return this.x * v.x + this.y * v.y;
 };
 
-PIXI.Vector.prototype.length = function(v) {
+PIXI.Vec.prototype.length = function(v) {
     return Math.sqrt(this.x * this.x + this.y * this.y);
 };
 
-PIXI.Vector.prototype.lengthSq = function() {
+PIXI.Vec.prototype.lengthSq = function() {
     return this.x * this.x + this.y * this.y;
 };
 
-PIXI.Vector.prototype.normalize = function() {
+PIXI.Vec.prototype.normalize = function() {
     return this.divideScalar(this.length());
 };
 
-PIXI.Vector.prototype.distanceTo = function(v) {
+PIXI.Vec.prototype.distanceTo = function(v) {
     return Math.sqrt(this.distanceToSq(v));
 };
 
-PIXI.Vector.prototype.distanceToSq = function(v) {
+PIXI.Vec.prototype.distanceToSq = function(v) {
     var dx = this.x - v.x, dy = this.y - v.y;
     return dx * dx + dy * dy;
 };
 
-PIXI.Vector.prototype.set = function(x, y) {
+PIXI.Vec.prototype.set = function(x, y) {
     this.x = x;
     this.y = y;
     return this;
 };
 
-PIXI.Vector.prototype.setX = function(x) {
+PIXI.Vec.prototype.setX = function(x) {
     this.x = x;
     return this;
 };
 
-PIXI.Vector.prototype.setY = function(y) {
+PIXI.Vec.prototype.setY = function(y) {
     this.y = y;
     return this;
 };
 
-PIXI.Vector.prototype.setLength = function(l) {
+PIXI.Vec.prototype.setLength = function(l) {
     var oldLength = this.length();
     if(oldLength !== 0 && l !== oldLength) {
         this.multiplyScalar(l / oldLength);
@@ -117,38 +117,38 @@ PIXI.Vector.prototype.setLength = function(l) {
     return this;
 };
 
-PIXI.Vector.prototype.invert = function(v) {
+PIXI.Vec.prototype.invert = function(v) {
     this.x *= -1;
     this.y *= -1;
     return this;
 };
 
-PIXI.Vector.prototype.lerp = function(v, alpha) {
+PIXI.Vec.prototype.lerp = function(v, alpha) {
     this.x += (v.x - this.x) * alpha;
     this.y += (v.y - this.y) * alpha;
     return this;
 };
 
-PIXI.Vector.prototype.rad = function() {
+PIXI.Vec.prototype.rad = function() {
     return Math.atan2(this.y, this.x);
 };
 
-PIXI.Vector.prototype.deg = function() {
+PIXI.Vec.prototype.deg = function() {
     return this.rad() * 180 / Math.PI;
 };
 
-PIXI.Vector.prototype.equals = function(v) {
+PIXI.Vec.prototype.equals = function(v) {
     return this.x === v.x && this.y === v.y;
 };
 
-PIXI.Vector.prototype.rotate = function(theta) {
+PIXI.Vec.prototype.rotate = function(theta) {
     var xtemp = this.x;
     this.x = this.x * Math.cos(theta) - this.y * Math.sin(theta);
     this.y = xtemp * Math.sin(theta) + this.y * Math.cos(theta);
     return this;
 };
 
-PIXI.Vector.prototype.angle = function(v) {
+PIXI.Vec.prototype.angle = function(v) {
     var a1 = this.rad()
     var a2 = v.rad()
     var sign = a1 > a2 ? 1 : -1;
@@ -157,11 +157,11 @@ PIXI.Vector.prototype.angle = function(v) {
     return (Math.abs(K + angle) < Math.abs(angle))? K + angle : angle;
 }
 
-PIXI.Vector.prototype.angleRelativeTo = function(v, center) {
+PIXI.Vec.prototype.angleRelativeTo = function(v, center) {
     return this.clone().sub(center).angle(v.clone().sub(center))
 }
 
-PIXI.Vector.prototype.perpendicular = function(clockwise) {
+PIXI.Vec.prototype.perpendicular = function(clockwise) {
     var xtemp = this.x;
     if (clockwise) {
         this.x = this.y 
