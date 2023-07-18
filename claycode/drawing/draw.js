@@ -1,31 +1,31 @@
 let graphics = null
-const DEBUG_COLOR = 0x22AA22
+const DEFAULT_COLOR = 0x22AA22
 
 export function initDebug(app) {
     graphics = new PIXI.Graphics();
     app.stage.addChild(graphics);
 }
 
-export function drawDebugCircle(center, radius, color = DEBUG_COLOR) {
+export function drawCircle(center, radius, color = DEFAULT_COLOR) {
     graphics.beginFill(color);
     graphics.drawCircle(center.x, center.y, radius);
     graphics.endFill();
 }
 
-export function drawDebugPolygon(points, color = DEBUG_COLOR) {
+export function drawPolygon(points, color = DEFAULT_COLOR) {
     graphics.beginFill(color);
     const pts = points.map(p => new PIXI.Point(p.x, p.y))
     graphics.drawPolygon(pts)
     graphics.endFill();
 }
 
-export function drawRoundedDebugRect(x, y, width, height, radius=3, color = DEBUG_COLOR) {
+export function drawRoundedRect(x, y, width, height, radius=3, color = DEFAULT_COLOR) {
     graphics.beginFill(color);
     graphics.drawRoundedRect(x, y, width, height, radius)
     graphics.endFill();
 }
 
-export function drawDebugRegularPolygon(center, radius, sides, color = DEBUG_COLOR) {
+export function drawRegularPolygon(center, radius, sides, color = DEFAULT_COLOR) {
     var points = []
     for (var i = 0; i < sides; i++) {
         const angle = i / sides * 2 * Math.PI
@@ -35,7 +35,7 @@ export function drawDebugRegularPolygon(center, radius, sides, color = DEBUG_COL
         points.push(p)
     }
     
-    drawDebugPolygon(points, color)
+    drawPolygon(points, color)
 }
 
 /**     D
@@ -46,7 +46,7 @@ export function drawDebugRegularPolygon(center, radius, sides, color = DEBUG_COL
  *     |_|
  *    A   G
  */
-export function drawDebugArrow(start, end, thickness = 3, color = DEBUG_COLOR) {
+export function drawArrow(start, end, thickness = 3, color = DEFAULT_COLOR) {
     const dir = end.clone().sub(start).normalize()
     const head_start = start.clone().lerp(end, .9)
 
@@ -63,7 +63,7 @@ export function drawDebugArrow(start, end, thickness = 3, color = DEBUG_COLOR) {
 
     const points = [a,b,c,d,e,f,g]
     
-    drawDebugPolygon(points, color)
+    drawPolygon(points, color)
 }
 
 export function clearDebug() {

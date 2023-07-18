@@ -25,7 +25,7 @@ export function circlePolygon(center, radius, numSegments) {
     for (var i = 0; i < numSegments; i ++) {
         const angle = i / numSegments * 2 * Math.PI
         circle[i] = new PIXI.Vec(Math.cos(angle)*radius,
-                                    Math.sin(angle)*radius)
+                                 Math.sin(angle)*radius)
         circle[i].add(center)
     }
 

@@ -1,7 +1,7 @@
 import { } from "../geometry/vector.js"
 import { } from "../geometry/math.js"
-import { clearDebug, initDebug } from "../drawing/debug.js"
-import { drawClaycode } from "../drawing/draw_claycode.js"
+import { clearDebug, initDebug } from "../drawing/draw.js"
+import { drawClaycode } from "../drawing/draw_rectangle_claycode.js"
 import { bitsToTree } from "../conversion/converter.js"
 import { BitStreamText } from "../conversion/bit_stream.js"
 

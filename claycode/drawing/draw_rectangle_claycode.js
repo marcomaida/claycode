@@ -1,4 +1,4 @@
-import { drawRoundedDebugRect } from "../drawing/debug.js"
+import { drawRoundedRect } from "./draw.js"
 
 const BLACK = 0x000000
 const WHITE = 0xFFFFFF
@@ -18,7 +18,7 @@ export function drawClaycode(node, bar_frame, color=WHITE) {
     const shorter = Math.min(bar_width,bar_height)
     const round = Math.min(shorter/5, 15)
 
-    drawRoundedDebugRect(bar_frame[0].x, bar_frame[0].y, bar_width, bar_height, round, color)
+    drawRoundedRect(bar_frame[0].x, bar_frame[0].y, bar_width, bar_height, round, color)
 
     if (node.isLeaf()) return;
 
