@@ -1,7 +1,7 @@
 let graphics = null
 const DEFAULT_COLOR = 0x22AA22
 
-export function initDebug(app) {
+export function initDrawing(app) {
     graphics = new PIXI.Graphics();
     app.stage.addChild(graphics);
 }
@@ -66,6 +66,6 @@ export function drawArrow(start, end, thickness = 3, color = DEFAULT_COLOR) {
     drawPolygon(points, color)
 }
 
-export function clearDebug() {
+export function clearDrawing() {
     graphics.clear()
 }

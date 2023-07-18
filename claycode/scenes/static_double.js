@@ -1,6 +1,6 @@
 import { } from "../geometry/vector.js"
 import { } from "../geometry/math.js"
-import { clearDebug, initDebug } from "../drawing/draw.js"
+import { clearDrawing, initDrawing } from "../drawing/draw.js"
 import { drawClaycode } from "../drawing/draw_rectangle_claycode.js"
 import { bitsToTree } from "../conversion/converter.js"
 import { BitStreamText } from "../conversion/bit_stream.js"
@@ -10,7 +10,7 @@ const app = new PIXI.Application({
     height: window.innerHeight,
     resolution: 1
 })
-initDebug(app)
+initDrawing(app)
 
 const inputTextBox = document.getElementById("inputText")
 inputTextBox.select()
@@ -46,7 +46,7 @@ function doubleView() {
         new PIXI.Vec(bar_left + bar_width, bar_top + bar_height),
         new PIXI.Vec(bar_left, bar_top + bar_height)]
 
-    clearDebug();
+    clearDrawing();
     drawClaycode(current_tree.root, code_frame_square)
     drawClaycode(current_tree.root, code_frame_rect)
 }
