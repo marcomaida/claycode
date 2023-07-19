@@ -28,7 +28,7 @@ function polygonView() {
     const window_height = window.innerHeight
 
     const shorter = Math.min(window_width/2, window_height/2)
-    let polygon = circlePolygon( new PIXI.Vec(window_width/2, window_height/2), shorter*.7, 100)
+    let polygon = circlePolygon( new PIXI.Vec(window_width/2, window_height/2), shorter*.7, 4)
 
     clearDrawing();
     drawClaycode(current_tree.root, polygon)

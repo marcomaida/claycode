@@ -1,3 +1,5 @@
+import {} from "./offset.js"
+
 // Make a rectangle mesh (array of 12 elements)
 export function rectangleMesh(from, to, thickness) {
     const a = to.clone()
@@ -112,17 +114,17 @@ export function scalePolygon(polygon, scale) {
         point.sub(centr).multiplyScalar(scale).add(centr)
 }
 
-//TODO probably not working for any angle, but only for 90 degrees
-//Clearly fixable with some effort
-export function coatPolygon(polygon, coating) {
-    for (const [i, point] of polygon.entries()) {
-        const prev = i != 0 ? polygon[i-1] : polygon[polygon.length - 1]
-        const next = i < polygon.length - 1 ? polygon[i+1] : polygon[0]
-
-        const lprev = point.clone().sub(prev).normalize()
-        const lnext = point.clone().sub(next).normalize()
-
-        lprev.add(lnext).normalize().multiplyScalar(coating)
-        point.add(lprev)
-    }
+// Returns a smaller polygon which is padded a certain amount
+export function padPolygon(polygon, amount) {
+    /* Must do some weird stuff to make the format match with what
+       the library expects. My library does not want the first and last
+       poing to be equal, and works with a vector structure instead of
+       with nested arrays. */
+    let polygon_vec = polygon.map(p => [p.x, p.y])
+    polygon_vec.push(polygon_vec[0].slice(0)) // copy first element
+    var offset = new Offset();
+    var padding = offset.data(polygon_vec).padding(amount)[0];
+    padding.pop(); // Remove last element
+    let polygon_padded = padding.map(p => new PIXI.Vec(p[0], p[1]))
+    return polygon_padded
 }
