@@ -1,25 +1,7 @@
 import {} from "./polygon_offset.js"
 
-// Make a rectangle mesh (array of 12 elements)
-export function rectangleMesh(from, to, thickness) {
-    const a = to.clone()
-            .sub(from)
-            .normalize()
-            .multiplyScalar(thickness/2)
-            .perpendicular(false)
-
-    const b = a.clone().multiplyScalar(-1)
-    const c = b.clone()
-    const d = a.clone()
-
-    a.add(from)
-    b.add(from)
-    c.add(to)
-    d.add(to)
-
-    return [a.x, a.y, b.x, b.y, c.x, c.y,
-            a.x, a.y, c.x, c.y, d.x, d.y]
-}
+// Smallest unit, used to avoid floating point precision issues
+const EPS = 0.0000001;
 
 export function circlePolygon(center, radius, numSegments) {
     const circle = Array(numSegments).fill(new PIXI.Vec(0,0))
@@ -99,12 +81,78 @@ export function doPolygonsIntersect (a, b) {
 export function centroid(polygon) {
     const centroid = new PIXI.Vec(0,0)
 
-    for (const point of polygon)
-        centroid.add(point)
+    for (const vertex of polygon)
+        centroid.add(vertex)
 
     centroid.multiplyScalar(1/polygon.length)
     
     return centroid
+}
+  
+export function perimeter(polygon) {
+    let perimeter = 0
+
+    for (const [i, vertex] of polygon.entries()) {
+        perimeter += vertex.distanceTo(polygon[(i+1)%polygon.length])
+    }
+
+    return perimeter;
+}
+
+export function area(polygon) {
+    let sum = 0;
+    // Shoelace formula
+    for (const [i, vertex] of polygon.entries()) {
+        const next_vertex = polygon[(i+1) % polygon.length]
+        sum += vertex.x * next_vertex.y - next_vertex.x * vertex.y;
+    }
+  
+    return Math.abs(sum) * 0.5;
+}
+
+// Computes the circularity of the polygon
+// It is 1 for a perfect circle
+// It is 0 for an infinitely squashed and long polygon
+// (Iso-Perimetric Quotient / Polsby-Popper method / Cox’s circularity)
+// (https://mathworld.wolfram.com/IsoperimetricQuotient.html)
+export function circularity(polygon) {
+    return 4 * Math.PI * area(polygon) 
+           / Math.pow(perimeter(polygon),2)
+}
+
+/* Given a parameter `0 <= t < 1`, gets the point on the perimeter of
+   the polygon, where 0 is the first vertex and 1 is the last one. 
+   Returns the point and the index of the previous vertex (which is useful
+   to cut the polygon). */ 
+export function pickPointOnPerimeter(polygon, t) {
+    console.assert(0 <= t && t < 1)
+    const total_travel = t*perimeter(polygon)
+    
+    // The solution will be a lerp between two vertices. 
+    // Find those vertices first
+    let start_vertex_idx = 0;
+    let traveled = 0;
+    for (const [i, point] of polygon.entries()) {
+        const travel_dist = point.distanceTo(polygon[(i+1)%polygon.length])
+        if (traveled+travel_dist <= total_travel) {
+            start_vertex_idx = i;
+            traveled += travel_dist;
+        }
+        else {
+            // We found the first vertex
+            break;
+        }
+    }
+
+    // Lerp between the two vertices w.r.t. the remaining
+    // distance to travel
+    const left_to_travel = total_travel-traveled
+    const va = polygon[start_vertex_idx]
+    const vb = polygon[(start_vertex_idx+=1)%polygon.length]
+    const tab = left_to_travel / va.distanceTo(vb)
+    console.assert(0 <= tab && tab < 1)
+
+    return [start_vertex_idx, va.lerp(vb, tab)];
 }
 
 export function scalePolygon(polygon, scale) {
@@ -123,8 +171,69 @@ export function padPolygon(polygon, amount) {
     let polygon_vec = polygon.map(p => [p.x, p.y])
     polygon_vec.push(polygon_vec[0].slice(0)) // copy first element
     var offset = new Offset();
-    var padding = offset.data(polygon_vec).padding(amount)[0];
-    padding.pop(); // Remove last element
-    let polygon_padded = padding.map(p => new PIXI.Vec(p[0], p[1]))
+    var padded_pols = offset.data(polygon_vec).padding(amount);
+    if (padded_pols.length == 0) { throw "Error padding polygon -- No space left"}
+    let padded = padded_pols[0]
+    padded.pop(); // Remove last element
+    let polygon_padded = padded.map(p => new PIXI.Vec(p[0], p[1]))
     return polygon_padded
 }
+
+// Finds the intersection between segments ab and cd
+function segmentSegmentIntersection (a, b, c, d) {
+    const between = (n1, n2, n3) => n1 - EPS <= n2 && n2 <= n3 + EPS;
+
+    var x = ((a.x*b.y-a.y*b.x)*(c.x-d.x)-(a.x-b.x)*(c.x*d.y-c.y*d.x)) /
+            ((a.x-b.x)*(c.y-d.y)-(a.y-b.y)*(c.x-d.x));
+
+    var y = ((a.x*b.y-a.y*b.x)*(c.y-d.y)-(a.y-b.y)*(c.x*d.y-c.y*d.x)) /
+            ((a.x-b.x)*(c.y-d.y)-(a.y-b.y)*(c.x-d.x));
+
+    if( (isNaN(x) || isNaN(y)) ||
+        (a.x>=b.x && !between(b.x, x, a.x) || !between(a.x, x, b.x)) ||
+        (a.y>=b.y && !between(b.y, y, a.y) || !between(a.y, y, b.y)) ||
+        (c.x>=d.x && !between(d.x, x, c.x) || !between(c.x, x, d.x)) ||
+        (c.y>=d.y && !between(d.y, y, c.y) || !between(c.y, y, d.y))) {
+        return null;
+    }
+    else { 
+        return new PIXI.Vec(x,y)
+    }
+}
+
+/* Returns all intersections between the polygon and the segment ab
+   (one intersection per edge max) 
+   If `exclude_ab` is true, does not consider a and b as intersections.
+   */
+export function segmentPolygonIntersections(polygon, a, b, exclude_ab) {
+    let intersections = []
+    for (const [i, vertex] of polygon.entries()) {
+        const next_vertex = polygon[(i+1) % polygon.length]
+
+        let itx = segmentSegmentIntersection(vertex, next_vertex, a, b)
+        if (itx) {
+            const is_a_or_b = itx.nearly_equals(a) || itx.nearly_equals(b)
+            if (!exclude_ab || !is_a_or_b) {
+                intersections.push(itx)
+            }
+        }
+    }
+
+    return intersections
+}
+
+export function isPointInPolygon(polygon, point) {
+    // ray-casting algorithm based on
+    // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
+    var inside = false;
+    for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        var xi = polygon[i].x, yi = polygon[i].y;
+        var xj = polygon[j].x, yj = polygon[j].y;
+        
+        var intersect = ((yi > point.y) != (yj > point.y))
+            && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    
+    return inside;
+};

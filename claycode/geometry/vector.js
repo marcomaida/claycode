@@ -141,6 +141,12 @@ PIXI.Vec.prototype.equals = function(v) {
     return this.x === v.x && this.y === v.y;
 };
 
+const EPS = 0.0000001;
+PIXI.Vec.prototype.nearly_equals = function(v) {
+    return Math.abs(this.x-v.x) < EPS && 
+           Math.abs(this.y-v.y) < EPS;
+};
+
 PIXI.Vec.prototype.rotate = function(theta) {
     var xtemp = this.x;
     this.x = this.x * Math.cos(theta) - this.y * Math.sin(theta);
