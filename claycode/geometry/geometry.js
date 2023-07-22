@@ -1,4 +1,4 @@
-import {} from "./offset.js"
+import {} from "./polygon_offset.js"
 
 // Make a rectangle mesh (array of 12 elements)
 export function rectangleMesh(from, to, thickness) {
