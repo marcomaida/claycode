@@ -135,7 +135,7 @@ export function pickPointOnPerimeter(polygon, t) {
     for (const [i, point] of polygon.entries()) {
         const travel_dist = point.distanceTo(polygon[(i+1)%polygon.length])
         if (traveled+travel_dist <= total_travel) {
-            start_vertex_idx = i;
+            start_vertex_idx = i+1;
             traveled += travel_dist;
         }
         else {
