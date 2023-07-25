@@ -14,13 +14,23 @@ function inverse_color(color) {
 
 export function drawClaycode(node, polygon, color=WHITE) {
     drawPolygon(polygon, color)
-
     const sub_polygon = padPolygon(polygon, 3)
-    const weights = Math.normalise(node.children.map((c) => c.numDescendants))
-    const partition = partitionPolygon(polygon, weights)       
-    
-    console.assert(partition.length == node.children.length)
-    for (const [i, c] of node.children.entries()) {
-        drawClaycode(c, partition[i], inverse_color(color))
+
+    if (node.children.length == 0) { return; }
+    else if (node.children.length == 1) {
+        drawClaycode(node.children[0], sub_polygon, inverse_color(color))
+    }
+    else {
+        // const weights = Math.normalise(node.children.map((c) => c.numDescendants))
+        let weights = [0.5, 0.5]
+        const partition = partitionPolygon(sub_polygon, weights) 
+        drawPolygon(partition[0], inverse_color(color))
+        drawPolygon(partition[1], inverse_color(color))
+
+        
+        // console.assert(partition.length == node.children.length)
+        // for (const [i, c] of node.children.entries()) {
+        //     drawClaycode(c, partition[i], inverse_color(color))
+        // }
     }
 }

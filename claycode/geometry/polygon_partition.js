@@ -5,7 +5,7 @@ import { area, pickPointOnPerimeter, segmentPolygonIntersections,
    approximating the ones specified in amounts */
 export function partitionPolygon(polygon, amounts) {
     let original_amounts_num = amounts.length
-    console.assert(amounts.reduce((a, b) => a + b, 0) <= 1.)
+    // console.assert(amounts.reduce((a, b) => a + b, 0) <= 1.)
 
     let partition = []
     let to_split = polygon
@@ -40,8 +40,8 @@ export function partitionPolygon(polygon, amounts) {
    (https://www.microimages.com/documentation/TechGuides/81PolyShape.pdf). */
 export function splitPolygonInSimplestPartition(polygon, partition_target_area_perc) {
     const CIRCULARITY_AREA_WEIGHT = .9 // 0 = only circularity, 1 = only area
-    const MAX_TRIES = 1000 
-    console.assert(0. < partition_target_area_perc && partition_target_area_perc < 1.)
+    const MAX_TRIES = 1 
+    // console.assert(0. < partition_target_area_perc && partition_target_area_perc < 1.)
 
     const total_area = area(polygon)
     const target_area_a = partition_target_area_perc * total_area
@@ -147,16 +147,29 @@ export function cutPolygon(polygon, cut_va_idx, va, cut_vb_idx, vb) {
     // Note, these are indices
     const va_l = cut_va_idx
     const vb_l = cut_vb_idx
+
+    // FIND BUG 
+    // FIND BUG 
+    // FIND BUG 
+    // FIND BUG 
+    // FIND BUG 
+    console.log("va vb", va, vb)
+    console.log("idx", va_l, vb_l)
+    console.log("pol", JSON.stringify(polygon))
     
     const pa = [vb.clone()]
                 .concat(polygon.slice(vb_l+1))   // Append ( vb_l.. ] -- in case of overflow, slice is empty
                 .concat(polygon.slice(0,va_l+1)) // Append [ ..va_l ] 
     pa.push(va.clone())
 
+    console.log("pa", JSON.stringify(pa))
+
     const pb = [va.clone()]
                 .concat(polygon.slice(va_l+1, vb_l+1)) // Append ( va_l..vb_l ]
     pb.push(vb.clone())
-
+    
+    console.log("pb", JSON.stringify(pb))
+    
     return [pa, pb]
 }
 
