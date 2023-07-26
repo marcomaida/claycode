@@ -31,12 +31,23 @@ try {
   test_section("area");
   assert_eq(area(square), 36);
   assert_eq(area(square_reverse), 36);
-  assert_nearly_eq(area(circle_r3_e100000), 28.27433388, EPS);
+  assert_nearly_eq(area(circle_r3_e100000), 28.274333882308137, EPS);
 
   test_section("perimeter");
   assert_eq(perimeter(square), 24);
   assert_eq(perimeter(square_reverse), 24);
   assert_nearly_eq(perimeter(circle_r3_e100000), 18.84955592, EPS);
+
+  test_section("circularity");
+  const long_rectangle = [
+    new PIXI.Vec(1, 1),
+    new PIXI.Vec(1, 1.00000000001),
+    new PIXI.Vec(999, 1.00000000001),
+    new PIXI.Vec(999, 1),
+  ];
+  assert_true(circularity(circle_r3_e100000) > 0.99999);
+  assert_true(circularity(square) > 0.78 && circularity(square) < 0.79);
+  assert_true(circularity(long_rectangle) < 0.000001);
 
   test_section("isPointInPolygon");
   assert_true(isPointInPolygon(square, new PIXI.Vec(3, 3)));
@@ -100,11 +111,33 @@ try {
     null
   );
 
+  assert_true(
+    segmentSegmentIntersection(
+      s_d_far[0],
+      s_d_far[1],
+      s_d_far[0],
+      s_d_far[1]
+    ) !== null // self intersection
+  );
+
+  assert_eq(
+    segmentSegmentIntersection(s_v[0], s_v[1], s_v_far[0], s_v_far[1]),
+    null // self intersection
+  );
+
   test_section("segmentPolygonIntersections");
 
-  //   console.log(segmentPolygonIntersections(square, s_h[0], s_h[1]));
+  const sp_itx_h_sq = segmentPolygonIntersections(square, s_h[0], s_h[1]);
+  assert_true(sp_itx_h_sq[0].equals(new PIXI.Vec(1, 4)));
+  assert_true(sp_itx_h_sq[1].equals(new PIXI.Vec(7, 4)));
 
-  //   console.log(circularity(circlePolygon(10, 10, 1000)))
+  const sp_itx_h_circle = segmentPolygonIntersections(
+    circle_r3_e100000,
+    s_h[0],
+    s_h[1]
+  );
+  assert_true(sp_itx_h_circle[0].equals(new PIXI.Vec(7, 4)));
+  assert_true(sp_itx_h_circle[1].equals(new PIXI.Vec(1, 4)));
 } catch (error) {
   console.error(`TEST FAILED: ${error}`);
 }

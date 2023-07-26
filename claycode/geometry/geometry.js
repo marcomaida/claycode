@@ -188,9 +188,20 @@ export function segmentSegmentIntersection(a, b, c, d) {
 
   let denominator = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
 
-  // Lines are parallel
+  // Lines are parallel or coincident (overlapping)
   if (denominator === 0) {
-    return null;
+    // Check if the segments are overlapping
+    if (
+      Math.max(a.x, b.x) < Math.min(c.x, d.x) ||
+      Math.max(c.x, d.x) < Math.min(a.x, b.x) ||
+      Math.max(a.y, b.y) < Math.min(c.y, d.y) ||
+      Math.max(c.y, d.y) < Math.min(a.y, b.y)
+    ) {
+      return null;
+    } else {
+      // Segments are overlapping, return a point
+      return new PIXI.Vec(Math.max(a.x, c.x), Math.max(a.y, c.y));
+    }
   }
 
   let ua =
@@ -223,7 +234,16 @@ export function segmentPolygonIntersections(polygon, a, b, exclude_ab) {
     if (itx) {
       const is_a_or_b = itx.nearly_equals(a) || itx.nearly_equals(b);
       if (!exclude_ab || !is_a_or_b) {
-        intersections.push(itx);
+        let already_added = false;
+        for (const added_itx of intersections) {
+          if (added_itx.nearly_equals(itx)) {
+            already_added = true;
+            break;
+          }
+        }
+        if (!already_added) {
+          intersections.push(itx);
+        }
       }
     }
   }
