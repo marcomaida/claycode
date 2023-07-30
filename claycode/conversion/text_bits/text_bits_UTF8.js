@@ -1,5 +1,5 @@
 const text_encoder = new TextEncoder("utf-8");
-export function textToBit(input_text) {
+export function textToBits(input_text) {
   const encodedData = text_encoder.encode(input_text);
 
   const bitsArray = [];
@@ -14,7 +14,7 @@ export function textToBit(input_text) {
 }
 
 const text_decoder = new TextDecoder();
-export function bitToText(bitsArray) {
+export function bitsToText(bitsArray) {
   if (bitsArray.length % 8 !== 0) {
     throw new Error("Invalid bits array length. It should be a multiple of 8.");
   }

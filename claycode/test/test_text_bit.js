@@ -39,11 +39,14 @@ const relevant_strings = [
 ];
 
 // Test UTF8 Encoder
-import * as text_bit_UTF8 from "../conversion/text_bit/text_bit_UTF8.js";
+import * as text_bit_UTF8 from "../conversion/text_bits/text_bits_UTF8.js";
 try {
   test_heading("Text-Bit Encoding: UTF8");
   for (const string of relevant_strings) {
-    assert_eq(string, text_bit_UTF8.bitToText(text_bit_UTF8.textToBit(string)));
+    assert_eq(
+      string,
+      text_bit_UTF8.bitsToText(text_bit_UTF8.textToBits(string))
+    );
   }
 } catch (error) {
   console.error(`TEST FAILED: ${error}`);
