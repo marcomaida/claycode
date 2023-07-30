@@ -140,7 +140,7 @@ function debounce(func, delay) {
 }
 
 polygonView();
-inputTextBox.addEventListener("input", () => debounce(polygonView, 50));
+inputTextBox.addEventListener("input", () => debounce(polygonView, 100));
 window.onresize = function () {
   debounce(polygonView, 50);
 };
