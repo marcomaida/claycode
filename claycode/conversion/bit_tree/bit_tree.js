@@ -1,11 +1,22 @@
-import { Tree } from "../tree/tree.js"
-import { TreeNode } from "../tree/tree_node.js";
+import { Tree } from "../../tree/tree.js"
+import { TreeNode } from "../../tree/tree_node.js";
 
-export function bitsToTree(stream) {
+function* bitStream(uint8Array) {
+    for (let i = 0; i < uint8Array.length; i++) {
+      const byte = uint8Array[i];
+      for (let j = 7; j >= 0; j--) {
+        yield (byte >> j) & 1;
+      }
+    }
+  
+    yield 1; // final extra one, necessary in current encoding
+}
+
+export function bitsToTree(bytes) {
     var root = new TreeNode(null)
     root.children = [new TreeNode(root)]
     var frontier = [root.children[0]];
-    var iter = stream.getStream()
+    var iter = bitStream(bytes)
     for (var bit of iter) {
         var node = frontier.shift();
 

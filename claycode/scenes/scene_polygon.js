@@ -5,9 +5,8 @@ import { TreeNode } from "../tree/tree_node.js";
 import { Tree } from "../tree/tree.js";
 import { clearDrawing, initDrawing } from "../drawing/draw.js";
 import { drawClaycode } from "../drawing/draw_polygon_claycode.js";
-import { bitsToTree } from "../conversion/converter.js";
-import { BitStreamText } from "../conversion/bit_stream.js";
-import { circlePolygon, scalePolygon } from "../geometry/geometry.js";
+import { textToTree } from "../conversion/convert.js";
+import { circlePolygon } from "../geometry/geometry.js";
 
 const app = new PIXI.Application({
   width: window.innerWidth,
@@ -50,8 +49,7 @@ function polygonView(inputText) {
     inputText.startsWith(polygon_view_last_text);
   polygon_view_last_text = inputText;
 
-  var stream = new BitStreamText(inputText);
-  let current_tree = bitsToTree(stream);
+  let current_tree = textToTree(inputText);
 
   // DEBUG
   // current_tree = debugTree();
