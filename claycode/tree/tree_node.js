@@ -1,10 +1,15 @@
 export class TreeNode {
-  constructor(father, children = []) {
-    this.father = father
+  constructor(father = null, children = []) {
+    this.father = father;
     this.children = children;
-    this.numDescendants = 0
-    this.label = null
-    this.tree = null
+    this.label = null;
+    this.tree = null;
+
+    this.numDescendants = 0;
+    /* Describes how much space is taken by this node, considering
+       also all its descendants. The UoM is irrelevant, as long as
+       all nodes are weighted using the same heuristics. */
+    this.weight = null;
   }
 
   /**
@@ -17,14 +22,13 @@ export class TreeNode {
     while (frontier.length > 0) {
       var pair = frontier.shift();
 
-      if (pair[0].children.length != pair[1].children.length)
-        return false
+      if (pair[0].children.length != pair[1].children.length) return false;
 
       for (var i = 0; i < pair[0].children.length; i++)
-        frontier.push([pair[0].children[i], pair[1].children[i]])
+        frontier.push([pair[0].children[i], pair[1].children[i]]);
     }
 
-    return true
+    return true;
   }
 
   isLeaf() {

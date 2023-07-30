@@ -32,6 +32,17 @@ h1 {
     margin-top: 2.8%;
 }
 
+.infoBox {
+    font-family: Helvetica, sans-serif;
+    position: fixed;
+    top: 75%;
+    left: 5%;
+    background-color: #1c1b1b;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 a {
     text-decoration: none;
     color:white;

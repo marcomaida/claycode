@@ -4,17 +4,25 @@ import {} from "../geometry/vector.js";
 // Smallest unit, used to avoid floating point precision issues
 export const EPS = 0.0000001;
 
-export function circlePolygon(center, radius, numSegments) {
+export function circlePolygon(
+  center,
+  radius,
+  numSegments,
+  scale_vec = new PIXI.Vec(1, 1),
+  rotation_deg = 0
+) {
   const circle = Array(numSegments).fill(new PIXI.Vec(0, 0));
-
+  const rotation_rad = (rotation_deg / 180) * Math.PI;
   for (var i = 0; i < numSegments; i++) {
-    const angle = (i / numSegments) * 2 * Math.PI;
+    const angle = (i / numSegments) * 2 * Math.PI + rotation_rad;
     circle[i] = new PIXI.Vec(
       Math.cos(angle) * radius,
       Math.sin(angle) * radius
     );
     circle[i].add(center);
   }
+
+  scalePolygon(circle, scale_vec);
 
   return circle;
 }
@@ -153,11 +161,12 @@ export function pickPointOnPerimeter(polygon, t) {
   return [start_vertex_idx, va.clone().lerp(vb, tab)];
 }
 
-export function scalePolygon(polygon, scale) {
-  const centr = centroid(polygon);
+export function scalePolygon(polygon, scale_vec) {
+  const center = centroid(polygon);
 
-  for (const point of polygon)
-    point.sub(centr).multiplyScalar(scale).add(centr);
+  for (const point of polygon) {
+    point.sub(center).hadamard(scale_vec).add(center);
+  }
 }
 
 // Returns a smaller polygon which is padded a certain amount
