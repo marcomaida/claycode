@@ -49,7 +49,7 @@ export function splitPolygonInSimplestPartition(
   partition_target_area_perc
 ) {
   const CIRCULARITY_AREA_WEIGHT = 0.9; // 0 = only circularity, 1 = only area
-  const MAX_TRIES = 1;
+  const MAX_TRIES = 500;
   // console.assert(0. < partition_target_area_perc && partition_target_area_perc < 1.)
 
   const total_area = area(polygon);

@@ -169,7 +169,8 @@ export function padPolygon(polygon, amount) {
   let polygon_vec = polygon.map((p) => [p.x, p.y]);
   polygon_vec.push(polygon_vec[0].slice(0)); // copy first element
   var offset = new Offset();
-  var padded_pols = offset.data(polygon_vec).padding(amount);
+  const data = offset.data(polygon_vec);
+  var padded_pols = data.padding(amount);
   if (padded_pols.length == 0) {
     throw "Error padding polygon -- No space left";
   }

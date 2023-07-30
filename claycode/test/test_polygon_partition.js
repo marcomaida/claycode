@@ -1,13 +1,7 @@
 import { area, circlePolygon } from "../geometry/geometry.js";
 
 import { cutPolygon } from "../geometry/polygon_partition.js";
-import {
-  assert_eq,
-  assert_true,
-  assert_nearly_eq,
-  test_section,
-  test_heading,
-} from "./test_utils.js";
+import { assert_eq, assert_nearly_eq, test_heading } from "./test_utils.js";
 
 try {
   test_heading("Polygon Partition");
