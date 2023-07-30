@@ -5,7 +5,7 @@ import { TreeNode } from "../tree/tree_node.js";
 import { Tree } from "../tree/tree.js";
 import { clearDrawing, initDrawing } from "../drawing/draw.js";
 import { drawClaycode } from "../drawing/draw_polygon_claycode.js";
-import { textToTree } from "../conversion/convert.js";
+import { textToTree, textToBits } from "../conversion/convert.js";
 import { circlePolygon } from "../geometry/geometry.js";
 
 const app = new PIXI.Application({
@@ -54,7 +54,9 @@ function polygonView(inputText) {
   // DEBUG
   // current_tree = debugTree();
 
-  infoText.textContent = `Nodes: ${current_tree.root.numDescendants}`;
+  infoText.textContent = `${current_tree.root.numDescendants} Nodes | ${
+    textToBits(inputText).length
+  } bits `;
 
   const window_width = window.innerWidth;
   const window_height = window.innerHeight;
@@ -104,6 +106,7 @@ function polygonView(inputText) {
       tries++;
       if (tries == MAX_TRIES) {
         clearDrawing();
+        infoText.textContent += "- Failed to Pack :(";
         break;
       }
     }
