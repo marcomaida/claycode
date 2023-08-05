@@ -48,15 +48,17 @@ export function splitPolygonInSimplestPartition(
   polygon,
   partition_target_area_perc
 ) {
-  const CIRCULARITY_AREA_WEIGHT = 0.9; // 0 = only circularity, 1 = only area
+  const CIRCULARITY_AREA_WEIGHT = 0.8; // 0 = only circularity, 1 = only area
   const MAX_TRIES = 500;
+  const MAX_TRIES_WITHOUT_IMPROVEMENT = 200; // If score does not increase after these tries, return
   // console.assert(0. < partition_target_area_perc && partition_target_area_perc < 1.)
 
   const total_area = area(polygon);
   const target_area_a = partition_target_area_perc * total_area;
 
   let min_error = null;
-  let partition = null;
+  let best_partition = null;
+  let tries_without_improvement = 0;
   for (let i = 0; i < MAX_TRIES; i++) {
     const [cut_va_idx, va] = pickPointOnPerimeter(polygon, Math.random());
     const [cut_vb_idx, vb] = pickPointOnPerimeter(polygon, Math.random());
@@ -64,8 +66,8 @@ export function splitPolygonInSimplestPartition(
     let res = cutPolygon(polygon, cut_va_idx, va, cut_vb_idx, vb);
 
     if (res == null) {
-      continue;
-    } // bad cut
+      continue; // bad cut
+    }
 
     let [pa, pb] = res;
     for (let r = 0; r < 2; r++) {
@@ -77,7 +79,8 @@ export function splitPolygonInSimplestPartition(
       const error = Math.lerp(error_circ, error_area, CIRCULARITY_AREA_WEIGHT);
       if (error < min_error || min_error === null) {
         min_error = error;
-        partition = [pa, pb];
+        best_partition = [pa, pb];
+        tries_without_improvement = 0;
       }
 
       // Swap `pa` and `pb`
@@ -85,9 +88,14 @@ export function splitPolygonInSimplestPartition(
       pa = pb;
       pb = pt;
     }
+
+    tries_without_improvement += 1;
+    if (tries_without_improvement >= MAX_TRIES_WITHOUT_IMPROVEMENT) {
+      break;
+    }
   }
 
-  return partition;
+  return best_partition;
 }
 
 /* 
