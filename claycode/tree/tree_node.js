@@ -5,6 +5,10 @@ export class TreeNode {
     this.label = null;
     this.tree = null;
 
+    for (const c of children) {
+      children.father = this;
+    }
+
     this.numDescendants = 0;
     /* Describes how much space is taken by this node, considering
        also all its descendants. The UoM is irrelevant, as long as
