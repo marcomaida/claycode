@@ -70,13 +70,13 @@ function polygonView(inputText) {
   );
 
   // Try to draw for a certain max number of times
-  const MAX_TRIES = 200;
+  const MAX_TRIES = 300;
   let tries = 0;
 
   // Start with large padding, decrease at each fail
   let baseline_padding = Math.lerp(
     20,
-    1,
+    2,
     Math.min(current_tree.root.numDescendants, 300) / 300
   );
 
@@ -95,7 +95,7 @@ function polygonView(inputText) {
     polygon_view_last_padding = padding;
     current_tree.compute_weights(padding);
 
-    let min_node_area = area(polygon) * 0.0005;
+    let min_node_area = area(polygon) * 0.0002;
 
     try {
       clearDrawing();
