@@ -1,10 +1,10 @@
-import {} from "../geometry/vector.js";
+import { } from "../geometry/vector.js";
 import { area } from "../geometry/geometry.js";
-import {} from "../geometry/math.js";
+import { } from "../geometry/math.js";
 import { TreeNode } from "../tree/tree_node.js";
 import { Tree } from "../tree/tree.js";
-import { clearDrawing, initDrawing } from "../drawing/draw.js";
-import { drawClaycode } from "../drawing/draw_polygon_claycode.js";
+import { clearDrawing, initDrawing } from "../packer/draw.js";
+import { drawClaycode } from "../packer/draw_polygon_claycode.js";
 import { textToTree, textToBits } from "../conversion/convert.js";
 import { circlePolygon } from "../geometry/geometry.js";
 
@@ -54,9 +54,8 @@ function polygonView(inputText) {
   // DEBUG
   // current_tree = debugTree();
 
-  infoText.textContent = `${current_tree.root.numDescendants} Nodes | ${
-    textToBits(inputText).length
-  } bits `;
+  infoText.textContent = `${current_tree.root.numDescendants} Nodes | ${textToBits(inputText).length
+    } bits `;
 
   const window_width = window.innerWidth;
   const window_height = window.innerHeight;

@@ -1,7 +1,7 @@
 import { } from "../geometry/vector.js"
 import { } from "../geometry/math.js"
-import { clearDrawing, initDrawing } from "../drawing/draw.js"
-import { drawClaycode } from "../drawing/draw_rectangle_claycode.js"
+import { clearDrawing, initDrawing } from "../packer/draw.js"
+import { drawClaycode } from "../packer/draw_rectangle_claycode.js"
 import { textToTree } from "../conversion/convert.js";
 
 const app = new PIXI.Application({
