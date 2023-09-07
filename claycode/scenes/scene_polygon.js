@@ -53,10 +53,6 @@ function polygonView(inputText) {
 
   // DEBUG
   // current_tree = debugTree();
-
-  infoText.textContent = `${inputText.length} Chars | ${current_tree.root.numDescendants} Nodes | ${textToBits(inputText).length
-    } bits `;
-
   const window_width = window.innerWidth;
   const window_height = window.innerHeight;
 
@@ -70,7 +66,7 @@ function polygonView(inputText) {
   );
 
   // Try to draw for a certain max number of times
-  const MAX_TRIES = 300;
+  const MAX_TRIES = 400;
   let tries = 0;
 
   // Start with large padding, decrease at each fail
@@ -84,6 +80,8 @@ function polygonView(inputText) {
     ? polygon_view_last_padding
     : baseline_padding;
   let node_padding_min = 2;
+
+  let out = `${inputText.length} Chars | ${current_tree.root.numDescendants} Nodes | ${textToBits(inputText).length} bits `;
 
   while (tries < MAX_TRIES) {
     // Decrease padding if it keeps failing
@@ -105,11 +103,14 @@ function polygonView(inputText) {
       tries++;
       if (tries == MAX_TRIES) {
         clearDrawing();
-        infoText.textContent += "- Failed to Pack :(";
+        out += "- Failed to Pack :(";
         break;
       }
     }
   }
+
+  infoText.textContent = out;
+
 }
 
 let SHAPES = [
@@ -135,6 +136,7 @@ document.addEventListener("keydown", function (event) {
 // by fast-repeating keystrokes
 let timerId;
 function debounce(func, delay) {
+  infoText.textContent = `Packing...`
   clearTimeout(timerId);
   timerId = setTimeout(func, delay);
 }
