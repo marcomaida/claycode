@@ -1,6 +1,7 @@
 import {
   area,
   pickPointOnPerimeter,
+  getVerticesPercPositions,
   segmentPolygonIntersections,
   isPointInPolygon,
   circularity,
@@ -49,19 +50,22 @@ export function splitPolygonInSimplestPartition(
   partition_target_area_perc
 ) {
   const CIRCULARITY_AREA_WEIGHT = 0.8; // 0 = only circularity, 1 = only area
-  const MAX_TRIES = 500;
+  const MAX_TRIES = 400;
   const MAX_TRIES_WITHOUT_IMPROVEMENT = 200; // If score does not increase after these tries, return
   // console.assert(0. < partition_target_area_perc && partition_target_area_perc < 1.)
 
   const total_area = area(polygon);
   const target_area_a = partition_target_area_perc * total_area;
 
+  const percs = getVerticesPercPositions(polygon);
   let min_error = null;
   let best_partition = null;
   let tries_without_improvement = 0;
   for (let i = 0; i < MAX_TRIES; i++) {
-    const [cut_va_idx, va] = pickPointOnPerimeter(polygon, Math.random());
-    const [cut_vb_idx, vb] = pickPointOnPerimeter(polygon, Math.random());
+    const vt = percs[Math.floor(Math.random() * percs.length)];
+    const diff = Math.random() * 0.3;
+    const [cut_va_idx, va] = pickPointOnPerimeter(polygon, (vt + diff) % 1.0);
+    const [cut_vb_idx, vb] = pickPointOnPerimeter(polygon, (vt + 1.0 - diff) % 1.0);
 
     let res = cutPolygon(polygon, cut_va_idx, va, cut_vb_idx, vb);
 
