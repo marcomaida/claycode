@@ -54,7 +54,7 @@ function polygonView(inputText) {
   // DEBUG
   // current_tree = debugTree();
 
-  infoText.textContent = `${current_tree.root.numDescendants} Nodes | ${textToBits(inputText).length
+  infoText.textContent = `${inputText.length} Chars | ${current_tree.root.numDescendants} Nodes | ${textToBits(inputText).length
     } bits `;
 
   const window_width = window.innerWidth;
