@@ -1,5 +1,5 @@
-import {} from "./polygon_offset.js";
-import {} from "../geometry/vector.js";
+import { } from "./polygon_offset.js";
+import { } from "../geometry/vector.js";
 
 // Smallest unit, used to avoid floating point precision issues
 export const EPS = 0.0000001;
@@ -159,6 +159,22 @@ export function pickPointOnPerimeter(polygon, t) {
   // console.assert(0 <= tab && tab < 1)
 
   return [start_vertex_idx, va.clone().lerp(vb, tab)];
+}
+
+/* Returns at what percentage of the perimeter each vertex is found. 
+   e.g., for a perfect square, [0,0.25,0.50,0.75] */
+export function getVerticesPercPositions(polygon) {
+  const p = perimeter(polygon);
+  let percs = [];
+  let traveled = 0;
+  for (const [i, point] of polygon.entries()) {
+    percs.push(traveled / p);
+
+    const travel_dist = point.distanceTo(polygon[(i + 1) % polygon.length]);
+    traveled += travel_dist;
+  }
+
+  return percs;
 }
 
 export function scalePolygon(polygon, scale_vec) {

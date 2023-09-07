@@ -2,6 +2,7 @@ import {
   area,
   EPS,
   pickPointOnPerimeter,
+  getVerticesPercPositions,
   circlePolygon,
   segmentSegmentIntersection,
   segmentPolygonIntersections,
@@ -27,6 +28,7 @@ try {
   ];
   const square_reverse = [...square].reverse();
   const circle_r3_e100000 = circlePolygon(new PIXI.Vec(4, 4), 3, 100000);
+  const circle_r3_e1000 = circlePolygon(new PIXI.Vec(4, 4), 3, 1000);
 
   test_section("area");
   assert_eq(area(square), 36);
@@ -67,6 +69,19 @@ try {
   const [idx3, point3] = pickPointOnPerimeter(square, 0.9999999999999);
   assert_eq(idx3, 3);
   assert_true(point3.nearly_equals(square[0]));
+
+  test_section("getVerticesPercPositions");
+  const percs_square = getVerticesPercPositions(square);
+  assert_eq(percs_square[0], 0.0);
+  assert_eq(percs_square[1], 0.25);
+  assert_eq(percs_square[2], 0.50);
+  assert_eq(percs_square[3], 0.75);
+
+  const percs_circle = getVerticesPercPositions(circle_r3_e1000);
+  for (const [i, perc] of percs_circle.entries()) {
+    // Test that pickPointOnPerimeter and getVerticesPercPositions are inverses
+    assert_true(pickPointOnPerimeter(circle_r3_e1000, perc)[1].nearly_equals(circle_r3_e1000[i]));
+  }
 
   test_section("segmentSegmentIntersection");
   // s(egment)_h(orizontal) / v(ertical) / d(iagonal)
