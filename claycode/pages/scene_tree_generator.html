@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="https://pixijs.download/release/pixi.min.js"></script> -->
+    <script src="../pixi.mini.js"></script>
+    <script type="module" src="../page_loader.js"></script>
+    <script type="module" src="/scenes/scene_tree_generator.js"></script>
+</head>
+
+<body>
+    <div id="headerDiv" style="z-index:2;position: absolute;"></div>
+    <div id="canvasDiv" style="z-index:1;position: absolute;"></div>
+    <div class="infoBox" , id="infoBox">
+        <div id="infoText"></div>
+        <div id="changeShapeDiv" class="change_shape_div">
+            <img src='/images/enter.png' width="20" height="20" class="change_shape_img">Change Shape <br>
+            <img src='/images/space.png' width="40" height="25" class="change_shape_img">Random Tree
+        </div>
+    </div>
+    <div id="footerDiv" class="footer_div">
+        <div class="tree_gen_label">
+            Max Node Children: <input type="number" id="inputMaxChildren" maxlength="4" value="10" class="tree_gen_val">
+        </div>
+
+        <div class="tree_gen_label">
+            Max Tree Height: <input type="number" id="inputMaxHeight" maxlength="4" value="3" class="tree_gen_val">
+        </div>
+
+        <div class="tree_gen_label">
+            Probability Of Growing: <input type="number" id="inputGrowProb" maxlength="4" value="0.5" step="0.1" max="1"
+                min="0" class="tree_gen_val">
+        </div>
+    </div>
+</body>
+
+</html>

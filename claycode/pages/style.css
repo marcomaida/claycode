@@ -110,12 +110,6 @@ a {
     margin-left: 10pt;
 }
 
-.small_text {
-    font-size: 11pt;
-    font-style: italic;
-    text-align: left;
-}
-
 .inline-text {
     max-width: 15pt;
     max-height: 15pt;
@@ -126,6 +120,20 @@ a {
     bottom: 10pt;
     left: 50%;
     transform: translateX(-50%);
+}
+
+
+.tree_gen_label {
+    font-size: 15pt;
+    text-align: right;
+    color: whitesmoke;
+}
+
+.tree_gen_val {
+    font-size: 20pt;
+    vertical-align: middle;
+    text-align: left;
+    width: 50pt;
 }
 
 .change_shape_div {

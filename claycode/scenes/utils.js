@@ -30,5 +30,9 @@ export function initInfoText() {
 
 export function updateInfoText(inputText, currentTree, infoSuffix = '') {
     const infoText = document.getElementById("infoText");
-    infoText.textContent = `${inputText.length} Chars | ${currentTree.root.numDescendants} Nodes | ${textToBits(inputText).length} bits ` + infoSuffix;
+    if (inputText !== null)
+        infoText.textContent = `${inputText.length} Chars | ${textToBits(inputText).length} bits | ${currentTree.root.numDescendants} Nodes ` + infoSuffix;
+    else
+        infoText.textContent = `${currentTree.root.numDescendants} Nodes` + infoSuffix;
+
 }
