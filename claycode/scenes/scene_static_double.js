@@ -18,7 +18,7 @@ function doubleView() {
 
     const shorter = Math.min(window_width, window_height)
     var bar_width = shorter / 2
-    var bar_height = shorter / 2
+    var bar_height = shorter / 2.3
 
     const bar_left = window_width / 2 - bar_width / 2
     var bar_top = window_height / 2 - bar_height / 1.2

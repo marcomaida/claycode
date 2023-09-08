@@ -131,10 +131,25 @@ a {
 .change_shape_div {
     vertical-align: middle;
     margin: 15px 0px 0px 0px;
-    display: none;
 }
 
 .change_shape_img {
     vertical-align: middle;
     margin: 0px 10px 5px 5px;
+}
+
+.header_button {
+    background-color: #252525;
+    border: none;
+    color: rgb(213, 213, 213);
+    padding: 5pt 10pt;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10pt;
+    cursor: pointer;
+    border-radius: 4pt;
+    margin-top: 40pt;
+    margin-left: 2pt;
+    transform: translate(0, -50%);
 }

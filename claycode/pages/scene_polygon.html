@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="https://pixijs.download/release/pixi.min.js"></script> -->
+    <script src="../pixi.mini.js"></script>
+    <script type="module" src="../page_loader.js"></script>
+    <script type="module" src="/scenes/scene_polygon.js"></script>
+</head>
+
+<body>
+    <div id="headerDiv" style="z-index:2;position: absolute;"></div>
+    <div id="canvasDiv" style="z-index:1;position: absolute;"></div>
+    <div class="infoBox" , id="infoBox">
+        <div id="infoText"></div>
+        <div id="changeShapeDiv" class="change_shape_div">
+            <img src='/images/enter.png' width="20" height="20" class="change_shape_img">Change Shape
+        </div>
+    </div>
+    <div id="footerDiv" class="footer_div">
+        <input type="text" id="inputText" maxlength="30" value="" placeholder="> write here <">
+    </div>
+</body>
+
+</html>

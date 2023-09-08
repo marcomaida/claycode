@@ -11,11 +11,6 @@ const app = initPIXI();
 const inputTextBox = initInputText();
 initInfoText();
 
-const changeShapeInfo = document.getElementById("changeShapeDiv");
-changeShapeInfo.style.display = 'block'
-
-
-
 let polygon_view_last_padding = 0;
 let polygon_view_last_text = "";
 function polygonView(inputText) {
