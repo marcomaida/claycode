@@ -1,19 +1,20 @@
 input {
-    background-color:rgba(0, 0, 0, 0);
-    color:white;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
     border: none;
-    outline:none;
+    outline: none;
     font-size: 40pt;
     text-align: center;
     width: auto;
     height: auto;
-    transition:height 1s;
-    -webkit-transition:height 1s;
+    transition: height 1s;
+    -webkit-transition: height 1s;
     font-family: Helvetica, sans-serif;
 }
 
-html, body {
-    background-color:#000000;
+html,
+body {
+    background-color: #000000;
     margin: 0;
     height: 100%;
 }
@@ -22,11 +23,11 @@ h1 {
     font-family: Helvetica, sans-serif;
     font-size: 26pt;
     margin-left: 12%;
-    background-color:rgba(0, 0, 0, 0);
-    color:white;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
 }
 
-.questionmark {
+.question_mark {
     font-family: Helvetica, sans-serif;
     margin-left: 91%;
     margin-top: 2.8%;
@@ -45,7 +46,7 @@ h1 {
 
 a {
     text-decoration: none;
-    color:white;
+    color: white;
 }
 
 /* Landing page */
@@ -56,7 +57,7 @@ a {
     margin-top: 6%;
     margin-left: 25%;
     margin-right: 25%;
-    color:white;
+    color: white;
 }
 
 .clip-circle {
@@ -73,12 +74,14 @@ a {
     grid-area: image;
 }
 
-.gheader { grid-area: header;
+.gheader {
+    grid-area: header;
     font-size: 14pt;
     text-align: left;
 }
 
-.gdesc { grid-area: desc;
+.gdesc {
+    grid-area: desc;
     margin-left: 7pt;
     font-size: 12pt;
     text-align: left;
@@ -114,6 +117,24 @@ a {
 }
 
 .inline-text {
-    max-width:15pt;
-    max-height:15pt;
+    max-width: 15pt;
+    max-height: 15pt;
+}
+
+.footer_div {
+    position: fixed;
+    bottom: 10pt;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.change_shape_div {
+    vertical-align: middle;
+    margin: 15px 0px 0px 0px;
+    display: none;
+}
+
+.change_shape_img {
+    vertical-align: middle;
+    margin: 0px 10px 5px 5px;
 }
