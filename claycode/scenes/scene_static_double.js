@@ -1,21 +1,13 @@
 import { } from "../geometry/vector.js"
 import { } from "../geometry/math.js"
-import { clearDrawing, initDrawing } from "../packer/draw.js"
+import { clearDrawing } from "../packer/draw.js"
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js"
 import { textToTree } from "../conversion/convert.js";
+import { initInfoText, initInputText, initPIXI, updateInfoText } from "./utils.js";
 
-const app = new PIXI.Application({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    resolution: 1
-})
-initDrawing(app)
-
-const inputTextBox = document.getElementById("inputText")
-inputTextBox.select()
-inputTextBox.focus()
-
-document.body.appendChild(app.view)
+const app = initPIXI();
+const inputTextBox = initInputText();
+const infoText = initInfoText();
 
 function doubleView() {
     var inputText = document.getElementById("inputText").value
@@ -47,6 +39,8 @@ function doubleView() {
     clearDrawing();
     drawClaycode(current_tree.root, code_frame_square)
     drawClaycode(current_tree.root, code_frame_rect)
+
+    updateInfoText(inputText, current_tree);
 }
 
 doubleView()

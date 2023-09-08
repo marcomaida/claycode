@@ -1,46 +1,23 @@
 import { } from "../geometry/vector.js";
 import { area } from "../geometry/geometry.js";
 import { } from "../geometry/math.js";
-import { TreeNode } from "../tree/tree_node.js";
-import { Tree } from "../tree/tree.js";
-import { clearDrawing, initDrawing } from "../packer/draw.js";
+import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { textToTree, textToBits } from "../conversion/convert.js";
+import { textToTree } from "../conversion/convert.js";
 import { circlePolygon } from "../geometry/geometry.js";
+import { updateInfoText, initInputText, initInfoText, initPIXI } from "./utils.js";
 
-const app = new PIXI.Application({
-  width: window.innerWidth,
-  height: window.innerHeight,
-  resolution: 1,
-  antialias: true,
-});
-initDrawing(app);
+const app = initPIXI();
+const inputTextBox = initInputText();
+initInfoText();
 
-const inputTextBox = document.getElementById("inputText");
-const infoText = document.getElementById("infoText");
-inputTextBox.select();
-inputTextBox.focus();
+const changeShapeInfo = document.getElementById("changeShapeDiv");
+changeShapeInfo.style.display = 'block'
 
-document.body.appendChild(app.view);
+
 
 let polygon_view_last_padding = 0;
 let polygon_view_last_text = "";
-
-function debugTree() {
-  return new Tree(
-    new TreeNode(null, [
-      new TreeNode(null, [
-        new TreeNode(),
-        new TreeNode(),
-        new TreeNode(),
-        new TreeNode(),
-        new TreeNode(),
-        new TreeNode(),
-      ]),
-    ])
-  );
-}
-
 function polygonView(inputText) {
   var inputText = document.getElementById("inputText").value;
   const last_text_is_prefix =
@@ -51,8 +28,6 @@ function polygonView(inputText) {
 
   let current_tree = textToTree(inputText);
 
-  // DEBUG
-  // current_tree = debugTree();
   const window_width = window.innerWidth;
   const window_height = window.innerHeight;
 
@@ -81,8 +56,7 @@ function polygonView(inputText) {
     : baseline_padding;
   let node_padding_min = 2;
 
-  let out = `${inputText.length} Chars | ${current_tree.root.numDescendants} Nodes | ${textToBits(inputText).length} bits `;
-
+  let infoSuffix = ``;
   while (tries < MAX_TRIES) {
     // Decrease padding if it keeps failing
     const padding = Math.lerp(
@@ -103,14 +77,13 @@ function polygonView(inputText) {
       tries++;
       if (tries == MAX_TRIES) {
         clearDrawing();
-        out += "- Failed to Pack :(";
+        infoSuffix += "- Failed to Pack :(";
         break;
       }
     }
   }
 
-  infoText.textContent = out;
-
+  updateInfoText(inputText, current_tree, infoSuffix);
 }
 
 let SHAPES = [
@@ -143,6 +116,4 @@ function debounce(func, delay) {
 
 polygonView();
 inputTextBox.addEventListener("input", () => debounce(polygonView, 100));
-window.onresize = function () {
-  debounce(polygonView, 50);
-};
+window.onresize = function () { debounce(polygonView, 50); };

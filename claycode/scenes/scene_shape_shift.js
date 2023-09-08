@@ -2,21 +2,11 @@ import { } from "../geometry/vector.js"
 import { } from "../geometry/math.js"
 import { clearDrawing, initDrawing } from "../packer/draw.js"
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js"
-import { bitsToTree } from "../conversion/converter.js"
-import { BitStreamText } from "../conversion/bit_stream.js"
+import { bitsToTree, textToTree } from "../conversion/convert.js"
+import { initInputText, updateInfoText, initPIXI } from "./utils.js";
 
-const app = new PIXI.Application({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    resolution: 1
-})
-initDrawing(app)
-
-const inputTextBox = document.getElementById("inputText")
-inputTextBox.select()
-inputTextBox.focus()
-
-document.body.appendChild(app.view)
+const app = initPIXI();
+const inputTextBox = initInputText();
 
 var current_tree = null
 var current_ticker = null
@@ -53,13 +43,14 @@ function updateDrawing() {
 
 function updateClaycode() {
     var inputText = document.getElementById("inputText").value
-    var stream = new BitStreamText(inputText)
-    current_tree = bitsToTree(stream)
+    current_tree = textToTree(inputText)
 
     current_ticker = (delta) => {
         updateDrawing()
     }
     app.ticker.add(current_ticker)
+
+    updateInfoText(inputText, current_tree);
 }
 
 updateClaycode()
