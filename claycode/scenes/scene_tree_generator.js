@@ -14,20 +14,27 @@ const inputMaxChildren = document.getElementById("inputMaxChildren");
 const inputMaxHeight = document.getElementById("inputMaxHeight");
 const inputGrowProb = document.getElementById("inputGrowProb");
 
-function generateRandomTree(maxChildren, maxHeight, growProbability) {
-  function _gen(node, maxChildren, maxHeight, growProbability, height) {
-    if (height > maxHeight) { return; }
+function generateRandomTree(maxChildren, maxHeight, growProbability, remainingNodes) {
+  function _gen(node, maxChildren, maxHeight, growProbability, height, remainingNodes) {
+    if (height > maxHeight) { return remainingNodes; }
     for (let i = 0; i < maxChildren; i++) {
       if (Math.random() <= growProbability) {
+        if (remainingNodes <= 0) {
+          return remainingNodes;
+        }
+
         let child = new TreeNode(node, []);
-        _gen(child, maxChildren, maxHeight, growProbability, height + 1)
+        remainingNodes = _gen(child, maxChildren, maxHeight, growProbability, height + 1, remainingNodes - 1)
         node.children.push(child)
       }
+
     }
+
+    return remainingNodes
   }
 
   const inner = new TreeNode(null, []);
-  _gen(inner, maxChildren, maxHeight, growProbability, 1);
+  _gen(inner, maxChildren, maxHeight, growProbability, 1, remainingNodes - 2);
 
   return new Tree(
     new TreeNode(null, [inner])
@@ -35,18 +42,18 @@ function generateRandomTree(maxChildren, maxHeight, growProbability) {
 }
 
 function polygonView() {
-  let maxEstimatedNodes = 3000;
-  if (Math.pow(inputMaxChildren.value, inputMaxHeight.value) * inputGrowProb.value > maxEstimatedNodes) {
-    infoText.textContent = `Estimated > ${maxEstimatedNodes} Nodes (${inputMaxChildren.value}^${inputMaxHeight.value}*${inputGrowProb.value}). Aborting Packing.`;
-    clearDrawing();
-    return;
-  }
-
+  let maxNodes = 1000;
   let current_tree = generateRandomTree(
     inputMaxChildren.value,
     inputMaxHeight.value,
-    inputGrowProb.value
+    inputGrowProb.value,
+    maxNodes,
   );
+
+  let infoSuffix = ``;
+  if (current_tree.root.numDescendants >= maxNodes) {
+    infoSuffix = ` - (Capped) `;
+  }
 
   const window_width = window.innerWidth;
   const window_height = window.innerHeight;
@@ -74,7 +81,6 @@ function polygonView() {
   let node_padding_max = baseline_padding;
   let node_padding_min = 2;
 
-  let infoSuffix = ``;
   while (tries < MAX_TRIES) {
     // Decrease padding if it keeps failing
     const padding = Math.lerp(
