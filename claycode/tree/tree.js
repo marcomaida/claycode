@@ -62,7 +62,7 @@ function compute_weights_(node, node_padding) {
     Not working well so I went back to basic +1 heuristic 
   */
 
-  node.weight = children_weight + 1;
+  node.weight = children_weight + node_padding;
   node.weight = Math.max(node.weight, 1);
 }
 
