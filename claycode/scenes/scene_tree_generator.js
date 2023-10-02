@@ -1,6 +1,6 @@
-import { } from "../geometry/vector.js";
+import {} from "../geometry/vector.js";
 import { area } from "../geometry/geometry.js";
-import { } from "../geometry/math.js";
+import {} from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
 import { circlePolygon } from "../geometry/geometry.js";
@@ -9,14 +9,28 @@ import { Tree } from "../tree/tree.js";
 import { TreeNode } from "../tree/tree_node.js";
 
 const app = initPIXI();
-const infoText = initInfoText()
+const infoText = initInfoText();
 const inputMaxChildren = document.getElementById("inputMaxChildren");
 const inputMaxHeight = document.getElementById("inputMaxHeight");
 const inputGrowProb = document.getElementById("inputGrowProb");
 
-function generateRandomTree(maxChildren, maxHeight, growProbability, remainingNodes) {
-  function _gen(node, maxChildren, maxHeight, growProbability, height, remainingNodes) {
-    if (height > maxHeight) { return remainingNodes; }
+function generateRandomTree(
+  maxChildren,
+  maxHeight,
+  growProbability,
+  remainingNodes
+) {
+  function _gen(
+    node,
+    maxChildren,
+    maxHeight,
+    growProbability,
+    height,
+    remainingNodes
+  ) {
+    if (height > maxHeight) {
+      return remainingNodes;
+    }
     for (let i = 0; i < maxChildren; i++) {
       if (Math.random() <= growProbability) {
         if (remainingNodes <= 0) {
@@ -24,21 +38,25 @@ function generateRandomTree(maxChildren, maxHeight, growProbability, remainingNo
         }
 
         let child = new TreeNode(node, []);
-        remainingNodes = _gen(child, maxChildren, maxHeight, growProbability, height + 1, remainingNodes - 1)
-        node.children.push(child)
+        remainingNodes = _gen(
+          child,
+          maxChildren,
+          maxHeight,
+          growProbability,
+          height + 1,
+          remainingNodes - 1
+        );
+        node.children.push(child);
       }
-
     }
 
-    return remainingNodes
+    return remainingNodes;
   }
 
   const inner = new TreeNode(null, []);
   _gen(inner, maxChildren, maxHeight, growProbability, 1, remainingNodes - 2);
 
-  return new Tree(
-    new TreeNode(null, [inner])
-  );
+  return new Tree(new TreeNode(null, [inner]));
 }
 
 function polygonView() {
@@ -47,7 +65,7 @@ function polygonView() {
     inputMaxChildren.value,
     inputMaxHeight.value,
     inputGrowProb.value,
-    maxNodes,
+    maxNodes
   );
 
   let infoSuffix = ``;
@@ -125,7 +143,7 @@ let current_shape = 0;
 // by fast-repeating keystrokes
 let timerId;
 function debounce(func, delay) {
-  infoText.textContent = `Packing...`
+  infoText.textContent = `Packing...`;
   clearTimeout(timerId);
   timerId = setTimeout(func, delay);
 }
@@ -144,4 +162,6 @@ polygonView();
 inputMaxChildren.addEventListener("input", () => debounce(polygonView, 100));
 inputMaxHeight.addEventListener("input", () => debounce(polygonView, 100));
 inputGrowProb.addEventListener("input", () => debounce(polygonView, 100));
-window.onresize = function () { debounce(polygonView, 50); };
+window.onresize = function () {
+  debounce(polygonView, 50);
+};

@@ -1,5 +1,5 @@
 import * as util from "./util.js";
-import { } from "./compression/shoco_en.js"
+import {} from "./compression/shoco_en.js";
 
 export function textToBits(input_text) {
   const encodedData = shoco_en.compress(input_text);

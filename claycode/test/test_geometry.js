@@ -74,13 +74,17 @@ try {
   const percs_square = getVerticesPercPositions(square);
   assert_eq(percs_square[0], 0.0);
   assert_eq(percs_square[1], 0.25);
-  assert_eq(percs_square[2], 0.50);
+  assert_eq(percs_square[2], 0.5);
   assert_eq(percs_square[3], 0.75);
 
   const percs_circle = getVerticesPercPositions(circle_r3_e1000);
   for (const [i, perc] of percs_circle.entries()) {
     // Test that pickPointOnPerimeter and getVerticesPercPositions are inverses
-    assert_true(pickPointOnPerimeter(circle_r3_e1000, perc)[1].nearly_equals(circle_r3_e1000[i]));
+    assert_true(
+      pickPointOnPerimeter(circle_r3_e1000, perc)[1].nearly_equals(
+        circle_r3_e1000[i]
+      )
+    );
   }
 
   test_section("segmentSegmentIntersection");

@@ -1,11 +1,16 @@
-import { } from "../geometry/vector.js";
+import {} from "../geometry/vector.js";
 import { area } from "../geometry/geometry.js";
-import { } from "../geometry/math.js";
+import {} from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
 import { textToTree } from "../conversion/convert.js";
 import { circlePolygon } from "../geometry/geometry.js";
-import { updateInfoText, initInputText, initInfoText, initPIXI } from "./utils.js";
+import {
+  updateInfoText,
+  initInputText,
+  initInfoText,
+  initPIXI,
+} from "./utils.js";
 
 const app = initPIXI();
 const inputTextBox = initInputText();
@@ -104,11 +109,13 @@ document.addEventListener("keydown", function (event) {
 // by fast-repeating keystrokes
 let timerId;
 function debounce(func, delay) {
-  infoText.textContent = `Packing...`
+  infoText.textContent = `Packing...`;
   clearTimeout(timerId);
   timerId = setTimeout(func, delay);
 }
 
 polygonView();
 inputTextBox.addEventListener("input", () => debounce(polygonView, 100));
-window.onresize = function () { debounce(polygonView, 50); };
+window.onresize = function () {
+  debounce(polygonView, 50);
+};

@@ -65,7 +65,10 @@ export function splitPolygonInSimplestPartition(
     const vt = percs[Math.floor(Math.random() * percs.length)];
     const diff = Math.random() * 0.3;
     const [cut_va_idx, va] = pickPointOnPerimeter(polygon, (vt + diff) % 1.0);
-    const [cut_vb_idx, vb] = pickPointOnPerimeter(polygon, (vt + 1.0 - diff) % 1.0);
+    const [cut_vb_idx, vb] = pickPointOnPerimeter(
+      polygon,
+      (vt + 1.0 - diff) % 1.0
+    );
 
     let res = cutPolygon(polygon, cut_va_idx, va, cut_vb_idx, vb);
 

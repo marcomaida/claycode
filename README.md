@@ -7,11 +7,13 @@ Claycodes are an aesthetically pleasing alternative to QR codes. Claycodes can e
 Make sure that the python package `SimpleHTTPServer` is installed (`make requirements`).
 
 For MacOS run:
+
 ```
 make
 ```
 
 For Linux run:
+
 ```
-make run-linux 
+make run-linux
 ```
