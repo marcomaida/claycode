@@ -2,6 +2,17 @@ import tree.tree
 import math
 from tree.tree import TreeNode
 
+###########
+# The original Treecode encoding
+# The encoding works with a breath first visit of the tree
+# 1. Initialize frontier with root node
+# 2. Pop a node from the frontier
+# 3. If the bit is 1 or the frontier is empty, 
+#          if next bit is 0 create 2 children, otherwise 3, add to frontier.
+#    else  
+#          go to step 2.
+###########
+
 def bits_to_tree(stream): 
     root = TreeNode()
     frontier = [root]
