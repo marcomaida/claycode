@@ -1,8 +1,7 @@
-import tree.tree 
+from tree_lib.tree import TreeNode, equal, wrap
 import math
-from tree.tree import TreeNode
 
-###########
+######################
 # The original Treecode encoding
 # The encoding works with a breath first visit of the tree
 # 1. Initialize frontier with root node
@@ -11,7 +10,7 @@ from tree.tree import TreeNode
 #          if next bit is 0 create 2 children, otherwise 3, add to frontier.
 #    else  
 #          go to step 2.
-###########
+######################
 
 def bits_to_tree(stream): 
     root = TreeNode()
@@ -37,6 +36,26 @@ def bits_to_tree(stream):
     
     root.initialize()
     return root
+
+def tree_to_bits(root):
+    bits = ""
+    frontier = [root]
+    while len(frontier) > 0:
+        parent = frontier.pop(0)
+
+        # First choice -- has children?
+        if len(frontier) > 0:  # If first choice is available
+            bits += "1" if len(parent.children) > 0 else "0"
+
+        # Second choice -- how many children?
+        if len(parent.children) > 0:
+            assert len(parent.children) in [2,3]
+            bits += "0" if len(children) == 2 else "1"
+            for c in children:
+                frontier.append(c)
+
+    
+    
 
 def bits_to_tree_k(stream, k): 
     assert k >=3
@@ -77,14 +96,14 @@ def bits_to_tree_k(stream, k):
     return root
 
 def tree_ord(node):
-    needs_ord = not all([tree.tree.equal(node.children[i-1], node.children[i]) 
+    needs_ord = not all([equal(node.children[i-1], node.children[i]) 
                          for i in range(1,len(node.children))])
     
     for c in node.children:
         tree_ord(c)
 
     if needs_ord:
-        node.children = [tree.tree.wrap(node.children[i], i) 
+        node.children = [wrap(node.children[i], i) 
                          for i in range(len(node.children))]
 
 # A modified version of the encoding that marks

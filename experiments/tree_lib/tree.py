@@ -1,12 +1,9 @@
 """
 Data structure of the tree, helper function
 """
-from util.vector import Vector
-
 class TreeNode:
-	def __init__(self, children = [], position = Vector(0,0)):
+	def __init__(self, children = []):
 		self.children = children 
-		self.position = position
 		self.n_descendants = None
 		self.longest_descending_path = None
 		self.father_thickness = 1

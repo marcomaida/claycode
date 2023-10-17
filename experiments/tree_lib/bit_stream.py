@@ -52,6 +52,8 @@ class bit_stream_number:
         self._ptr = 0
         self._finished = False
 
+# Literal binary string 
+# "0101111010101" as a string
 class bit_stream_literal:
     def __init__(self, array):
         self._array = array
@@ -65,9 +67,9 @@ class bit_stream_literal:
             return 1 # Final extra 1
         else:
             bit = self._array[self._i]
-            assert bit == 1 or bit == 0
+            assert bit == "1" or bit == "0"
             self._i += 1
-            return bit
+            return int(bit)
 
     def is_finished(self):
         return self._finished
