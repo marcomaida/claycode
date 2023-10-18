@@ -1,4 +1,5 @@
 from tree_lib.tree import TreeNode, equal, wrap
+from tree_lib.bit_stream import bit_stream_literal
 import math
 
 ######################
@@ -12,7 +13,8 @@ import math
 #          go to step 2.
 ######################
 
-def bits_to_tree(stream): 
+def bits_to_tree(input_string): 
+    stream = bit_stream_literal(input_string)
     root = TreeNode()
     frontier = [root]
     while not stream.is_finished():
@@ -50,10 +52,14 @@ def tree_to_bits(root):
         # Second choice -- how many children?
         if len(parent.children) > 0:
             assert len(parent.children) in [2,3]
-            bits += "0" if len(children) == 2 else "1"
-            for c in children:
+            bits += "0" if len(parent.children) == 2 else "1"
+            for c in parent.children:
                 frontier.append(c)
+    
+    # Strip last trailing zeroes and one terminator
+    bits = bits.rstrip('0')[:-1]
 
+    return bits
     
     
 
