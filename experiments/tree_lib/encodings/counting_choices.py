@@ -2,7 +2,10 @@ from tree_lib.tree import TreeNode, equal, wrap
 import math
 
 ######################
-# Experimental encoding
+# Simple encoding:
+# Perform a level-order traversal and convert bits as follows:
+# 0 -> one child
+# 1 -> two children + the amount of subsequent 1's (hence the name: you count 1's)
 ######################
 
 def bits_to_tree(bits: str) -> TreeNode: 
