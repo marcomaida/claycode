@@ -11,6 +11,9 @@ import math
 #          if next bit is 0 create 2 children, otherwise 3, add to frontier.
 #    else  
 #          go to step 2.
+#
+# Note: all strings have a "1" appended. If a next bit needs to be fetched at the
+# end of the string, it is assumed to be "0" (i.e. will produce node with 2 children)
 ######################
 
 def bits_to_tree(input_string): 
