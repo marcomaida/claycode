@@ -1,5 +1,7 @@
 from tree_lib.tree import TreeNode
 
+STARTING_BASE = 2
+
 ######################
 # Unordered tree encoding
 # Treats the bits as a big natural number
@@ -31,23 +33,23 @@ def largest_pow(n,b):
     return max_exp
 
 # Decompose the number into 2^a + 3^b + 4^c + ...
-def number_to_pow_decomposition(n):
+def number_to_pow_decomposition(n, starting_base=2):
     dec = []
-    pow=2
+    base=starting_base
     while n > 0:
-        lp = largest_pow(n, pow)
+        lp = largest_pow(n, base)
         dec += [lp]
-        n-=pow**lp
-        pow+=1
+        n-=base**lp
+        base+=1
     return dec
 
-def pow_decomposition_to_number(dec):
+def pow_decomposition_to_number(dec, starting_base=2):
     dec.sort(reverse=True)
-    return sum([(i+2)**pow for i,pow in enumerate(dec)])
+    return sum([(i+starting_base)**pow for i,pow in enumerate(dec)])
 
 def bits_to_tree(bits: str) -> TreeNode: 
     def populate_tree_of_number(root: TreeNode, n):
-        dec = number_to_pow_decomposition(n)
+        dec = number_to_pow_decomposition(n,STARTING_BASE)
         root.children = [TreeNode() for _ in range(len(dec))]
         for i,c in enumerate(root.children):
             populate_tree_of_number(c, dec[i])
@@ -66,6 +68,6 @@ def tree_to_bits(root: TreeNode) -> str:
         else:
             dec = [tree_to_number(c) for c in root.children]
             dec.sort(reverse=True)
-            return pow_decomposition_to_number(dec)
+            return pow_decomposition_to_number(dec,STARTING_BASE)
         
     return number_to_bit_string(tree_to_number(root))
