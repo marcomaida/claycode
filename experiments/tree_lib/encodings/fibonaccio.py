@@ -1,18 +1,11 @@
-
+from tree_lib.util import bit_string_to_number, number_to_bit_string
 from tree_lib.tree import TreeNode
+
 
 ######################
 # Unordered tree encoding
 # Fibonaccio Encoding
 ######################
-
-def bit_string_to_number(bits: str):
-    bits = "1" + bits # Add 1 so that any zero on the left is kept
-    return sum(int(c)*(2**i) for i,c in enumerate(bits[::-1]))
-
-def number_to_bit_string(n):
-    assert n > 0
-    return bin(n)[3:] # remove the 0b, then remove the first one
 
 def fib(n):
     fibn=1
