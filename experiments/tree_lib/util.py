@@ -1,0 +1,34 @@
+import numpy as np
+import random
+
+# Generate random bit string, given the probability of picking one
+# `p_of_one = 0`   => constant zero
+# `p_of_one = 0.5` => pure random
+# `p_of_one = 0.9` => mostly ones
+# `p_of_one = 1`   => All ones
+def gen_bit_string(length, p_of_one=0.5): 
+    assert 0 <= p_of_one and p_of_one <= 1
+    return ''.join(np.random.choice(["0","1"], length, p=[1-p_of_one, p_of_one]))
+
+# Generate random bit string, given the "auto-correlation with lag 1"
+# Autocorrelation represents the degree of similarity between a 
+# given time series and a lagged version of itself over successive time intervals.
+# `auto_correlation = 0`   => perfectly alternating 
+# `auto_correlation = 0.5` => pure random
+# `auto_correlation = 1`   => constant string
+def gen_bit_string_with_autocorrelation(length, auto_correlation=0.5): # 0.5 = random
+    assert 0 <= auto_correlation <= 1 and length > 0
+    signal = ["0"]*length
+    signal[0] = random.choice("01")
+    for i in range(1,length):
+        is_same_as_previous = random.random() < auto_correlation
+        signal[i] = signal[i-1] if is_same_as_previous else f"{1-int(signal[i-1])}"
+    return ''.join(signal)
+
+def bit_string_to_number(bits: str):
+    bits = "1" + bits # Add 1 so that any zero on the left is kept
+    return sum(int(c)*(2**i) for i,c in enumerate(bits[::-1]))
+
+def number_to_bit_string(n):
+    assert n > 0
+    return bin(n)[3:] # remove the 0b, then remove the first one
