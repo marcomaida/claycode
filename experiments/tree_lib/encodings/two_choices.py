@@ -64,9 +64,13 @@ def tree_to_bits(root):
 
     return bits
     
-    
+#####################
+# Variants 
+#####################
 
-def bits_to_tree_k(stream, k): 
+def bits_to_tree_k(input_string, k): 
+    stream = bit_stream_literal(input_string)
+
     assert k >=3
     # k children can encode log2(k-1) bits
     k_bits = math.log2(k-1)
@@ -115,11 +119,8 @@ def tree_ord(node):
         node.children = [wrap(node.children[i], i) 
                          for i in range(len(node.children))]
 
-# A modified version of the encoding that marks
-# the order of branches by nesting stacks of
-# one children when necessary
-def bits_to_tree_ord(stream):
-    t = bits_to_tree(stream)
+def bits_to_tree_markers(input_string):
+    t = bits_to_tree(input_string)
     num_descendants_opt = t.n_descendants
     tree_ord(t)
     t.initialize()
