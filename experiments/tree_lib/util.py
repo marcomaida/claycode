@@ -25,6 +25,9 @@ def gen_bit_string_with_autocorrelation(length, auto_correlation=0.5): # 0.5 = r
         signal[i] = signal[i-1] if is_same_as_previous else f"{1-int(signal[i-1])}"
     return ''.join(signal)
 
+def autocorrelation(bit_string):
+    return sum([bit_string[i] == bit_string[i-1] for i in range(1, len(bit_string))], 1) / len(bit_string)
+
 def bit_string_to_number(bits: str):
     bits = "1" + bits # Add 1 so that any zero on the left is kept
     return sum(int(c)*(2**i) for i,c in enumerate(bits[::-1]))
