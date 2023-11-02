@@ -32,15 +32,19 @@ def add_markers(node: TreeNode, n: int):
     node.children = new_children
 
 # Either MSB is 1 or the entire number is 0
-def bits_to_int_binary(bits: str) -> str:
-    if bits and bits[0] == "0" and bits != "0":
-        return "1" + bits
-    return bits
+def is_int(bits):
+    return bits and bits[0] == "1" or bits == "0"
+
+def cut_leading_zeroes(bits: str) -> str:
+    assert bits
+    bits_int = bits.lstrip("0")
+    if not bits_int:
+        bits_int = "0"
+    return bits_int
 
 # Assumes bits represents an integer
 def int_binary_to_int(bits: str) -> int:
-    assert bits
-    assert bits[0] == "1" or bits == "0", f"Bits are {bits}"
+    assert is_int(bits)
     n = 0
     for i, bit in enumerate(bits[::-1]):
         n += (2**i)*int(bit)
@@ -52,8 +56,8 @@ def bits_to_tree(bits: str) -> TreeNode | None:
     for bit in bits:
         assert bit == "1" or bit == "0"
     
-    # Assumes bits represents an integer
     def rec(bits):
+        assert is_int(bits) # Assumes bits represents an integer
         if bits == "0":
             return None
         if bits == "1":
@@ -62,9 +66,11 @@ def bits_to_tree(bits: str) -> TreeNode | None:
         new_node = TreeNode()
         new_children = []
         odd_bits, even_bits = de_interleave(bits)
+        odd_bits_int = cut_leading_zeroes(odd_bits)
+        even_bits_int = cut_leading_zeroes(even_bits)
 
-        left_child = rec(odd_bits)
-        right_child = rec(even_bits)
+        left_child = rec(odd_bits_int)
+        right_child = rec(even_bits_int)
         if left_child:
             new_children.append(left_child)
         if right_child:
@@ -72,8 +78,8 @@ def bits_to_tree(bits: str) -> TreeNode | None:
         new_node.children = new_children
 
         # Add markers based on int tuple (a, b)
-        a = int_binary_to_int(bits_to_int_binary(odd_bits))
-        b = int_binary_to_int(bits_to_int_binary(even_bits))
+        a = int_binary_to_int(odd_bits_int)
+        b = int_binary_to_int(even_bits_int)
         if a > b:
             if b == 0:
                 assert len(new_node.children) == 1
@@ -83,8 +89,8 @@ def bits_to_tree(bits: str) -> TreeNode | None:
 
         return new_node
     
-    bits_int = bits_to_int_binary(bits)
-    root = rec(bits_int)
+    bits = "1" + bits
+    root = rec(bits)
     if root:
         root.initialize()
     return root
