@@ -108,12 +108,12 @@ def bits_to_tree_k(input_string, k):
     root.initialize()
     return root
 
-def tree_ord(node):
+def add_markers(node):
     needs_ord = not all([equal(node.children[i-1], node.children[i]) 
                          for i in range(1,len(node.children))])
     
     for c in node.children:
-        tree_ord(c)
+        add_markers(c)
 
     if needs_ord:
         node.children = [wrap(node.children[i], i) 
@@ -122,7 +122,7 @@ def tree_ord(node):
 def bits_to_tree_markers(input_string):
     t = bits_to_tree(input_string)
     num_descendants_opt = t.n_descendants
-    tree_ord(t)
+    add_markers(t)
     t.initialize()
     assert(t.n_descendants >= num_descendants_opt)
     return t

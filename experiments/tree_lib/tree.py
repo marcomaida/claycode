@@ -6,6 +6,7 @@ class TreeNode:
 		self.children = children 
 		self.n_descendants = None
 		self.longest_descending_path = None
+		self.weight = None
 		self.father_thickness = 1
 
 	def _compute_descendants(self):
@@ -23,6 +24,8 @@ class TreeNode:
 		# compute metadata in each this node and children
 		self._compute_descendants()
 		self._compute_longest_descending_path()
+		self.weight = sum ((node.longest_descending_path 
+					  		for node in iterate_tree_depth_first(self)))
 
 	def __repr__(self) -> str:
 		return f"{str(self.children)}"
