@@ -35,3 +35,9 @@ def bit_string_to_number(bits: str):
 def number_to_bit_string(n):
     assert n > 0
     return bin(n)[3:] # remove the 0b, then remove the first one
+
+def shuffle_tree(root):
+    for c in root.children:
+        shuffle_tree(c)
+    
+    random.shuffle(root.children)
