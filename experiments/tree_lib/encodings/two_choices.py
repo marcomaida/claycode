@@ -1,4 +1,4 @@
-from tree_lib.tree import TreeNode, equal, wrap
+from tree_lib.tree import TreeNode, equal, wrap, tower
 from tree_lib.bit_stream import bit_stream_literal
 import math
 
@@ -18,7 +18,7 @@ import math
 
 def bits_to_tree(input_string): 
     stream = bit_stream_literal(input_string)
-    root = TreeNode()
+    root = TreeNode([])
     frontier = [root]
     while not stream.is_finished():
         bit = stream.next()
@@ -108,21 +108,44 @@ def bits_to_tree_k(input_string, k):
     root.initialize()
     return root
 
-def add_markers(node):
-    needs_ord = not all([equal(node.children[i-1], node.children[i]) 
+# Encode sibling ordering in a tree by wrapping
+# the nth child with n intermediate nodes
+def add_wraps(node):
+    children_need_ord = not all([equal(node.children[i-1], node.children[i]) 
                          for i in range(1,len(node.children))])
     
     for c in node.children:
-        add_markers(c)
+        add_wraps(c)
 
-    if needs_ord:
+    if children_need_ord:
         node.children = [wrap(node.children[i], i) 
                          for i in range(len(node.children))]
 
-def bits_to_tree_markers(input_string):
+def bits_to_tree_wrap(input_string):
     t = bits_to_tree(input_string)
-    num_descendants_opt = t.n_descendants
-    add_markers(t)
+    add_wraps(t)
     t.initialize()
-    assert(t.n_descendants >= num_descendants_opt)
+    return t
+
+
+# Encode sibling ordering in a tree by adding markers
+# The nth child will have a marker with n intermediate nodes
+def add_markers(node, position_to_mark):
+    children_need_ord = not all([equal(node.children[i-1], node.children[i]) 
+                         for i in range(1,len(node.children))])
+    
+    for i,c in enumerate(node.children): 
+        position = i if children_need_ord else 0
+        add_markers(c, position)
+
+    # Add marker
+    if position_to_mark > 0:
+        cs = [c for c in node.children]
+        cs.append(tower(position_to_mark+1))
+        node.children = cs
+
+def bits_to_tree_mark(input_string):
+    t = bits_to_tree(input_string)
+    add_markers(t,0)
+    t.initialize()
     return t

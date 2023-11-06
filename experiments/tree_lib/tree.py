@@ -45,9 +45,16 @@ def max_layers(t):
 def rightmost(layers):
 	assert layers > 0
 	if layers == 1:
-		return TreeNode()
+		return TreeNode([])
 	else:
 		return TreeNode([TreeNode(), rightmost(layers-1)])
+
+def tower(layers):
+	assert layers > 0
+	if layers == 1:
+		return TreeNode([])
+	else:
+		return TreeNode([tower(layers-1)])
 	
 def one():
 	return rightmost(2)
