@@ -41,3 +41,24 @@ def shuffle_tree(root):
         shuffle_tree(c)
     
     random.shuffle(root.children)
+
+def fib(n):
+    fibn=1
+    fibnm1=0
+    if n == 0:
+        return 0
+    
+    while n>0:
+        t = fibn + fibnm1
+        fibnm1 = fibn
+        fibn = t
+        n -=1
+
+    return fibn
+
+# Returns the largest fibonacci number less or equal to n
+def largest_fib(n):
+    fibn = 1
+    while fib(fibn) <= n:
+        fibn+=1
+    return fibn-1

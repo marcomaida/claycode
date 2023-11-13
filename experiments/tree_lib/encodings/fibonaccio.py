@@ -1,34 +1,10 @@
-from tree_lib.util import bit_string_to_number, number_to_bit_string
+from tree_lib.util import bit_string_to_number, number_to_bit_string, largest_fib, fib
 from tree_lib.tree import TreeNode
-
 
 ######################
 # Unordered tree encoding
 # Fibonaccio Encoding
 ######################
-
-def fib(n):
-    fibn=1
-    fibnm1=0
-    if n == 0:
-        return 0
-    
-    while n>0:
-        t = fibn + fibnm1
-        fibnm1 = fibn
-        fibn = t
-        n -=1
-
-    return fibn
-
-
-# Returns the largest fibonacci number less or equal to n
-def largest_fib(n):
-    fibn = 1
-    while fib(fibn) <= n:
-        fibn+=1
-    return fibn-1
-    
 
 def number_to_fib_decomposition(n):
     dec = []
