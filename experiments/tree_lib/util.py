@@ -62,3 +62,52 @@ def largest_fib(n):
     while fib(fibn) <= n:
         fibn+=1
     return fibn-1
+
+def gauss(n):
+    return (n*(n+1))//2
+
+def largest_gauss(n):
+    gaussn = 1
+    while gauss(gaussn) <= n:
+        gaussn+=1
+    return gaussn-1
+
+def largest_gauss_binsearch(n):
+    assert n > 0
+    if n == 1:
+        return 1
+    a = 0
+    b = n
+    while True:
+        r = (a+b)//2
+        rsq = gauss(r)
+        if rsq <= n and gauss(r+1) > n:
+            return r
+        else:
+            if rsq <= n:
+                a = r
+            else:
+                b = r
+
+def largest_value_fitting(f, n, use_binsearch=True):
+    assert n > 0
+    if use_binsearch:
+        if n == 1:
+            return 1
+        a = 0
+        b = n
+        while True:
+            r = (a+b)//2
+            rsq = f(r)
+            if rsq <= n and f(r+1) > n:
+                return f(r)
+            else:
+                if rsq <= n:
+                    a = r
+                else:
+                    b = r
+    else:
+        curr_largest = 1
+        while f(curr_largest) <= n:
+            curr_largest += 1
+        return f(curr_largest-1)
