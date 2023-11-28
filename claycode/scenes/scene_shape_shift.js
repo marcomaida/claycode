@@ -2,7 +2,7 @@ import {} from "../geometry/vector.js";
 import {} from "../geometry/math.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js";
-import { bitsToTree, textToTree } from "../conversion/convert.js";
+import { textToTree } from "../conversion/convert.js";
 import { initInputText, updateInfoText, initPIXI } from "./utils.js";
 
 const app = initPIXI();

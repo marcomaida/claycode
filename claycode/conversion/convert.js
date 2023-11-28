@@ -1,6 +1,6 @@
 import * as text_bit_UTF8 from "./text_bits/text_bits_UTF8.js";
 import * as text_bit_shoco from "./text_bits/text_bits_shoco.js";
-import * as bits_tree from "./bits_tree/bits_tree.js";
+import * as two_choices_mark from "./bits_tree/two_choices_mark.js";
 
 /* This is the external interface of the conversion functions.
    Modify these functions to change the scenes behavior. */
@@ -11,10 +11,10 @@ export function textToBits(text) {
 }
 
 export function bitsToTree(bitsArray) {
-  return bits_tree.bitsToTree(bitsArray);
+  return two_choices_mark.bitsToTree(bitsArray);
 }
 
 export function textToTree(text) {
   const bitsArray = textToBits(text);
-  return bitsToTree(bitsArray);
+  return two_choices_mark.bitsToTree(bitsArray);
 }
