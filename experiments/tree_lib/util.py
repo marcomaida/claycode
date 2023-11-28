@@ -89,7 +89,7 @@ def largest_gauss_binsearch(n):
             else:
                 b = r
 
-def largest_value_fitting(f, n, use_binsearch=True):
+def largest_arg_fitting(f, n, use_binsearch=True):
     assert n > 0
     if use_binsearch:
         if n == 1:
@@ -100,7 +100,7 @@ def largest_value_fitting(f, n, use_binsearch=True):
             r = (a+b)//2
             rsq = f(r)
             if rsq <= n and f(r+1) > n:
-                return f(r)
+                return r
             else:
                 if rsq <= n:
                     a = r
@@ -110,4 +110,7 @@ def largest_value_fitting(f, n, use_binsearch=True):
         curr_largest = 1
         while f(curr_largest) <= n:
             curr_largest += 1
-        return f(curr_largest-1)
+        return curr_largest-1
+    
+def largest_value_fitting(f, n, use_binsearch=True):
+   return f(largest_arg_fitting(f,n,use_binsearch))
