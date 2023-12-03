@@ -35,11 +35,13 @@ def number_to_cantor2d_decomposition(n):
     
     assert n > 0
     dec = cantor2d_bisect(n)
+    dec = [d for d in dec if d != 0]
+
     return dec
 
 def cantor2d_decomposition_to_number(dec):
-    if dec == []:
-        return 0
+    if len(dec) != 2:
+        dec += [0 for _ in range(2-len(dec))]
     
     dec.sort(reverse=True)
     return cantor2d_bisect_inverse(dec)
@@ -61,7 +63,7 @@ def bits_to_tree(bits: str) -> TreeNode:
 def tree_to_bits(root: TreeNode) -> str:
     def tree_to_number(root: TreeNode):
         if root.children == []:
-            return 0
+            return 1
         else:
             dec = [tree_to_number(c) for c in root.children]
             dec.sort(reverse=True)
