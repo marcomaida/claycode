@@ -114,3 +114,20 @@ def largest_arg_fitting(f, n, use_binsearch=True):
     
 def largest_value_fitting(f, n, use_binsearch=True):
    return f(largest_arg_fitting(f,n,use_binsearch))
+
+def combinations(n, r):
+    if r > n:
+        return 0
+
+    numerator = 1
+    denominator = 1
+
+    for i in range(r):
+        numerator *= n - i
+        denominator *= i + 1
+
+    return numerator // denominator
+
+# Computes the mth simplex number in k dimension
+def simplex(m, k):
+   return combinations(m+k-1, k)
