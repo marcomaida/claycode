@@ -36,7 +36,6 @@ def number_to_simplex_decomposition(n,K):
 
     return dec
 
-# Now build opposite
 def simplex_decomposition_to_number(dec, k):
     if len(dec) != k:
         dec += [0 for _ in range(k-len(dec))]
