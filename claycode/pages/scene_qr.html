@@ -6,13 +6,16 @@
     <!-- <script src="https://pixijs.download/release/pixi.min.js"></script> -->
     <script src="../pixi.mini.js"></script>
     <script type="module" src="../page_loader.js"></script>
-    <script type="module" src="/scenes/scene_polygon.js"></script>
+    <script type="module" src="/scenes/scene_qr.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 </head>
 
-<body>
+<body style="position: relative;">
     <div id="pixiDiv" style="z-index:0; position: fixed;"></div>
-    <div style="z-index:1; position: fixed;">
+    <div style="z-index:1; position: fixed; width: 100%;">
         <div id="headerDiv"></div>
+        <div style="margin-left:50%; margin-top: 20%;transform: translateY(-50%);" id="qrcode"></div>
+
         <div class="infoBox" , id="infoBox">
             <div id="infoText"></div>
             <div id="changeShapeDiv" class="change_shape_div">

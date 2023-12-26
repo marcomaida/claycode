@@ -5,7 +5,7 @@ import { TreeNode } from "../../tree/tree_node.js";
 
 function bitStringToInt(bits) {
     bits.unshift("1"); // Add 1 at beginning to make sure it is an integer
-    return Array.from(bits).reverse().reduce((acc, c, i) => acc + BigInt(c)*2n**BigInt(i), 0n);
+    return Array.from(bits).reverse().reduce((acc, c, i) => acc + BigInt(c) * 2n ** BigInt(i), 0n);
 }
 
 function intToBitString(x) {
@@ -62,7 +62,6 @@ function squareDecompositionToNumber(dec) {
 /* Encoding functions */
 
 export function bitsToTree(bitsArray) {
-    console.log("Encoding using squares");
     function populateTreeOfNumber(root, n) {
         const dec = numberToSquareDecomposition(n);
         root.children = dec.map(() => new TreeNode());

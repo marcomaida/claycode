@@ -1,5 +1,8 @@
 import { textToBits } from "../conversion/convert.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
+import { area } from "../geometry/geometry.js";
+import { drawClaycode } from "../packer/draw_polygon_claycode.js";
+import { circlePolygon } from "../geometry/geometry.js";
 
 export function initPIXI() {
   const app = new PIXI.Application({
@@ -10,7 +13,8 @@ export function initPIXI() {
   });
   initDrawing(app);
 
-  document.body.appendChild(app.view);
+  const canvasDiv = document.getElementById("pixiDiv").value;
+  pixiDiv.appendChild(app.view);
 
   return app;
 }
@@ -32,10 +36,71 @@ export function updateInfoText(inputText, currentTree, infoSuffix = "") {
   const infoText = document.getElementById("infoText");
   if (inputText !== null)
     infoText.textContent =
-      `${inputText.length} Chars | ${textToBits(inputText).length} bits | ${
-        currentTree.root.numDescendants
+      `${inputText.length} Chars | ${textToBits(inputText).length} bits | ${currentTree.root.numDescendants
       } Nodes ` + infoSuffix;
   else
     infoText.textContent =
       `${currentTree.root.numDescendants} Nodes` + infoSuffix;
+}
+
+// Helper function to avoid too many calls to the drawing function
+// by fast-repeating keystrokes
+export function debounce(func, delay, timerId) {
+  infoText.textContent = `Packing...`;
+  clearTimeout(timerId);
+  return setTimeout(func, delay);
+}
+
+// Shape management
+export const POLYGON_SHAPES = [
+  // [num_edges, scale, rotation_deg]
+  [4, new PIXI.Vec(1, 1), 45],
+  [50, new PIXI.Vec(1, 1), 0],
+  [3, new PIXI.Vec(1, 1), 0],
+  [4, new PIXI.Vec(1.5, 0.7), 45],
+  [8, new PIXI.Vec(1, 1), 0],
+];
+export function drawPolygonClaycode(current_tree, current_shape, polygon_center, polygon_size) {
+  // Start with large padding, decrease at each fail
+  let node_padding_max = Math.lerp(
+    5,
+    2,
+    Math.min(current_tree.root.numDescendants, 300) / 300
+  );
+  let node_padding_min = 2;
+
+  let polygon = circlePolygon(
+    polygon_center,
+    polygon_size,
+    POLYGON_SHAPES[current_shape][0],
+    POLYGON_SHAPES[current_shape][1],
+    POLYGON_SHAPES[current_shape][2]
+  );
+
+  // Try to draw for a certain max number of times
+  const MAX_TRIES = 400;
+  let tries = 0;
+  while (tries < MAX_TRIES) {
+    // Decrease padding if it keeps failing
+    const padding = Math.lerp(
+      node_padding_max,
+      node_padding_min,
+      tries / MAX_TRIES
+    );
+    current_tree.compute_weights(padding);
+
+    let min_node_area = area(polygon) * 0.0001;
+
+    try {
+      clearDrawing();
+      drawClaycode(current_tree.root, polygon, padding, min_node_area);
+      return true;
+    } catch (error) {
+      tries++;
+      if (tries == MAX_TRIES) {
+        clearDrawing();
+        return false
+      }
+    }
+  }
 }
