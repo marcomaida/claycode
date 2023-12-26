@@ -13,6 +13,7 @@ function* bitStream(bitsArray) {
 }
 
 export function bitsToTree(bitsArray) {
+    console.log("Encoding using two_choices_mark");
     let root = new TreeNode(null)
     root.children = [new TreeNode(root)]
     let frontier = [root.children[0]];

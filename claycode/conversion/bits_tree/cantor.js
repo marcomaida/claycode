@@ -5,16 +5,16 @@ import { TreeNode } from "../../tree/tree_node.js";
 /* Util */
 
 function bitStringToInt(bits) {
-    bits = "1" + bits; // Make sure it is an integer
+    bits.unshift("1"); // Add 1 at beginning to make sure it is an integer
     return Array.from(bits).reverse().reduce((acc, c, i) => acc + BigInt(c)*2n**BigInt(i), 0n);
 }
 
-function intToBitString(n) {
-    assert(typeof n === "bigint");
-    if (n <= 0) {
+function intToBitString(x) {
+    assert(typeof x === "bigint");
+    if (x <= 0n) {
         throw new Error("Input must be greater than 0");
     }
-    return n.toString(2).slice(1); // Remove initial 1
+    return x.toString(2).slice(1); // Remove initial 1
 }
 
 function gauss(k) {
