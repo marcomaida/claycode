@@ -62,12 +62,12 @@ export const POLYGON_SHAPES = [
 ];
 export function drawPolygonClaycode(current_tree, current_shape, polygon_center, polygon_size) {
   // Start with large padding, decrease at each fail
+  let node_padding_min = 1.9;
   let node_padding_max = Math.lerp(
     5,
-    2,
-    Math.min(current_tree.root.numDescendants, 300) / 300
+    node_padding_min,
+    Math.min(current_tree.root.numDescendants, 700) / 700
   );
-  let node_padding_min = 2;
 
   let polygon = circlePolygon(
     polygon_center,
