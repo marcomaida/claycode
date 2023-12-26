@@ -15,7 +15,7 @@ def largest_square(n):
     a = 0
     b = n
     while True:
-        r = (a+b)//2
+        r = a + (b-a)//2
         rsq = r*r
         if rsq <= n and (r+1)**2 > n:
             return r
