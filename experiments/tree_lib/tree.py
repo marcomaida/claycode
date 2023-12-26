@@ -49,12 +49,19 @@ def rightmost(layers):
 	else:
 		return TreeNode([TreeNode(), rightmost(layers-1)])
 
-def tower(layers):
+# Creates a tower with n children at each layer
+# e.g., for layers=4, k=3
+# *---*---*---*
+# '-* '-* '-* '-* 
+# '-* '-* '-* '-*
+def tower(layers, k=1):
 	assert layers > 0
 	if layers == 1:
-		return TreeNode([])
+		return TreeNode([TreeNode() for _ in range(k)])
 	else:
-		return TreeNode([tower(layers-1)])
+		children = [TreeNode() for _ in range(k-1)]
+		children += [tower(layers-1)]
+		return TreeNode(children)
 	
 def one():
 	return rightmost(2)
