@@ -35,7 +35,6 @@ def number_to_square_decomposition(n):
     return dec
 
 def square_decomposition_to_number(dec):
-    dec.sort(reverse=True)
     return sum([(num**2) for num in dec])+1
 
 def bits_to_tree(bits: str) -> TreeNode: 
@@ -58,7 +57,6 @@ def tree_to_bits(root: TreeNode) -> str:
             return 1
         else:
             dec = [tree_to_number(c) for c in root.children]
-            dec.sort(reverse=True)
             return square_decomposition_to_number(dec)
     
     return number_to_bit_string(tree_to_number(root))
