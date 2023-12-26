@@ -1,10 +1,13 @@
-from tree_lib.util import bit_string_to_number, number_to_bit_string, gauss, largest_gauss_binsearch
+from tree_lib.util import bit_string_to_number, number_to_bit_string, largest_gauss_binsearch
 from tree_lib.tree import TreeNode
 
 ######################
 # Unordered tree encoding
 # Gauss Encoding
 ######################
+
+def gauss(n):
+    return (n*(n+1))//2
 
 def number_to_gauss_decomposition(n):
     assert n > 0
