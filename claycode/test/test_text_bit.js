@@ -1,4 +1,4 @@
-import { assert_eq, test_heading } from "./test_utils.js";
+import { assert_eq, assert_array_eq, test_heading } from "./test_utils.js";
 
 const relevant_strings = [
   "Hello World",
@@ -38,14 +38,58 @@ const relevant_strings = [
   "🌟🎉🚀📚🎵🎮🏆", // Miscellaneous
 ];
 
-// Test UTF8 Encoder
-import * as text_bit_UTF8 from "../conversion/text_bits/text_bits_UTF8.js";
+function generateBinaryString(length) {
+  const binaryString = [];
+
+  for (let i = 0; i < length; i++) {
+    const bit = Math.random() < 0.5 ? 0 : 1;
+    binaryString.push(bit);
+  }
+
+  return binaryString;
+}
+
+const MAX_STR_LEN = 1_000;
+let binary_strings = [[], [0], [1], [1, 0], [0, 1], [1, 1], [0, 0]];
+for (let i = 1; i <= MAX_STR_LEN; i++) {
+  binary_strings.push(generateBinaryString(i));
+}
+
+import * as convert from "../conversion/convert.js";
+
 try {
-  test_heading("Text-Bit Encoding: UTF8");
+  test_heading("Bit-Tree Encoding");
+  for (let bits of binary_strings) {
+    // Test bits => tree
+    assert_array_eq(
+      bits,
+      convert.treeToBits(convert.bitsToTree(bits))
+    );
+  }
+} catch (error) {
+  console.error(`TEST FAILED: ${error}`);
+}
+
+try {
+  test_heading("Text-Bit Encoding");
   for (const string of relevant_strings) {
+    // Test text => bits
     assert_eq(
       string,
-      text_bit_UTF8.bitsToText(text_bit_UTF8.textToBits(string))
+      convert.bitsToText(convert.textToBits(string))
+    );
+  }
+} catch (error) {
+  console.error(`TEST FAILED: ${error}`);
+}
+
+try {
+  test_heading("Conversion pipeline");
+  for (const string of relevant_strings) {
+    // Test whole pipeline
+    assert_eq(
+      string,
+      convert.treeToText(convert.textToTree(string))
     );
   }
 } catch (error) {

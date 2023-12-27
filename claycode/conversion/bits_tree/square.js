@@ -3,17 +3,18 @@ import { TreeNode } from "../../tree/tree_node.js";
 
 /* Util */
 
-function bitStringToInt(bits) {
-    bits.unshift("1"); // Add 1 at beginning to make sure it is an integer
-    return Array.from(bits).reverse().reduce((acc, c, i) => acc + BigInt(c) * 2n ** BigInt(i), 0n);
+function bitArrayToInt(bits) {
+    let newBits = Array.from(bits); 
+    newBits.unshift(1); // Add 1 at beginning to make sure it is an integer
+    return Array.from(newBits).reverse().reduce((acc, c, i) => acc + BigInt(c) * 2n ** BigInt(i), 0n);
 }
 
-function intToBitString(x) {
+function intToBitArray(x) {
     console.assert(typeof x === "bigint");
     if (x <= 0n) {
         throw new Error("Input must be greater than 0");
     }
-    return x.toString(2).slice(1); // Remove initial 1
+    return x.toString(2).slice(1).split("").map((x) => parseInt(x)); // Remove initial 1
 }
 
 function largestSquareBinsearch(x) {
@@ -71,7 +72,7 @@ export function bitsToTree(bitsArray) {
     }
 
     const root = new TreeNode();
-    const n = bitStringToInt(bitsArray);
+    const n = bitArrayToInt(bitsArray);
     populateTreeOfNumber(root, n);
 
     return new Tree(root);
@@ -80,12 +81,12 @@ export function bitsToTree(bitsArray) {
 export function treeToBits(tree) {
     function treeToNumber(root) {
         if (root.children.length === 0) {
-            return 1;
+            return 1n;
         } else {
             const dec = root.children.map(c => treeToNumber(c));
             return squareDecompositionToNumber(dec);
         }
     }
 
-    return intToBitString(treeToNumber(tree.root));
+    return intToBitArray(treeToNumber(tree.root));
 }
