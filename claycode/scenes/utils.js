@@ -19,7 +19,11 @@ export function initPIXI() {
   return app;
 }
 
-export function initInputText() {
+export async function initInputText() {
+  while (document.getElementById("inputText") === null) {
+    await new Promise(r => setTimeout(r, 100));
+  }
+
   const inputTextBox = document.getElementById("inputText");
   inputTextBox.select();
   inputTextBox.focus();
@@ -49,6 +53,12 @@ export function debounce(func, delay, timerId) {
   infoText.textContent = `Packing...`;
   clearTimeout(timerId);
   return setTimeout(func, delay);
+}
+
+export function showChangeShapeLabel(is_visible) {
+  const changeShapeLabel = document.getElementById("changeShapeDiv");
+  changeShapeLabel.style.visibility = is_visible ? "visible" : "collapse";
+
 }
 
 // Shape management

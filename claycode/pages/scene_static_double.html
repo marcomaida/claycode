@@ -9,16 +9,12 @@
     <script type="module" src="/scenes/scene_static_double.js"></script>
 </head>
 
-<body>
-    <div id="pixiDiv" style="z-index:0; position: fixed;"></div>
-    <div style="z-index:1; position: fixed;">
+<body style="position: relative;">
+    <div id="pixiDiv" class="pixi-div"></div>
+    <div class="elements-div">
         <div id="headerDiv"></div>
-        <div class="infoBox" , id="infoBox">
-            <div id="infoText"></div>
-        </div>
-        <div id="footerDiv" class="footer_div">
-            <input type="text" id="inputText" maxlength="30" value="" placeholder="> write here <">
-        </div>
+        <div id="qr-container" style="flex:auto;"></div>
+        <div id="footerDiv"></div>
     </div>
 </body>
 

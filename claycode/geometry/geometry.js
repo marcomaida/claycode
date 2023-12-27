@@ -1,5 +1,5 @@
-import {} from "./polygon_offset.js";
-import {} from "../geometry/vector.js";
+import { } from "./polygon_offset.js";
+import { } from "../geometry/vector.js";
 
 // Smallest unit, used to avoid floating point precision issues
 export const EPS = 0.0000001;

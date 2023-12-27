@@ -3,35 +3,54 @@ import { } from "../geometry/math.js";
 import { textToTree } from "../conversion/convert.js";
 import * as utils from "./utils.js";
 
-// Setup
-const app = utils.initPIXI();
-const inputTextBox = utils.initInputText();
-utils.initInfoText();
-var qr_code = new QRCode("qrcode", {
-  text: "",
-  colorDark: "#ffffff",
-  colorLight: "#000000",
-  correctLevel: QRCode.CorrectLevel.L
-});
+function updateQR(inputText, size) {
+  // Computing height like this due to flexbox apparent bug in taking qrcode's container size
+  document.getElementById("qrcode").innerHTML = "";
+  new QRCode("qrcode", {
+    text: inputText,
+    width: size,
+    height: size,
+    colorDark: "#ffffff",
+    colorLight: "#000000",
+    correctLevel: QRCode.CorrectLevel.L
+  });
+}
 
 // Update function
 function polygonView() {
-  const inputText = document.getElementById("inputText").value;
-  qr_code.clear();
-  qr_code.makeCode(inputText,);
+  let inputText = document.getElementById("inputText").value;
+  if (inputText === "") { inputText = " "; }
+
+  // Decide size of QR code
+  const parent_height = ((window.innerHeight
+    - document.getElementById("headerDiv").clientHeight
+    - document.getElementById("footerDiv").clientHeight)) * 0.65;
+  const parent_width = document.getElementById("qr-container").clientWidth * 0.9;
+  const qr_size = Math.min(parent_height, parent_width);
+  updateQR(inputText, qr_size);
 
   const current_tree = textToTree(inputText);
-  const polygon_center = new PIXI.Vec(window.innerWidth / 3, window.innerHeight / 2)
-  const polygon_size = Math.min(window.innerWidth / 2, window.innerHeight / 2) * 0.7;
+  const polygon_center = new PIXI.Vec(window.innerWidth * 0.25, window.innerHeight / 2)
+
+  // Since the polygon drawing function draws a regular polygon around a circle,
+  // but the qr size is expressed as the side length of the square, we adjust
+  // it to be the radius of the enclosing circle, (multiply by `sqrt(2)/2`)
+  const polygon_size = qr_size * 1.41421356 / 2;
   const success = utils.drawPolygonClaycode(current_tree, current_shape, polygon_center, polygon_size);
   utils.updateInfoText(inputText, current_tree, success ? "" : "- Failed to Pack :(");
 }
+
+// Setup
+utils.showChangeShapeLabel(true);
+const app = utils.initPIXI();
+const inputTextBox = await utils.initInputText();
+utils.initInfoText();
 
 // Shape change management
 let current_shape = 0;
 document.addEventListener("keydown", function (event) {
   if (event.key == "Enter") {
-    current_shape = (current_shape + 1) % POLYGON_SHAPES.length;
+    current_shape = (current_shape + 1) % utils.POLYGON_SHAPES.length;
     polygonView();
   }
 });

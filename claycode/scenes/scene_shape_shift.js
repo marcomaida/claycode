@@ -1,16 +1,11 @@
-import {} from "../geometry/vector.js";
-import {} from "../geometry/math.js";
+import { } from "../geometry/vector.js";
+import { } from "../geometry/math.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js";
 import { textToTree } from "../conversion/convert.js";
-import { initInputText, updateInfoText, initPIXI } from "./utils.js";
+import * as util from "./utils.js";
 
-const app = initPIXI();
-const inputTextBox = initInputText();
-
-var current_tree = null;
-var current_ticker = null;
-
+// Oscillation
 function smoothOscillation(min, max, duration_s, oscillation_fun) {
   const amplitude = (max - min) / 2;
   const center = min + amplitude;
@@ -21,7 +16,6 @@ function smoothOscillation(min, max, duration_s, oscillation_fun) {
 
 function updateDrawing() {
   const d = new Date();
-  let ms = d.getMilliseconds();
 
   const anim_cycle_s = 6;
   const min_div = 10;
@@ -54,7 +48,9 @@ function updateDrawing() {
 }
 
 function updateClaycode() {
-  var inputText = document.getElementById("inputText").value;
+  let inputText = document.getElementById("inputText").value;
+  if (inputText === "") { inputText = " "; }
+
   current_tree = textToTree(inputText);
 
   current_ticker = (delta) => {
@@ -62,11 +58,16 @@ function updateClaycode() {
   };
   app.ticker.add(current_ticker);
 
-  updateInfoText(inputText, current_tree);
+  util.updateInfoText(inputText, current_tree);
 }
 
+// Setup
+util.showChangeShapeLabel(false);
+const app = util.initPIXI();
+const inputTextBox = await util.initInputText();
+var current_tree = null;
+var current_ticker = null;
 updateClaycode();
 inputTextBox.addEventListener("input", updateClaycode);
-window.onresize = function () {
-  updateClaycode();
-};
+window.onresize = function () { updateClaycode(); };
+
