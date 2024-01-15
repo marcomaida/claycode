@@ -19,12 +19,21 @@ export function initPIXI() {
   return app;
 }
 
-export async function initInputText() {
-  while (document.getElementById("inputText") === null) {
-    await new Promise(r => setTimeout(r, 100));
+/**
+ * Since scripts start before the page is fully loaded, sometimes components
+ * cannot be found. Keep trying until they are available.
+ * May never return.
+ */
+export async function getElementByIdAndKeepTrying(element_name) {
+  while (document.getElementById(element_name) === null) {
+    await new Promise((r) => setTimeout(r, 100));
   }
 
-  const inputTextBox = document.getElementById("inputText");
+  return document.getElementById(element_name);
+}
+
+export async function initInputText() {
+  const inputTextBox = await getElementByIdAndKeepTrying("inputText");
   inputTextBox.select();
   inputTextBox.focus();
   return inputTextBox;
@@ -40,7 +49,8 @@ export function updateInfoText(inputText, currentTree, infoSuffix = "") {
   const infoText = document.getElementById("infoText");
   if (inputText !== null)
     infoText.textContent =
-      `${inputText.length} Chars | ${textToBits(inputText).length} bits | ${currentTree.root.numDescendants
+      `${inputText.length} Chars | ${textToBits(inputText).length} bits | ${
+        currentTree.root.numDescendants
       } Nodes ` + infoSuffix;
   else
     infoText.textContent =
@@ -55,10 +65,9 @@ export function debounce(func, delay, timerId) {
   return setTimeout(func, delay);
 }
 
-export function showChangeShapeLabel(is_visible) {
-  const changeShapeLabel = document.getElementById("changeShapeDiv");
+export async function showChangeShapeLabel(is_visible) {
+  const changeShapeLabel = await getElementByIdAndKeepTrying("changeShapeDiv");
   changeShapeLabel.style.visibility = is_visible ? "visible" : "collapse";
-
 }
 
 // Shape management
@@ -70,7 +79,12 @@ export const POLYGON_SHAPES = [
   [4, new PIXI.Vec(1.5, 0.7), 45],
   [8, new PIXI.Vec(1, 1), 0],
 ];
-export function drawPolygonClaycode(current_tree, current_shape, polygon_center, polygon_size) {
+export function drawPolygonClaycode(
+  current_tree,
+  current_shape,
+  polygon_center,
+  polygon_size
+) {
   // Start with large padding, decrease at each fail
   let node_padding_min = 1.9;
   let node_padding_max = Math.lerp(
@@ -109,7 +123,7 @@ export function drawPolygonClaycode(current_tree, current_shape, polygon_center,
       tries++;
       if (tries == MAX_TRIES) {
         clearDrawing();
-        return false
+        return false;
       }
     }
   }

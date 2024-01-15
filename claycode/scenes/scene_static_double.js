@@ -1,5 +1,5 @@
-import { } from "../geometry/vector.js";
-import { } from "../geometry/math.js";
+import {} from "../geometry/vector.js";
+import {} from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js";
 import { textToTree } from "../conversion/convert.js";
@@ -7,7 +7,9 @@ import * as util from "./utils.js";
 
 function doubleView() {
   let inputText = document.getElementById("inputText").value;
-  if (inputText === "") { inputText = " "; }
+  if (inputText === "") {
+    inputText = " ";
+  }
 
   const current_tree = textToTree(inputText);
 
@@ -45,9 +47,8 @@ function doubleView() {
   util.updateInfoText(inputText, current_tree);
 }
 
-
 // Setup
-util.showChangeShapeLabel(false);
+await util.showChangeShapeLabel(false);
 const app = util.initPIXI();
 const inputTextBox = await util.initInputText();
 const infoText = util.initInfoText();

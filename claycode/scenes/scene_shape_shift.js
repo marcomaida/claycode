@@ -1,5 +1,5 @@
-import { } from "../geometry/vector.js";
-import { } from "../geometry/math.js";
+import {} from "../geometry/vector.js";
+import {} from "../geometry/math.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js";
 import { textToTree } from "../conversion/convert.js";
@@ -49,7 +49,9 @@ function updateDrawing() {
 
 function updateClaycode() {
   let inputText = document.getElementById("inputText").value;
-  if (inputText === "") { inputText = " "; }
+  if (inputText === "") {
+    inputText = " ";
+  }
 
   current_tree = textToTree(inputText);
 
@@ -62,12 +64,13 @@ function updateClaycode() {
 }
 
 // Setup
-util.showChangeShapeLabel(false);
+await util.showChangeShapeLabel(false);
 const app = util.initPIXI();
 const inputTextBox = await util.initInputText();
 var current_tree = null;
 var current_ticker = null;
 updateClaycode();
 inputTextBox.addEventListener("input", updateClaycode);
-window.onresize = function () { updateClaycode(); };
-
+window.onresize = function () {
+  updateClaycode();
+};
