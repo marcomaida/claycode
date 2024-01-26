@@ -86,11 +86,14 @@ export function drawPolygonClaycode(
   polygon_size
 ) {
   // Start with large padding, decrease at each fail
-  let node_padding_min = 1.9;
+  let node_padding_min = 2.5;
+
+  // If there are few nodes, be ambitious with padding
+  // Once reached a certain limit, start from the minimum
   let node_padding_max = Math.lerp(
-    5,
+    15,
     node_padding_min,
-    Math.min(current_tree.root.numDescendants, 700) / 700
+    Math.min(current_tree.root.numDescendants, 600) / 600
   );
 
   let polygon = circlePolygon(
@@ -102,7 +105,7 @@ export function drawPolygonClaycode(
   );
 
   // Try to draw for a certain max number of times
-  const MAX_TRIES = 400;
+  const MAX_TRIES = 200;
   let tries = 0;
   while (tries < MAX_TRIES) {
     // Decrease padding if it keeps failing
@@ -113,7 +116,7 @@ export function drawPolygonClaycode(
     );
     current_tree.compute_weights(padding);
 
-    let min_node_area = area(polygon) * 0.0001;
+    let min_node_area = area(polygon) * 0.0003;
 
     try {
       clearDrawing();
