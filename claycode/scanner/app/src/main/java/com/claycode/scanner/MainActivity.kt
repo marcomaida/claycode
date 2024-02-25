@@ -103,6 +103,7 @@ class MainActivity : ComponentActivity() {
                                             )
 
                                             updatePhoto(rotatedBitmap)
+                                            image.close()
                                         }
 
                                         override fun onError(exception: ImageCaptureException) {
