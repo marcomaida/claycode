@@ -1,10 +1,10 @@
 default: macos
 
 macos:
-	(sleep 1 && open http://localhost:731/index.html) & (cd claycode && python3 -m http.server 731)
+	(sleep 1 && open http://localhost:731/index.html) & (python3 -m http.server 731)
 
 linux:
-	cd claycode && sudo python3 -m http.server 731 &
+	sudo python3 -m http.server 731 &
 	sleep 1
 	xdg-open http://localhost:731/index.html
 
