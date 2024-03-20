@@ -1,14 +1,14 @@
-import * as text_bit_shoco from "./text_bits/text_bits_shoco.js";
+import * as text_bit_UTF8 from "./text_bits/text_bits_UTF8.js";
 import * as square from "./bits_tree/square.js";
 
 /* This is the external interface of the conversion functions.
    Modify these functions to change the scenes behavior. */
 
 export function textToBits(text) {
-  return text_bit_shoco.textToBits(text);
+  return text_bit_UTF8.textToBits(text);
 }
 export function bitsToText(bits) {
-  return text_bit_shoco.bitsToText(bits);
+  return text_bit_UTF8.bitsToText(bits);
 }
 
 export function bitsToTree(bitsArray) {
