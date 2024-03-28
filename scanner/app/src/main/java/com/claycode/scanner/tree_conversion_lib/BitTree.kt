@@ -6,11 +6,11 @@ package com.claycode.scanner.tree_conversion_lib
  */
 class BitTree {
     companion object {
-        fun BitsToTree(bits: String): Tree {
+        fun BitsToTree(bits: BitString): Tree {
             throw NotImplementedError()
         }
 
-        fun TreeToBits(tree: Tree): String {
+        fun TreeToBits(tree: BitString): String {
             throw NotImplementedError()
         }
     }
