@@ -16,13 +16,13 @@ function removeSyncPattern(bits) {
   
   if (
     bits.length < PREFIX_BITS.length + SUFFIX_BITS.length ||
-    bits.slice(0, pre).toString() != PREFIX_BITS.toString() ||
-    bits.slice(-post, bits.length).toString() != SUFFIX_BITS.toString()
+    (pre > 0 && bits.slice(0, pre).toString() != PREFIX_BITS.toString()) ||
+    (post > 0 && bits.slice(-post, bits.length).toString() != SUFFIX_BITS.toString())
   ) {
     throw Error(`Sync pattern not present in bits ${bits}`)
   }
 
-  return bits.slice(pre, -post)
+  return bits.slice(pre, post > 0 ? -post : bits.length)
 }
 
 /* This is the external interface of the conversion functions.
