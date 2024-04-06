@@ -1,4 +1,4 @@
-package com.claycode.scanner.tree_conversion_lib
+package com.claycode.scanner.tree_conversion
 
 /**
  * This class provides conversions between text and bits.

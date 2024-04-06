@@ -1,4 +1,4 @@
-package com.claycode.scanner.tree_conversion_lib
+package com.claycode.scanner.tree_conversion
 
 class BitString(private val bits: String) {
     init {
