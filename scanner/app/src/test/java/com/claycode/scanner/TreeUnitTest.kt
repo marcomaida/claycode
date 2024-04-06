@@ -1,6 +1,6 @@
 package com.claycode.scanner
 
-import com.claycode.scanner.tree_conversion_lib.Tree
+import com.claycode.scanner.tree_conversion.Tree
 import org.junit.Assert.*
 import org.junit.Test
 
