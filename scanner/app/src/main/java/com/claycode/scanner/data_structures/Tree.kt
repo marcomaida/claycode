@@ -1,4 +1,4 @@
-package com.claycode.scanner.tree_conversion
+package com.claycode.scanner.data_structures
 
 public class Tree(private var children: Array<Tree> = arrayOf()) {
 
