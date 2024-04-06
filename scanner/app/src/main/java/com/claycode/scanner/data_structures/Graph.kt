@@ -4,8 +4,10 @@ package com.claycode.scanner.data_structures
  * An undirected graph that uses an adjacency list representation,
  * where nodes are numbered from 0 to n.
  */
-public class Graph(n: Int) {
-    private val adjList: Array<HashSet<Int>> = Array(n) { hashSetOf<Int>() }
+public class Graph(var size: Int) {
+    private val adjList: Array<HashSet<Int>> = Array(size) { hashSetOf<Int>() }
+
+    operator fun get(index: Int): HashSet<Int> = adjList[index]
 
     fun addEdge(a: Int, b: Int) {
         if (a < 0 || b < 0 || a >= adjList.size || b >= adjList.size)
