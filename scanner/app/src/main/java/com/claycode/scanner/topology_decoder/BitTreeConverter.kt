@@ -1,4 +1,4 @@
-package com.claycode.scanner.tree_conversion_lib
+package com.claycode.scanner.topology_decoder
 
 import android.os.Build
 import androidx.annotation.RequiresApi

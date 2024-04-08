@@ -1,4 +1,4 @@
-package com.claycode.scanner.tree_conversion
+package com.claycode.scanner.topology_decoder
 
 import com.claycode.scanner.data_structures.BitString
 
@@ -6,7 +6,7 @@ import com.claycode.scanner.data_structures.BitString
  * This class provides conversions between text and bits.
  * Bits are represented as strings of zeros and ones.
  */
-class TextBits {
+class TextBitsConverter {
     companion object {
         fun TextToBits(text: String): BitString {
             throw NotImplementedError()
