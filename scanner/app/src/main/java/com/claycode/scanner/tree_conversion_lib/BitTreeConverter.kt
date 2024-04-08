@@ -72,6 +72,7 @@ class BitTreeConverter {
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private fun numberToSquareDecomposition(n: BigInteger): List<BigInteger> {
             var num = n - BigInteger.ONE
             val dec = mutableListOf<BigInteger>()
