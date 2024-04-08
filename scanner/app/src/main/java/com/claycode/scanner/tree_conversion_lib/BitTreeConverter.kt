@@ -1,5 +1,9 @@
 package com.claycode.scanner.tree_conversion_lib
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.claycode.scanner.data_structures.BitString
+import com.claycode.scanner.data_structures.Tree
 import java.math.BigInteger
 
 /**
@@ -47,6 +51,7 @@ class BitTreeConverter {
             return number.toString(2).substring(1)
         }
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private fun largestSquare(n: BigInteger): BigInteger {
             if (n == BigInteger.ONE) return BigInteger.ONE
 

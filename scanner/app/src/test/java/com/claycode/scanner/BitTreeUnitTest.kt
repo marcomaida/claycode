@@ -1,6 +1,6 @@
 package com.claycode.scanner
 
-import com.claycode.scanner.tree_conversion_lib.BitString
+import com.claycode.scanner.data_structures.BitString
 import com.claycode.scanner.tree_conversion_lib.BitTreeConverter
 import org.junit.Assert.*
 import org.junit.Test
