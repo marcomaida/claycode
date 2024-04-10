@@ -1,18 +1,11 @@
 package com.claycode.scanner
 
-import com.claycode.scanner.data_structures.Tree
 import com.claycode.scanner.data_structures.Graph
+import com.claycode.scanner.data_structures.Tree
 import com.claycode.scanner.topology_analysis.TopologyAnalyser
-import org.junit.Assert.*
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-
-data class TopologyAnalysisGroundTruth(
-    val file_name: String,
-    val touch_graph: Graph,
-    val parents: Array<Int?>,
-    val tree: Tree
-)
 
 /**
  * Testing the topology extractor algorithm.
@@ -64,11 +57,11 @@ class TopologyAnalyserUnitTest {
         g8.addEdge(0, 1)
         g8.addEdge(0, 2)
         g8.addEdge(1, 2)
-        val parents8 = arrayOf(0, 0, 0)
+        val parents8 = arrayOf(1, 1, 1)
         val tree8 = Tree.fromString("(()())")
 
-        assertArrayEquals(parents8, TopologyAnalyser.buildParentsArrayFromTouchGraph(g8, 0))
-        assertEquals(tree8.toString(), TopologyAnalyser.buildTreeFromParentsArray(parents8, 0).toString())
+        assertArrayEquals(parents8, TopologyAnalyser.buildParentsArrayFromTouchGraph(g8, 1))
+        assertEquals(tree8.toString(), TopologyAnalyser.buildTreeFromParentsArray(parents8, 1).toString())
     }
 
     @Test

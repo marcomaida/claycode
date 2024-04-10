@@ -27,15 +27,15 @@ class TopologyAnalyser {
                 }
 
                 val nodesOnLevel = unexploredNodesTouchingS0.toMutableList()
-                while (true) {
-                    // Get the touch count for each node in the touch graph
-                    val touchCount = Array(touchGraph.size) { 0 }
-                    nodesOnLevel.forEach { n ->
-                        touchGraph[n].forEach { nn ->
-                            touchCount[nn]++
-                        }
+                // Get the touch count for each node in the touch graph
+                val touchCount = Array(touchGraph.size) { 0 }
+                nodesOnLevel.forEach { n ->
+                    touchGraph[n].forEach { nn ->
+                        touchCount[nn]++
                     }
+                }
 
+                while (true) {
                     // Of all the nodes, get only the ones with at least two touches
                     // that are not already explored
                     val newNodes = touchCount.withIndex().filter {
@@ -44,8 +44,14 @@ class TopologyAnalyser {
 
                     // If no new nodes are found, we reached a fix-point.
                     if (newNodes.isEmpty()) break
-
                     nodesOnLevel += newNodes
+
+                    // Add the new nodes to the touch count
+                    newNodes.forEach { n ->
+                        touchGraph[n].forEach { nn ->
+                            touchCount[nn]++
+                        }
+                    }
                 }
 
                 // Assign parent to all siblings
@@ -79,7 +85,7 @@ class TopologyAnalyser {
             // Build the tree by setting children
             for ((childIndex, parentIndex) in parents.withIndex()) {
                 if (childIndex != root) { // Skip the root since it has no parent
-                    nodeMap[parentIndex]?.addChild(nodeMap[childIndex]!!)
+                    nodeMap[parentIndex]!!.addChild(nodeMap[childIndex]!!)
                 }
             }
 
