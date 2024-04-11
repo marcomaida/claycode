@@ -11,6 +11,8 @@ class BitString(private val bits: String) {
     fun slice(range: IntRange): BitString = BitString(bits.slice(range))
     val length: Int get() = bits.length
     fun isEmpty(): Boolean = bits.isEmpty()
+    fun startsWith(other: BitString): Boolean = bits.startsWith(other.bits)
+    fun endsWith(other: BitString): Boolean = bits.endsWith(other.bits)
     override fun toString(): String = bits
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
