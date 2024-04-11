@@ -8,12 +8,23 @@ import com.claycode.scanner.data_structures.BitString
  */
 class TextBitsConverter {
     companion object {
-        fun TextToBits(text: String): BitString {
-            throw NotImplementedError()
+        fun textToBits(text: String): BitString {
+            val bytes = text.toByteArray(Charsets.UTF_8)
+            val binaryStr = bytes.joinToString(separator = "") { byte ->
+                String.format(
+                    "%8s", byte.toInt()    // Convert to int
+                        .and(255)    // keep last 8 bits only
+                        .toString(2) // turn into binary digit
+                ).replace(' ', '0') // Ensures leading zeros are maintained
+            }
+            return BitString(binaryStr)
         }
 
-        fun BitsToText(bits: BitString): String {
-            throw NotImplementedError()
+        fun bitsToText(bits: BitString): String {
+            // Split the binary string into 8-bit segments that correspond to bytes
+            val bytes = bits.toString().chunked(8).map { it.toInt(2).toByte() }.toByteArray()
+            // Convert byte array back to string using UTF-8 encoding
+            return String(bytes, Charsets.UTF_8)
         }
     }
 }
