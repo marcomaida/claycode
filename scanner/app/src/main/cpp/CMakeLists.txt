@@ -28,8 +28,16 @@ project("topology-extractor")
 add_library(${CMAKE_PROJECT_NAME} SHARED
     image_processor.cpp)
 
-# OpenCV
-set(OpenCV_DIR /Users/mmaida/Desktop/claycode/scanner/opencv/native/jni/)
+# Add OpenCV
+# NOTE: This looks quite brittle.
+#       `PROJECT_SOURCE_DIR` is quite nebulous: https://cmake.org/cmake/help/latest/variable/PROJECT_SOURCE_DIR.html
+#       Probably, there is an easier way.
+# NOTE: When I imported the OpenCV module, I called it `opencv` (reflected in the folder structure)
+#       The original name proposed by Android Studio was `sdk`, which seems nonsensical to me.
+#       However, all cmake files use hardcoded `.../sdk/...` paths for its libraries. 
+#       Therefore, I manually replaced them to point to `.../opencv/...`.
+#       This procedure was a bit cursed, but worked.
+set(OpenCV_DIR "${PROJECT_SOURCE_DIR}/../../../../opencv/native/jni/")
 find_package(OpenCV REQUIRED)
 
 # Specifies libraries CMake should link to your target library. You
