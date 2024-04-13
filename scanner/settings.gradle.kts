@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Claycode Scanner"
-include(":app")
+include(":app",":opencv")

@@ -88,4 +88,6 @@ dependencies {
     implementation("androidx.camera:camera-extensions:$cameraxVersion")
 
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
+
+    implementation(project(":opencv"))
 }
