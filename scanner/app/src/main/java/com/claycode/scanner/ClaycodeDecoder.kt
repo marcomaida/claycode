@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 class ClaycodeDecoder {
     companion object {
         init {
-            System.loadLibrary("image-processor")
+            System.loadLibrary("topology-extractor")
         }
 
         private external fun stringFromJNI(): String
