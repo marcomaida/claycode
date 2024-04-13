@@ -8,10 +8,13 @@ class ClaycodeDecoder {
             System.loadLibrary("topology-extractor")
         }
 
-        private external fun stringFromJNI(): String
+        private external fun extractTouchGraph(bitmap: Bitmap): Array<IntArray>
 
         fun decode(bitmap: Bitmap) : String {
-            return stringFromJNI()
+            val data = extractTouchGraph(bitmap)
+            val dimensions = data[0]
+            val means = data[1]
+            return "size : ${dimensions[0]}x${dimensions[1]}, mean rgb: {${means[0]}, ${means[1]}, ${means[2]}}"
         }
     }
 }
