@@ -26,7 +26,7 @@ project("topology-extractor")
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
-    image_processor.cpp)
+        topology_extractor.cpp)
 
 # Add OpenCV
 # NOTE: This looks quite brittle.
