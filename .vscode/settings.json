@@ -3,5 +3,9 @@
         "**/*.log": true,
         "**/*.out": true,
         "**/*.run.xml": true
+    },
+    "files.associations": {
+        "*.js": "javascriptreact",
+        "iostream": "cpp"
     }
 }

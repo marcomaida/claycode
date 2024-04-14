@@ -26,7 +26,7 @@ project("topology-extractor")
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
-    image_processor.cpp)
+        topology_extractor.cpp)
 
 # Add OpenCV
 # NOTE: This looks quite brittle.
@@ -40,6 +40,9 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
 set(OpenCV_DIR "${PROJECT_SOURCE_DIR}/../../../../opencv/native/jni/")
 find_package(OpenCV REQUIRED)
 
+# Android bitmap libraries
+find_library(jnigraphics-lib jnigraphics)
+
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
@@ -47,5 +50,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     android
     log
     ${OpenCV_LIBS}
+    ${jnigraphics-lib}
 )
+
+
 
