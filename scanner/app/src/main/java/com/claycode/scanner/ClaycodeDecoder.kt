@@ -8,7 +8,7 @@ class ClaycodeDecoder {
             System.loadLibrary("topology-extractor")
         }
 
-        private external fun extractTouchGraph(bitmap: Bitmap): Array<IntArray>
+        public external fun extractTouchGraph(bitmap: Bitmap): Array<IntArray>
 
         fun decode(bitmap: Bitmap) : String {
             val data = extractTouchGraph(bitmap)

@@ -1,114 +1,118 @@
 #include <jni.h>
 #include <string>
-#include "opencv2/opencv.hpp"
-#include <android/bitmap.h>
-#include <jni.h>
 #include <vector>
-#include <iostream>
+
+#include <jni.h>
+#include <android/log.h>
+#include <android/bitmap.h>
+#include "opencv2/opencv.hpp"
+
+#include "find_shapes.hpp"
+#include "build_touch_graph.hpp"
 
 // Add macros to log
-#include <android/log.h>
 #define TAG "TopologyExtractorC++"
-#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, TAG,__VA_ARGS__)
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , TAG,__VA_ARGS__)
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO   , TAG,__VA_ARGS__)
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN   , TAG,__VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , TAG,__VA_ARGS__)
+#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, TAG, __VA_ARGS__)
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, TAG, __VA_ARGS__)
+#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
 
 extern "C" JNIEXPORT jobjectArray JNICALL
 Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
-        JNIEnv* env,
-        jobject /* this */,
-        jobject bitmap) {
+    JNIEnv *env,
+    jobject /* this */,
+    jobject bitmap)
+{
 
     /*****************
-    * Validate input bitmap
-    *****************/
+     * Validate input bitmap
+     *****************/
     AndroidBitmapInfo info;
-    void* pixels;
-    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0) {
+    void *pixels;
+    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0)
+    {
         return nullptr; // Error handling
     }
-    if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+    if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888)
+    {
         return nullptr; // Handle incompatible bitmap
     }
-    if (AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0) {
+    if (AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0)
+    {
         return nullptr; // Error handling
     }
 
-
     /*****************
-    * (SAMPLE) Use OpenCV to invert pixels
-    *****************/
+     * Apply OpenCV pipeline
+     *****************/
     cv::Mat img(info.height, info.width, CV_8UC4, pixels);
-    cv::Mat rgb_img;
-    cv::cvtColor(img, rgb_img, cv::COLOR_BGRA2RGBA);
-    cv::Mat inverted_img;
-    cv::bitwise_not(rgb_img, inverted_img);
+
+    // Discard alpha
+    cv::cvtColor(img, img, cv::COLOR_RGBA2RGB);
+
+    // Convert to RGB (is this needed?)
+    // cv::cvtColor(img, rgb_img, cv::COLOR_BGRA2RGBA);
+
+    // Mean Shift Filtering
+    cv::pyrMeanShiftFiltering(img, img, 10, 100);
+    // Convert to grayscale
+    cv::Mat gray_image;
+    cv::cvtColor(img, gray_image, cv::COLOR_BGR2GRAY);
+    // Thresholding
+    cv::Mat binary_image;
+    cv::threshold(gray_image, binary_image, 127, 255, cv::THRESH_BINARY);
+    // Turn the gray image back to BGR.
+    // Note that this is wasteful at the moment, but int he future
+    // we want to support coloured Claycodes. Hence, we want to build the rest of
+    // the code for BGR images.
+    cv::cvtColor(binary_image, img, cv::COLOR_GRAY2BGR);
 
     /*****************
-    * (SAMPLE) Compute mean pixel
-    *****************/
+     * Compute color shapes
+     *****************/
 
-    // Calculate mean of each color channel from the inverted image
-    long long totalRed = 0, totalGreen = 0, totalBlue = 0;
-    int pixelCount = info.width * info.height;
-    uint32_t* line = (uint32_t*)inverted_img.data;
-    for (size_t y = 0; y < info.height; ++y) {
-        for (size_t x = 0; x < info.width; ++x) {
-            uint32_t pixel = line[x];
-            uint8_t red = (uint8_t)((pixel >> 16) & 0xFF);
-            uint8_t green = (uint8_t)((pixel >> 8) & 0xFF);
-            uint8_t blue = (uint8_t)(pixel & 0xFF);
-
-            totalRed += red;
-            totalGreen += green;
-            totalBlue += blue;
-        }
-        line = (uint32_t*)((char*)line + inverted_img.step);
-    }
-
-    int meanRed = totalRed / pixelCount;
-    int meanGreen = totalGreen / pixelCount;
-    int meanBlue = totalBlue / pixelCount;
+    auto [shapes_image, shapes_num] = findColorShapes(img);
 
     // Unlocking pixels after processing
     AndroidBitmap_unlockPixels(env, bitmap);
 
     /*****************
-    * (SAMPLE) Populate output, currently size + the mean pixel
-    * (this will become the touch graph)
-    * Note that we first build a C++ vector and then the JObject, but
-    * we do not need to do it like this.
-    *****************/
-    std::vector<std::vector<int>> data = {
-            {static_cast<int>(info.width), static_cast<int>(info.height)},
-            {meanRed, meanGreen, meanBlue}
-    };
-    int rows = data.size();
+     * Build touch graph
+     *****************/
+    std::vector<std::vector<int>> touch_graph = buildTouchGraph(shapes_image, shapes_num);
 
     // Example log
-    LOGI("mean: %d,%d,%d info: size %d x %d", meanRed, meanGreen, meanBlue, info.width, info.height);
+    // LOGI("mean: %d,%d,%d info: size %d x %d", 1, 2, 3, info.width, info.height);
+
+    /*****************
+     * Populate output array
+     *****************/
+    int rows = touch_graph.size();
 
     // Find the class representing an array of integers
-    jclass intArrayClass = env->FindClass("[I");
-    if (intArrayClass == nullptr) return nullptr;  // TODO Error handling
+    jclass int_class_array = env->FindClass("[I");
+    if (int_class_array == nullptr)
+        return nullptr; // TODO Error handling
 
     // Create the outer jobjectArray (array of int arrays)
-    jobjectArray result = env->NewObjectArray(rows, intArrayClass, nullptr);
-    if (result == nullptr) return nullptr;  // TODO Error handling
+    jobjectArray result = env->NewObjectArray(rows, int_class_array, nullptr);
+    if (result == nullptr)
+        return nullptr; // TODO Error handling
 
-    for (int i = 0; i < rows; ++i) {
-        int cols = data[i].size();
-        jintArray innerArray = env->NewIntArray(cols);
-        if (innerArray == nullptr) return nullptr;  // TODO Error handling
+    for (int i = 0; i < rows; ++i)
+    {
+        int cols = touch_graph[i].size();
+        jintArray inner_array = env->NewIntArray(cols);
+        if (inner_array == nullptr)
+            return nullptr; // TODO Error handling
 
         // Copy the data from the vector to the jintArray
-        env->SetIntArrayRegion(innerArray, 0, cols, &data[i][0]);
+        env->SetIntArrayRegion(inner_array, 0, cols, &touch_graph[i][0]);
         // Set the jintArray in the jobjectArray
-        env->SetObjectArrayElement(result, i, innerArray);
+        env->SetObjectArrayElement(result, i, inner_array);
         // Clean up local reference
-        env->DeleteLocalRef(innerArray);
+        env->DeleteLocalRef(inner_array);
     }
 
     return result;
