@@ -13,6 +13,7 @@ import java.math.BigInteger
 class BitTreeConverter {
     companion object {
         fun bitsToTree(bits: BitString): Tree {
+            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
             fun populateTreeOfNumber(root: Tree, n: BigInteger) {
                 val dec = numberToSquareDecomposition(n)
                 root.children = dec.map { Tree() }.toTypedArray()
@@ -28,7 +29,7 @@ class BitTreeConverter {
             return root
         }
 
-        fun treeToBits(root: Tree): String {
+        fun treeToBits(root: Tree): BitString {
             fun treeToNumber(root: Tree): BigInteger {
                 if (root.children.isEmpty()) {
                     return BigInteger.ONE
@@ -46,9 +47,9 @@ class BitTreeConverter {
             return BigInteger("1${bits.toString()}", 2)
         }
 
-        private fun numberToBitString(number: BigInteger): String {
+        private fun numberToBitString(number: BigInteger): BitString {
             // Remove initial 1
-            return number.toString(2).substring(1)
+            return BitString(number.toString(2).substring(1))
         }
 
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
