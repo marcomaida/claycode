@@ -58,7 +58,7 @@ class TopologyExtractorTest {
         ))
         val touchGraph = Graph.fromArrayOfIntArray(ClaycodeDecoder.extractTouchGraph(img));
 
-        assertEquals("[0: [1] 1: [0]]", touchGraph.toString())
+        assertEquals("[0: [1, 2] 1: [0, 2] 2: [0, 1]]", touchGraph.toString())
     }
 
     @Test
@@ -75,6 +75,6 @@ class TopologyExtractorTest {
         ))
         val touchGraph = Graph.fromArrayOfIntArray(ClaycodeDecoder.extractTouchGraph(img));
 
-        assertEquals("[0: [1] 1: [0, 2] 2: [1]]", touchGraph.toString())
+        assertEquals("[0: [1, 2] 1: [0, 2] 2: [0, 1, 3] 3: [2]]", touchGraph.toString())
     }
 }

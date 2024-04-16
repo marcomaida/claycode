@@ -38,20 +38,34 @@ void floodFillIterative(cv::Mat &image, int x, int y, cv::Vec3b current_color, i
  * Function to find color shapes in the image
  * Returns an integer matrix of the same shape as the input image.
  * Each integer represents the shape owning the pixel at the given position.
- * E.g.,
+ * The function replaces all the border pixels with the zeroth class, which
+ * must be there as the Erosion algorithm requires a padding
  *
- *   X XXX       12333
- *   X       =>  12222
- *   XXXXX       11111
+ * E.g.,
+ *   X XXXX       000000
+ *   X XXXX       012220
+ *   X    X   =>  011110
+ *   XXXXXX       033330
+ *   XXXXXX       000000
  */
 std::pair<cv::Mat, int> findColorShapes(cv::Mat &image)
 {
     int rows = image.rows;
     int cols = image.cols;
     cv::Mat segmented_image = cv::Mat(rows, cols, CV_32S, cv::Scalar(-1)); // Image to hold shapes identifiers
-    int shape_id = 0;
 
-    for (int x = 0; x < rows; ++x)
+    // Add border shape equal to zero ("S0")
+    segmented_image.row(0).setTo(cv::Scalar(0));
+    segmented_image.row(rows - 1).setTo(cv::Scalar(0));
+    for (int i = 0; i < rows; ++i) {
+        segmented_image.at<int>(i, 0) = 0;
+    }
+    for (int i = 0; i < rows; ++i) {
+        segmented_image.at<int>(i, cols - 1) = 0;
+    }
+
+    int shape_id = 1;
+    for (int x = 1; x < rows; ++x)
     {
         for (int y = 0; y < cols; ++y)
         {
