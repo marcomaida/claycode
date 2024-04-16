@@ -55,7 +55,7 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     // cv::cvtColor(img, rgb_img, cv::COLOR_BGRA2RGBA);
 
     // Mean Shift Filtering
-    cv::pyrMeanShiftFiltering(img, img, 10, 100);
+    // cv::pyrMeanShiftFiltering(img, img, 10, 100);
     // Convert to grayscale
     cv::Mat gray_image;
     cv::cvtColor(img, gray_image, cv::COLOR_BGR2GRAY);
