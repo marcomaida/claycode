@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.camera.core.ImageCapture.OnImageCapturedCallback
@@ -26,15 +28,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
@@ -61,6 +60,10 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
+
+                // Set target resolution
+                controller.imageCaptureTargetSize = CameraController.OutputSize(Size(1400, 1920))
+
                 val (currentPhoto, updatePhoto) = remember {
                     mutableStateOf(Bitmap.createBitmap(100, 200, Bitmap.Config.ARGB_8888))
                 }
@@ -87,6 +90,11 @@ class MainActivity : ComponentActivity() {
                                     object : OnImageCapturedCallback() {
                                         override fun onCaptureSuccess(image: ImageProxy) {
                                             super.onCaptureSuccess(image)
+
+                                            // Log scanning start
+                                            val duration = Toast.LENGTH_SHORT
+                                            val toast = Toast.makeText(baseContext, "Scanning... ${image.width}x${image.height}", duration)
+                                            toast.show()
 
                                             // Fix landscape rotation
                                             val matrix = Matrix().apply {
@@ -129,7 +137,7 @@ class MainActivity : ComponentActivity() {
                                 contentDescription = "Current photo"
                             )
                             Text(
-                                text = "Decoded: ${ClaycodeDecoder.decode(currentPhoto)}"
+                                text = ClaycodeDecoder.decode(currentPhoto)
                             )
                         }
                     }

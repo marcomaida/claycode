@@ -7,6 +7,19 @@ package com.claycode.scanner.data_structures
 public class Graph(var size: Int) {
     private val adjList: Array<HashSet<Int>> = Array(size) { hashSetOf<Int>() }
 
+    companion object {
+        fun fromArrayOfIntArray(inputGraph: Array<IntArray>) : Graph {
+            val g = Graph(inputGraph.size)
+            for (n1 in inputGraph.indices) {
+                for (n2 in inputGraph[n1]) {
+                    g.addEdge(n1,n2)
+                }
+            }
+
+            return g
+        }
+    }
+
     operator fun get(index: Int): HashSet<Int> = adjList[index]
 
     fun addEdge(a: Int, b: Int) {
@@ -25,11 +38,10 @@ public class Graph(var size: Int) {
     }
 
     override fun toString() : String {
-        var s = ""
+        var s = "["
         adjList.forEachIndexed { index, edges ->
             s += "$index: [${edges.joinToString(", ")}] ";
         }
-
-        return s
+        return s.trim() + "]";
     }
 }

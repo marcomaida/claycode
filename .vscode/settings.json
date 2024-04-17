@@ -6,6 +6,7 @@
     },
     "files.associations": {
         "*.js": "javascriptreact",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "type_traits": "cpp"
     }
 }
