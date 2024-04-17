@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 // Set target resolution
-                controller.imageCaptureTargetSize = CameraController.OutputSize(Size(600, 1000))
+                controller.imageCaptureTargetSize = CameraController.OutputSize(Size(1400, 1920))
 
                 val (currentPhoto, updatePhoto) = remember {
                     mutableStateOf(Bitmap.createBitmap(100, 200, Bitmap.Config.ARGB_8888))
