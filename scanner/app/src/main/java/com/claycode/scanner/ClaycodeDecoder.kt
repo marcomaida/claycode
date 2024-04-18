@@ -16,7 +16,7 @@ class ClaycodeDecoder {
 
         public external fun extractTouchGraph(bitmap: Bitmap): Array<IntArray>
 
-        fun decode(bitmap: Bitmap): String {
+        fun decode(bitmap: Bitmap): Triple<Int,Int,String> {
             val touchGraph = Graph.fromArrayOfIntArray(extractTouchGraph(bitmap))
             val parents = TopologyAnalyser.buildParentsArrayFromTouchGraph(touchGraph, 0)
             val topologyTree = TopologyAnalyser.buildTreeFromParentsArray(parents, 0)
@@ -38,7 +38,7 @@ class ClaycodeDecoder {
                 out += "$r "
             }
 
-            return "[${potentialClaycodeTrees.size},${results.size}] => ${out}"
+            return Triple(potentialClaycodeTrees.size,results.size, out)
         }
     }
 }
