@@ -108,8 +108,10 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier
                         .fillMaxSize()
                         .clickable {
-                            if (showResult)
+                            if (showResult) {
                                 updateShowResult(false)
+                                updateLatestDecodedText("")
+                            }
                             else {
                                 controller.takePicture(ContextCompat.getMainExecutor(
                                     applicationContext
@@ -134,7 +136,7 @@ class MainActivity : ComponentActivity() {
                                             )
 
                                             updatePhoto(rotatedBitmap)
-                                            val (potentialCount,foundCount,outText) = ClaycodeDecoder.decode(currentPhoto)
+                                            val (potentialCount,foundCount,outText) = ClaycodeDecoder.decode(rotatedBitmap)
                                             if (foundCount > 0) {
                                                 updateLatestDecodedText(outText)
                                                 updateShowResult(true)
