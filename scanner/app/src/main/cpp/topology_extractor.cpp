@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <string>
 #include <vector>
+#include <chrono>
 
 #include <jni.h>
 #include <android/log.h>
@@ -11,12 +12,18 @@
 #include "build_touch_graph.hpp"
 
 // Add macros to log
-#define TAG "TopologyExtractorC++"
-#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, TAG, __VA_ARGS__)
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, TAG, __VA_ARGS__)
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
+#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, __VA_ARGS__)
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, __VA_ARGS__)
+#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, __VA_ARGS__)
+
+void logRelativeTime(const std::string& tag, std::chrono::time_point<std::chrono::steady_clock> startTime) {
+    auto currentTime = std::chrono::steady_clock::now();
+    auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
+
+    LOGI("Performance", "%s:%lld", tag.c_str(), delta);
+}
 
 extern "C" JNIEXPORT jobjectArray JNICALL
 Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
@@ -24,7 +31,7 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     jobject /* this */,
     jobject bitmap)
 {
-
+    auto startTime = std::chrono::high_resolution_clock::now();
     /*****************
      * Validate input bitmap
      *****************/
@@ -68,6 +75,8 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     // the code for BGR images.
     cv::cvtColor(binary_image, img, cv::COLOR_GRAY2BGR);
 
+    logRelativeTime("OpenCV", startTime);
+
     /*****************
      * Compute color shapes
      *****************/
@@ -77,14 +86,14 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     // Unlocking pixels after processing
     AndroidBitmap_unlockPixels(env, bitmap);
 
+    logRelativeTime("Compute Color Shapes", startTime);
+
     /*****************
      * Build touch graph
      *****************/
     std::vector<std::vector<int>> touch_graph = buildTouchGraph(shapes_image, shapes_num);
 
-    // Example log
-    // LOGI("mean: %d,%d,%d info: size %d x %d", 1, 2, 3, info.width, info.height);
-
+    logRelativeTime("Build Touch Graph", startTime);
     /*****************
      * Populate output array
      *****************/
@@ -114,6 +123,8 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
         // Clean up local reference
         env->DeleteLocalRef(inner_array);
     }
+
+    logRelativeTime("Populate Output Array", startTime);
 
     return result;
 }
