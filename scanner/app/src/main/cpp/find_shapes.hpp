@@ -5,20 +5,23 @@
 
 void floodFillIterative(cv::Mat &image, int x, int y, cv::Vec3b current_color, int shape_id, cv::Mat &shape_image)
 {
+    static std::vector<std::pair<int, int>> stack = [] {
+        std::vector<std::pair<int, int>> stack;
+        stack.reserve(1920*1080);
+        return std::move(stack);
+    }();
+
     int rows = image.rows;
     int cols = image.cols;
-    std::stack<std::pair<int, int>> stack;
-    stack.push({x, y});
+    stack.push_back({x, y});
 
     while (!stack.empty())
     {
-        auto [cx, cy] = stack.top();
-        stack.pop();
+        auto [cx, cy] = stack.back();
+        stack.pop_back();
 
         // Check if current position is valid
-        if (cx < 0 || cx >= rows || cy < 0 || cy >= cols ||
-            shape_image.at<int>(cx, cy) != -1 ||
-            image.at<cv::Vec3b>(cx, cy) != current_color)
+        if (image.at<cv::Vec3b>(cx, cy) != current_color)
         {
             continue;
         }
@@ -27,10 +30,14 @@ void floodFillIterative(cv::Mat &image, int x, int y, cv::Vec3b current_color, i
         shape_image.at<int>(cx, cy) = shape_id;
 
         // Add neighbors to the stack (4-way connectivity)
-        stack.push({cx + 1, cy});
-        stack.push({cx - 1, cy});
-        stack.push({cx, cy + 1});
-        stack.push({cx, cy - 1});
+        if (cx < rows -1 && shape_image.at<int>(cx + 1, cy) == -1 )
+            stack.push_back({cx + 1, cy});
+        if (cx > 0 && shape_image.at<int>(cx - 1, cy) == -1 )
+            stack.push_back({cx - 1, cy});
+        if (cy < cols -1 && shape_image.at<int>(cx, cy + 1) == -1 )
+            stack.push_back({cx, cy + 1});
+        if (cy > 0 && shape_image.at<int>(cx, cy - 1) == -1 )
+            stack.push_back({cx, cy - 1});
     }
 }
 
@@ -65,9 +72,9 @@ std::pair<cv::Mat, int> findColorShapes(cv::Mat &image)
     }
 
     int shape_id = 1;
-    for (int x = 1; x < rows; ++x)
+    for (int x = 1; x < rows-1; ++x)
     {
-        for (int y = 0; y < cols; ++y)
+        for (int y = 1; y < cols-1; ++y)
         {
             if (segmented_image.at<int>(x, y) == -1)
             { // If the pixel hasn't been visited
