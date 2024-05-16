@@ -2,7 +2,7 @@ package com.claycode.scanner
 
 import com.claycode.scanner.data_structures.BitString
 import com.claycode.scanner.topology_decoder.BitTreeConverter
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class BitTreeUnitTest {
@@ -40,7 +40,7 @@ class BitTreeUnitTest {
     fun bitTree_Basic() {
         for (original in bitStrings) {
             assertEquals(
-                original,
+                BitString(original),
                 BitTreeConverter.treeToBits(
                     BitTreeConverter.bitsToTree(BitString(original))
                 )
