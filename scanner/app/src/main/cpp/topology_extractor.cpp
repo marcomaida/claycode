@@ -18,7 +18,8 @@
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, __VA_ARGS__)
 
-void logRelativeTime(const std::string& tag, std::chrono::time_point<std::chrono::steady_clock> startTime) {
+void logRelativeTime(const std::string &tag, std::chrono::time_point<std::chrono::steady_clock> startTime)
+{
     auto currentTime = std::chrono::steady_clock::now();
     auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
 
@@ -58,6 +59,11 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     // Discard alpha
     cv::cvtColor(img, img, cv::COLOR_RGBA2RGB);
 
+    // Down sample
+    cv::resize(img, img,
+               cv::Size(img.cols * 0.7, img.rows * 0.7),
+               0, 0, cv::INTER_LINEAR);
+
     // Convert to RGB (is this needed?)
     // cv::cvtColor(img, rgb_img, cv::COLOR_BGRA2RGBA);
 
@@ -69,6 +75,7 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     // Thresholding
     cv::Mat binary_image;
     cv::threshold(gray_image, binary_image, 127, 255, cv::THRESH_BINARY);
+
     // Turn the gray image back to BGR.
     // Note that this is wasteful at the moment, but int he future
     // we want to support coloured Claycodes. Hence, we want to build the rest of

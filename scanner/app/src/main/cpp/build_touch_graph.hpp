@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <set>
+#include <unordered_set>
 
 #include "opencv2/opencv.hpp"
 
@@ -12,7 +12,14 @@
 std::vector<std::vector<int>> buildTouchGraph(const cv::Mat &image_shapes, int num_shapes)
 {
     // Initialize the adjacency list using a vector of sets to avoid duplicates
-    std::vector<std::set<int>> adjacency_sets(num_shapes);
+    std::vector<std::unordered_set<int>> adjacency_sets;
+    adjacency_sets.reserve(num_shapes);
+    for (int i = 0; i < num_shapes; ++i)
+    {
+        std::unordered_set<int> set;
+        set.reserve(num_shapes);
+        adjacency_sets.push_back(std::move(set));
+    }
 
     int rows = image_shapes.rows;
     int cols = image_shapes.cols;
