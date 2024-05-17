@@ -3,7 +3,6 @@
 #include <vector>
 #include <chrono>
 
-#include <jni.h>
 #include <android/log.h>
 #include <android/bitmap.h>
 #include "opencv2/opencv.hpp"
@@ -30,31 +29,36 @@ extern "C" JNIEXPORT jobjectArray JNICALL
 Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     JNIEnv *env,
     jobject /* this */,
-    jobject bitmap)
+    jobject bitmap,
+    jint left, jint top, jint width, jint height)
 {
     auto startTime = std::chrono::high_resolution_clock::now();
+
     /*****************
      * Validate input bitmap
      *****************/
     AndroidBitmapInfo info;
     void *pixels;
-    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0)
-    {
-        return nullptr; // Error handling
+    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0 ||
+        info.format != ANDROID_BITMAP_FORMAT_RGBA_8888 ||
+        AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0) {
+        return nullptr; // Error handling, incompatible bitmap
     }
-    if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888)
-    {
-        return nullptr; // Handle incompatible bitmap
-    }
-    if (AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0)
-    {
-        return nullptr; // Error handling
+    if (left < 0 || top < 0 || left + width > info.width || top + height > info.height) {
+        LOGE("Topology Extractor C++", "Invalid image crop region");
+        return nullptr; // Error handling, incompatible bitmap
     }
 
     /*****************
      * Apply OpenCV pipeline
      *****************/
     cv::Mat img(info.height, info.width, CV_8UC4, pixels);
+
+    AndroidBitmap_unlockPixels(env, bitmap); // Unlocking pixels after processing
+
+    // Crop
+    cv::Rect cropRegion(left, top, width, height);
+    img = img(cropRegion);
 
     // Discard alpha
     cv::cvtColor(img, img, cv::COLOR_RGBA2RGB);
@@ -90,12 +94,11 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
 
     auto [shapes_image, shapes_num] = findColorShapes(img);
 
-    // Unlocking pixels after processing
-    AndroidBitmap_unlockPixels(env, bitmap);
+    std::stringstream ss;
+    ss << "Compute Color Shapes " << img.size().width << "x" << img.size().height;
+    logRelativeTime(ss.str(), startTime);
 
-    logRelativeTime("Compute Color Shapes", startTime);
-
-    /*****************
+    /***************** D
      * Build touch graph
      *****************/
     std::vector<std::vector<int>> touch_graph = buildTouchGraph(shapes_image, shapes_num);
