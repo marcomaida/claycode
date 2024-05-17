@@ -60,9 +60,9 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     cv::cvtColor(img, img, cv::COLOR_RGBA2RGB);
 
     // Down sample
-    cv::resize(img, img,
-               cv::Size(img.cols * 0.7, img.rows * 0.7),
-               0, 0, cv::INTER_LINEAR);
+    // cv::resize(img, img,
+    //           cv::Size(img.cols * 0.7, img.rows * 0.7),
+    //           0, 0, cv::INTER_LINEAR);
 
     // Convert to RGB (is this needed?)
     // cv::cvtColor(img, rgb_img, cv::COLOR_BGRA2RGBA);

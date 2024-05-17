@@ -23,8 +23,9 @@ class ClaycodeDecoder {
         }
 
         fun decode(bitmap: Bitmap): Triple<Int,Int,String> {
+            Log.i("Performance", "-----------------")
             val startTime = System.currentTimeMillis()
-            logRelativeTime("Start Decode Process", startTime);
+            logRelativeTime("Start Decode Process (${bitmap.width}x${bitmap.height})", startTime);
             val touchGraph = Graph.fromArrayOfIntArray(extractTouchGraph(bitmap))
             logRelativeTime("Topology Extractor C++", startTime);
             val parents = TopologyAnalyser.buildParentsArrayFromTouchGraph(touchGraph, 0)
