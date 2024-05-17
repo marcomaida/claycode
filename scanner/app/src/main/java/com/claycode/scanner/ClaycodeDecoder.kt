@@ -9,6 +9,21 @@ import com.claycode.scanner.topology_decoder.BitTreeConverter
 import com.claycode.scanner.topology_decoder.BitsValidator
 import com.claycode.scanner.topology_decoder.TextBitsConverter
 
+enum class DecodingStack {
+    /**
+     * This stack uses OpenCV to prepare the image, then a proprietary algorithm
+     * to build a touch graph, and then the erosion algorithm to build the parents array
+     */
+    PROPRIETARY_EROSION,
+    /**
+     * This stack uses OpenCV to prepare the image and to build the parents array,
+     * using the `findCountours` function.
+     */
+    OPEN_CV_CONTOURS
+}
+
+val DECODING_STACK: DecodingStack = DecodingStack.OPEN_CV_CONTOURS
+
 class ClaycodeDecoder {
     companion object {
         init {
@@ -16,6 +31,7 @@ class ClaycodeDecoder {
         }
 
         public external fun extractTouchGraph(bitmap: Bitmap, left: Int, top: Int, width: Int, height: Int): Array<IntArray>
+        public external fun extractParentsArray(bitmap: Bitmap, left: Int, top: Int, width: Int, height: Int): IntArray
 
         fun logRelativeTime(tag: String, startTime: Long) {
             val delta = System.currentTimeMillis() - startTime
@@ -31,12 +47,19 @@ class ClaycodeDecoder {
             val left = (bitmap.width - squareSize) / 2
             val top = (bitmap.height - squareSize) / 2
 
-            Log.i("Performance", "-----------------")
+            Log.i("Performance", "---------------------")
             val startTime = System.currentTimeMillis()
-            logRelativeTime("Start Decode Process (${bitmap.width}x${bitmap.height})", startTime);
-            val touchGraph = Graph.fromArrayOfIntArray(extractTouchGraph(bitmap, left, top, squareSize, squareSize))
-            logRelativeTime("Topology Extractor C++", startTime);
-            val parents = TopologyAnalyser.buildParentsArrayFromTouchGraph(touchGraph, 0)
+            logRelativeTime("Start Decode Process (${bitmap.width}x${bitmap.height}, $DECODING_STACK)", startTime);
+            val parents = when (DECODING_STACK) {
+                DecodingStack.PROPRIETARY_EROSION -> {
+                    val touchGraph = Graph.fromArrayOfIntArray(extractTouchGraph(bitmap, left, top, squareSize, squareSize))
+                    logRelativeTime("Topology Extractor C++", startTime);
+                    TopologyAnalyser.buildParentsArrayFromTouchGraph(touchGraph, 0)
+                }
+                DecodingStack.OPEN_CV_CONTOURS -> {
+                    extractParentsArray(bitmap, left, top, squareSize, squareSize).toTypedArray()
+                }
+            }
             logRelativeTime("Build Parents Array", startTime);
             val topologyTree = TopologyAnalyser.buildTreeFromParentsArray(parents, 0)
             logRelativeTime("Build Tree", startTime);

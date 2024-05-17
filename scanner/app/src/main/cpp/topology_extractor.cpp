@@ -25,6 +25,54 @@ void logRelativeTime(const std::string &tag, std::chrono::time_point<std::chrono
     LOGI("Performance", "%s:%lld", tag.c_str(), delta);
 }
 
+AndroidBitmapInfo getImageInfo(JNIEnv *env, void ** pixels, const jobject& bitmap) {
+    AndroidBitmapInfo info;
+    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0 ||
+        info.format != ANDROID_BITMAP_FORMAT_RGBA_8888 ||
+        AndroidBitmap_lockPixels(env, bitmap, pixels) < 0)
+    {
+        throw "Invalid input bitmap";
+    }
+
+    return info;
+}
+
+/**
+ * Perform the initial part of the pipeline:
+ * - Prepare OpenCV's image
+ * - Unlock bitmap image
+ * - Crop OpenCV's image as specified
+ * - Remove alpha channel
+ */
+cv::Mat prepareInputImage(JNIEnv *env,
+                          const jobject& bitmap, const AndroidBitmapInfo& info, void* pixels,
+                          jint left, jint top, jint width, jint height) {
+    if (left < 0 || top < 0 || left + width > info.width || top + height > info.height)
+    {
+        throw "Invalid image crop region";
+    }
+
+    cv::Mat img(info.height, info.width, CV_8UC4, pixels);
+
+    AndroidBitmap_unlockPixels(env, bitmap); // Unlocking pixels after processing
+
+    // Crop
+    cv::Rect cropRegion(left, top, width, height);
+    img = img(cropRegion);
+
+    // Discard alpha
+    cv::cvtColor(img, img, cv::COLOR_RGBA2RGB);
+
+    // Mean Shift Filtering
+    // cv::pyrMeanShiftFiltering(img, img, 10, 100);
+
+    return img;
+}
+
+/**
+ * Extract touch graph using OpenCV for preprocessing,
+ * and the proprietary stack to infer topology.
+ */
 extern "C" JNIEXPORT jobjectArray JNICALL
 Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     JNIEnv *env,
@@ -37,54 +85,21 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     /*****************
      * Validate input bitmap
      *****************/
-    AndroidBitmapInfo info;
-    void *pixels;
-    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0 ||
-        info.format != ANDROID_BITMAP_FORMAT_RGBA_8888 ||
-        AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0) {
-        return nullptr; // Error handling, incompatible bitmap
-    }
-    if (left < 0 || top < 0 || left + width > info.width || top + height > info.height) {
-        LOGE("Topology Extractor C++", "Invalid image crop region");
-        return nullptr; // Error handling, incompatible bitmap
-    }
+    void *pixels = nullptr;
+    AndroidBitmapInfo info = getImageInfo(env, &pixels, bitmap);
 
     /*****************
      * Apply OpenCV pipeline
      *****************/
-    cv::Mat img(info.height, info.width, CV_8UC4, pixels);
+    cv::Mat img = prepareInputImage(env, bitmap, info, pixels, left, top, width, height);
 
-    AndroidBitmap_unlockPixels(env, bitmap); // Unlocking pixels after processing
+    // Convert to grayscale, threshold
+    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
+    cv::threshold(img, img, 127, 255, cv::THRESH_BINARY);
 
-    // Crop
-    cv::Rect cropRegion(left, top, width, height);
-    img = img(cropRegion);
-
-    // Discard alpha
-    cv::cvtColor(img, img, cv::COLOR_RGBA2RGB);
-
-    // Down sample
-    // cv::resize(img, img,
-    //           cv::Size(img.cols * 0.7, img.rows * 0.7),
-    //           0, 0, cv::INTER_LINEAR);
-
-    // Convert to RGB (is this needed?)
-    // cv::cvtColor(img, rgb_img, cv::COLOR_BGRA2RGBA);
-
-    // Mean Shift Filtering
-    // cv::pyrMeanShiftFiltering(img, img, 10, 100);
-    // Convert to grayscale
-    cv::Mat gray_image;
-    cv::cvtColor(img, gray_image, cv::COLOR_BGR2GRAY);
-    // Thresholding
-    cv::Mat binary_image;
-    cv::threshold(gray_image, binary_image, 127, 255, cv::THRESH_BINARY);
-
-    // Turn the gray image back to BGR.
-    // Note that this is wasteful at the moment, but int he future
-    // we want to support coloured Claycodes. Hence, we want to build the rest of
-    // the code for BGR images.
-    cv::cvtColor(binary_image, img, cv::COLOR_GRAY2BGR);
+    // Turn the gray image back to BGR. Note that this is wasteful at the moment, but in the future
+    // we want to support coloured Claycodes. Hence, we want to build the rest of the code for BGR images.
+    cv::cvtColor(img, img, cv::COLOR_GRAY2BGR);
 
     logRelativeTime("OpenCV", startTime);
 
@@ -98,40 +113,82 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     ss << "Compute Color Shapes " << img.size().width << "x" << img.size().height;
     logRelativeTime(ss.str(), startTime);
 
-    /***************** D
+    /*****************
      * Build touch graph
      *****************/
     std::vector<std::vector<int>> touch_graph = buildTouchGraph(shapes_image, shapes_num);
 
     logRelativeTime("Build Touch Graph", startTime);
+
     /*****************
      * Populate output array
      *****************/
     int rows = touch_graph.size();
 
-    // Find the class representing an array of integers
     jclass int_class_array = env->FindClass("[I");
-    if (int_class_array == nullptr)
-        return nullptr; // TODO Error handling
-
-    // Create the outer jobjectArray (array of int arrays)
+    if (int_class_array == nullptr) throw "Unable to find array class";
     jobjectArray result = env->NewObjectArray(rows, int_class_array, nullptr);
-    if (result == nullptr)
-        return nullptr; // TODO Error handling
-
     for (int i = 0; i < rows; ++i)
     {
         int cols = touch_graph[i].size();
         jintArray inner_array = env->NewIntArray(cols);
-        if (inner_array == nullptr)
-            return nullptr; // TODO Error handling
+        env->SetIntArrayRegion(inner_array, 0, cols, &touch_graph[i][0]); // Copy the data
+        env->SetObjectArrayElement(result, i, inner_array);  // Set the jintArray in the jobjectArray
+        env->DeleteLocalRef(inner_array); // Clean up local reference
+    }
 
-        // Copy the data from the vector to the jintArray
-        env->SetIntArrayRegion(inner_array, 0, cols, &touch_graph[i][0]);
-        // Set the jintArray in the jobjectArray
-        env->SetObjectArrayElement(result, i, inner_array);
-        // Clean up local reference
-        env->DeleteLocalRef(inner_array);
+    logRelativeTime("Populate Output Array", startTime);
+    return result;
+}
+
+/**
+ * Extract a parents array using OpenCV for preprocessing and to infer topology
+ */
+extern "C" JNIEXPORT jintArray JNICALL
+Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractParentsArray(
+    JNIEnv *env,
+    jobject /* this */,
+    jobject bitmap,
+    jint left, jint top, jint width, jint height)
+{
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    /*****************
+     * Validate input bitmap
+     *****************/
+    void *pixels = nullptr;
+    AndroidBitmapInfo info = getImageInfo(env, &pixels, bitmap);
+
+    /*****************
+     * Apply OpenCV pipeline
+     *****************/
+    cv::Mat img = prepareInputImage(env, bitmap, info, pixels, left, top, width, height);
+
+    // Convert to grayscale, threshold
+    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
+    cv::threshold(img, img, 127, 255, cv::THRESH_BINARY);
+
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(img, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+
+    logRelativeTime("OpenCV", startTime);
+
+    /*****************
+     * Populate output array
+     *****************/
+
+    // OpenCV's hierarchy is in the format [next contour in same level, previous, first child, parent]
+    // Thus, we only consider the third element.
+    // We add a parent shape ("S0") to match the expected format of the rest of the pipeline
+    jintArray result = env->NewIntArray(hierarchy.size() + 1);
+    auto zero = 0;
+    env->SetIntArrayRegion(result, 0, 1, &zero);
+    for (size_t i = 0; i < hierarchy.size(); i++)
+    {
+        int parentIdx = hierarchy[i][3];
+        parentIdx += 1; // Add offset to consider S0. OpenCV returns -1 for shapes without parent.
+        env->SetIntArrayRegion(result, i + 1, 1, &parentIdx);
     }
 
     logRelativeTime("Populate Output Array", startTime);
