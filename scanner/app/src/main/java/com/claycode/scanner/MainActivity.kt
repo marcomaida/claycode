@@ -185,26 +185,9 @@ class MainActivity : ComponentActivity() {
                                             true
                                         )
 
-                                        // Calculate the square box size and position
-                                        val squareSize = (TARGET_SIZE_PCT * minOf(
-                                            rotatedBitmap.width,
-                                            rotatedBitmap.height
-                                        )).toInt()
-                                        val left = (rotatedBitmap.width - squareSize) / 2
-                                        val top = (rotatedBitmap.height - squareSize) / 2
-
-                                        // Crop the bitmap to the square box
-                                        val croppedBitmap = Bitmap.createBitmap(
-                                            rotatedBitmap,
-                                            left,
-                                            top,
-                                            squareSize,
-                                            squareSize
-                                        )
-
-                                        updatePhoto(croppedBitmap)
+                                        updatePhoto(rotatedBitmap)
                                         val (potentialCount, foundCount, outText) = ClaycodeDecoder.decode(
-                                            croppedBitmap
+                                            rotatedBitmap, TARGET_SIZE_PCT
                                         )
                                         if (foundCount > 0) {
                                             updateLatestDecodedText(outText)
