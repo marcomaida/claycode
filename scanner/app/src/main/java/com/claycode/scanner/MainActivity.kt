@@ -110,9 +110,9 @@ class MainActivity : ComponentActivity() {
                                 } else {
                                     updateInfoText("\uD83D\uDE14 [${potentialCount},${foundCount}] ")
                                 }
-
-                                currFrame.close()
                             }
+
+                            currFrame.close()
                         }
                     }
                 }
