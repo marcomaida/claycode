@@ -70,9 +70,6 @@ class MainActivity : ComponentActivity() {
                 val (latestDecodedText, updateLatestDecodedText) = remember { mutableStateOf("") }
                 val (infoText, updateInfoText) = remember { mutableStateOf("Touch to scan...") }
 
-                LaunchedEffect(Unit) {
-
-                }
                 val controller = remember {
                     LifecycleCameraController(applicationContext).apply {
                         setEnabledUseCases(
