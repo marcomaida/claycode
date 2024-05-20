@@ -4,14 +4,11 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
@@ -30,7 +27,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,24 +54,61 @@ class MainActivity : ComponentActivity() {
         setContent {
             ClaycodeScannerTheme {
                 /* State variables */
-                val controller = remember {
-                    LifecycleCameraController(applicationContext).apply {
-                        setEnabledUseCases(
-                            CameraController.IMAGE_CAPTURE or CameraController.IMAGE_ANALYSIS
-                        )
-                    }
-                }
-                // Set target resolution
-                controller.imageCaptureTargetSize = CameraController.OutputSize(Size(1400, 1920))
-
                 val (currentPhoto, updatePhoto) = remember {
                     mutableStateOf(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
                 }
 
+                var analysisEnabled by remember { mutableStateOf(true) }
                 val (showResult, updateShowResult) = remember { mutableStateOf(false) }
                 val (latestDecodedText, updateLatestDecodedText) = remember { mutableStateOf("") }
                 val (infoText, updateInfoText) = remember { mutableStateOf("Touch to scan...") }
-                var isScanning by remember { mutableStateOf(false) }
+
+                val controller = remember {
+                    LifecycleCameraController(applicationContext).apply {
+                        setEnabledUseCases(
+                            CameraController.IMAGE_ANALYSIS
+                        )
+                        setImageAnalysisBackpressureStrategy(
+                            ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
+                        )
+                        setImageAnalysisTargetSize(
+                            CameraController.OutputSize(Size(1400, 1920))
+                        )
+                        setImageAnalysisAnalyzer(
+                            ContextCompat.getMainExecutor(applicationContext)
+                        ) { currFrame ->
+                            if (analysisEnabled) {
+                                val bitMap = currFrame.toBitmap()
+                                val (potentialCount, foundCount, outText) = ClaycodeDecoder.decode(
+                                    bitMap, TARGET_SIZE_PCT
+                                )
+                                if (foundCount > 0) {
+                                    // Fix landscape rotation
+                                    val matrix = Matrix().apply {
+                                        postRotate(currFrame.imageInfo.rotationDegrees.toFloat())
+                                    }
+                                    val rotatedBitmap = Bitmap.createBitmap(
+                                        bitMap,
+                                        0,
+                                        0,
+                                        currFrame.width,
+                                        currFrame.height,
+                                        matrix,
+                                        true
+                                    )
+                                    analysisEnabled = false
+                                    updatePhoto(rotatedBitmap)
+                                    updateLatestDecodedText(outText)
+                                    updateShowResult(true)
+                                } else {
+                                    updateInfoText("\uD83D\uDE14 [${potentialCount},${foundCount}] ")
+                                }
+                            }
+
+                            currFrame.close()
+                        }
+                    }
+                }
 
                 /* Compose UI */
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -150,66 +183,19 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
-                            if (showResult) {
-                                updateShowResult(false)
-                                updateLatestDecodedText("")
-                                updateInfoText("Touch to scan...")
-                            } else {
-                                if (!isScanning) {
-                                    isScanning = true
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                if (showResult) {
+                                    updateShowResult(false)
+                                    updateLatestDecodedText("")
                                     updateInfoText("Scanning...")
+                                    analysisEnabled = true
                                 }
                             }
-                        })
-
-                    if(isScanning) {
-                        LaunchedEffect(Unit) {
-                            controller.takePicture(ContextCompat.getMainExecutor(applicationContext),
-                                object : ImageCapture.OnImageCapturedCallback() {
-                                    override fun onCaptureSuccess(image: ImageProxy) {
-                                        super.onCaptureSuccess(image)
-                                        // Fix landscape rotation
-                                        val matrix = Matrix().apply {
-                                            postRotate(image.imageInfo.rotationDegrees.toFloat())
-                                        }
-                                        val rotatedBitmap = Bitmap.createBitmap(
-                                            image.toBitmap(),
-                                            0,
-                                            0,
-                                            image.width,
-                                            image.height,
-                                            matrix,
-                                            true
-                                        )
-
-                                        updatePhoto(rotatedBitmap)
-                                        val (potentialCount, foundCount, outText) = ClaycodeDecoder.decode(
-                                            rotatedBitmap, TARGET_SIZE_PCT
-                                        )
-                                        if (foundCount > 0) {
-                                            updateLatestDecodedText(outText)
-                                            updateShowResult(true)
-                                        } else {
-                                            updateInfoText("\uD83D\uDE14 [${potentialCount},${foundCount}] ")
-                                        }
-
-                                        image.close()
-                                        isScanning = false
-                                    }
-
-                                    override fun onError(exception: ImageCaptureException) {
-                                        super.onError(exception)
-                                        Log.println(Log.ERROR, "Camera", "Cannot take picture")
-                                        isScanning = false
-                                    }
-                                })
-                        }
-                    }
+                    )
                 }
-
             }
         }
     }
