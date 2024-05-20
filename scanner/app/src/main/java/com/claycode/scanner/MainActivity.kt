@@ -101,7 +101,7 @@ class MainActivity : ComponentActivity() {
                                     updateLatestDecodedText(outText)
                                     updateShowResult(true)
                                 } else {
-                                    updateInfoText("\uD83D\uDE14 [${potentialCount},${foundCount}] ")
+                                    updateInfoText("Potential Claycodes: $potentialCount ")
                                 }
                             }
 
