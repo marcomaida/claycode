@@ -9,12 +9,13 @@ let SAMPLES = [
     ["Hi", 1],
     ["Hi", 2],
     ["Hi", 3],
+    ["Hi", 4],
     ["Hello world!", 1],
     ["Hello world!", 2],
     ["Is the proof inductive or coinductive?", 2],
     ["www.maida.me", 1],
-    ["https://maps.app.goo.gl/aCCv21W1xx15Qxp18", 0],
-    ["https://maps.app.goo.gl/aCCv21W1xx15Qxp18", 1],
+    ["maps.app.goo.gl/aCCv21W1xx15Qxp18", 0],
+    ["maps.app.goo.gl/aCCv21W1xx15Qxp18", 1],
     //["open.spotify.com/track/0T5iIrXA4p5GsubkhuBIKV?si=9aa280042e824513", 1] // Currently too long :(
 ]
 
@@ -67,12 +68,6 @@ function captureAndSaveImage(index) {
 
     image.toBlob((blob) => {
         downloadBlob(blob, `${CLAYCODE_FILE_PREFIX}${index}.png`)
-      
-        if(index == SAMPLES.length-1) {
-            console.log("Produced all Claycodes. Saving metadata...")
-            saveMetadata()
-            close()
-        }
       }, 'image/png');  
 }
 
@@ -85,3 +80,9 @@ for (let [index, sample] of SAMPLES.entries()) {
     renderClaycode(inputText, shape);
     captureAndSaveImage(index);
 }
+
+console.log("Produced all Claycodes. Saving metadata...")
+saveMetadata()
+// Wait before closing the page, to avoid the last file not being produced
+await new Promise(resolve => setTimeout(resolve, 500)) 
+close()
