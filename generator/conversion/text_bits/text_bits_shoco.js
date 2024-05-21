@@ -1,6 +1,11 @@
 import * as util from "./util.js";
 import {} from "./compression/shoco_en.js";
 
+// Used by sample generator
+export function getDescription() {
+  return "Shoco"
+}
+
 export function textToBits(input_text) {
   const encodedData = shoco_en.compress(input_text);
 

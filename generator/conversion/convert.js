@@ -26,3 +26,8 @@ export function treeToText(tree) {
   const bitsArray = treeToBits(tree);
   return bitsToText(bitsArray);
 }
+
+// Used by sample generator
+export function getDescription() {
+  return `Text-bit: ${text_bit_UTF8.getDescription()}, Bit-tree: ${square.getDescription()} `
+}

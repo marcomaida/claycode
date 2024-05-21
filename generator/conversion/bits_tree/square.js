@@ -1,7 +1,10 @@
 import { Tree } from "../../tree/tree.js"
 import { TreeNode } from "../../tree/tree_node.js";
 
-/* Util */
+// Used by sample generator
+export function getDescription() {
+    return "Square"
+}
 
 function bitArrayToInt(bits) {
     let newBits = Array.from(bits); 
