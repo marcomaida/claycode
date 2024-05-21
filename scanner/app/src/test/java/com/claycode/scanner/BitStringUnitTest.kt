@@ -1,7 +1,8 @@
 package com.claycode.scanner
 
 import com.claycode.scanner.data_structures.BitString
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 
