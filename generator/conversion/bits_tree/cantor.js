@@ -2,7 +2,10 @@ import { assert } from "console";
 import { Tree } from "../../tree/tree.js"
 import { TreeNode } from "../../tree/tree_node.js";
 
-/* Util */
+// Used by sample generator
+export function getDescription() {
+    return "Cantor"
+}
 
 function bitStringToInt(bits) {
     bits.unshift("1"); // Add 1 at beginning to make sure it is an integer

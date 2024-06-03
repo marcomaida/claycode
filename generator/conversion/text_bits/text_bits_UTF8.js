@@ -1,6 +1,11 @@
 import * as util from "./util.js";
 import * as crc from "./crc.js"
 
+// Used by sample generator
+export function getDescription() {
+  return `UTF8, CRC: ${crc.getDescription()}`
+}
+
 const text_encoder = new TextEncoder("utf-8");
 export function textToBits(input_text) {
   const encodedData = text_encoder.encode(input_text);

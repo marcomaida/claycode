@@ -13,7 +13,6 @@ export function initPIXI() {
   });
   initDrawing(app);
 
-  const canvasDiv = document.getElementById("pixiDiv").value;
   pixiDiv.appendChild(app.view);
 
   return app;

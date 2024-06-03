@@ -1,6 +1,11 @@
 import { Tree } from "../../tree/tree.js"
 import { TreeNode } from "../../tree/tree_node.js";
 
+// Used by sample generator
+export function getDescription() {
+    return "Two choices (mark)"
+}
+
 function* bitStream(bitsArray) {
     for (const bit of bitsArray) {
         if (bit !== 0 && bit !== 1) {

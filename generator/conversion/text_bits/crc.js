@@ -1,6 +1,11 @@
 // https://reveng.sourceforge.io/crc-catalogue/all.htm
 export const CRC_POLY = [1,0,1,0,0,0,1,0,1,1,0,0,1,1,0,0,1] // (16 bits, 0x4599 - CAN's standard, including leading '1')
 
+// Used by sample generator
+export function getDescription() {
+  return `0x${parseInt(CRC_POLY.join("").slice(1), 2).toString(16)}`
+}
+
 export function computeCRC(inputBits, polynomialBits) {
     let input = inputBits.slice(); // Copy the input bits array
     let polynomial = polynomialBits.slice(); // Copy the polynomial bits array
