@@ -93,13 +93,8 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
      *****************/
     cv::Mat img = prepareInputImage(env, bitmap, info, pixels, left, top, width, height);
 
-    // Convert to grayscale, threshold
+    // Convert to grayscale
     cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
-    cv::threshold(img, img, 127, 255, cv::THRESH_BINARY);
-
-    // Turn the gray image back to BGR. Note that this is wasteful at the moment, but in the future
-    // we want to support coloured Claycodes. Hence, we want to build the rest of the code for BGR images.
-    cv::cvtColor(img, img, cv::COLOR_GRAY2BGR);
 
     logRelativeTime("OpenCV", startTime);
 
