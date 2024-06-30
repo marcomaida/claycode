@@ -79,10 +79,10 @@ class ClaycodeDecoder {
                 when (tree.toString()) {
                     // NOTE: This is not the correct way to do it -- this is temporary.
                     // We should check for equivalence in a way that's not dependent on the tree ordering
-                    "((((((())()()()()()()(()()()())(()))))))" -> {
+                    "((())()()()()()()(()()()())(()))" -> {
                         results += "Woof \uD83D\uDC36"
                     }
-                    "((((()()())()()()()()()()()()()()()()()()()()()()()()()())))" -> {
+                    "((()()())()()()()()()()()()()()()()()()()()()()()()()())" -> {
                         results += "\uD83C\uDFB5 I am not just a Spotify Code... \uD83C\uDFB5"
                     }
                 }

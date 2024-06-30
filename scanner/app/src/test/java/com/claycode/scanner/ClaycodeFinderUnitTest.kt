@@ -2,6 +2,7 @@ package com.claycode.scanner
 
 import com.claycode.scanner.data_structures.Tree
 import com.claycode.scanner.topology_analysis.ClaycodeFinder
+import com.claycode.scanner.topology_analysis.ClaycodeFinder.Companion.findNodesWithAtLeastNDescendants
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -99,5 +100,49 @@ class ClaycodeFinderUnitTest {
         assertArrayEquals(arrayOf(), resf(f(t4, 3)))
         assertArrayEquals(arrayOf("()"), resf(f(t4, 2)))
 
+    }
+
+
+    @Test
+    fun testFindNodesWithAtLeastNDescendants_Basic() {
+        val f: (String, Int) -> List<Tree> = { treeStr, nDescendants ->
+            findNodesWithAtLeastNDescendants(Tree.fromString(treeStr), nDescendants)
+        }
+
+        // Initial sparse tests
+        val testTrees1 = listOf("(()(()))", "((()))", "(((())))", "((()()))")
+        for (treeStr in testTrees1) {
+            assertEquals(emptyList<Tree>(), f(treeStr, 6))
+            assertEquals(emptyList<Tree>(), f(treeStr, 5))
+            assertTrue(f(treeStr, 1).isNotEmpty())
+        }
+
+        // Helper function to get sorted results, as we do not require the function
+        // to return results in a specific way
+        val resf: (List<Tree>) -> Array<String> = {
+            it.map { tree -> tree.toString() }
+                .sorted()
+                .toTypedArray()
+        }
+
+        val t1 = "()"
+        assertArrayEquals(arrayOf("()"), resf(f(t1, 1)))
+        assertEquals(emptyList<Tree>(), f(t1, 2))
+
+        val t2 = "(((((())))))" // tower of 6
+        assertEquals(emptyList<Tree>(), f(t2, 7))
+        assertArrayEquals(arrayOf("(((((())))))"), resf(f(t2, 6)))
+        assertArrayEquals(arrayOf("(((((())))))", "((((()))))"), resf(f(t2, 5)))
+        assertArrayEquals(arrayOf("(((((())))))", "((((()))))", "(((())))"), resf(f(t2, 4)))
+
+        val t3 = "(((()()()()())))"  // tower of 3, with 5 leaves at the end
+        assertEquals(emptyList<Tree>(), f(t3, 9))
+        assertArrayEquals(arrayOf("(((()()()()())))", "((()()()()()))", "(()()()()())"), resf(f(t3, 5)))
+
+        val t4 = "((()())(()()))"  // Fully balanced binary tree with height 3
+        assertArrayEquals(arrayOf("((()())(()()))", "(()())", "(()())", "()","()","()","()"), resf(f(t4, 1)))
+        assertArrayEquals(arrayOf("((()())(()()))", "(()())", "(()())"), resf(f(t4, 2)))
+        assertArrayEquals(arrayOf("((()())(()()))", "(()())", "(()())"), resf(f(t4, 3)))
+        assertArrayEquals(arrayOf("((()())(()()))"), resf(f(t4, 4)))
     }
 }
