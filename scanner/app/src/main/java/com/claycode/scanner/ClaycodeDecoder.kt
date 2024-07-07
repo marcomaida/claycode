@@ -2,12 +2,15 @@ package com.claycode.scanner
 
 import android.graphics.Bitmap
 import android.util.Log
+import com.claycode.scanner.data_structures.BitString
 import com.claycode.scanner.data_structures.Graph
+import com.claycode.scanner.data_structures.Tree
 import com.claycode.scanner.topology_analysis.ClaycodeFinder
 import com.claycode.scanner.topology_analysis.TopologyAnalyser
 import com.claycode.scanner.topology_decoder.BitTreeConverter
 import com.claycode.scanner.topology_decoder.BitsValidator
 import com.claycode.scanner.topology_decoder.TextBitsConverter
+import kotlin.time.Duration.Companion.seconds
 
 enum class DecodingStack {
     /**
@@ -98,6 +101,47 @@ class ClaycodeDecoder {
                 }
             }
             logRelativeTime("Bit to Text", startTime);
+
+            // 3 - Check for matching fragments
+            // NOTE: We use the tree-to-bits function as a temporary replacement for unordered tree equality
+            if (results.isEmpty()) {
+                val countMap: HashMap<BitString, Pair<Int, Tree>> = HashMap()
+                for (tree in potentialClaycodeTrees) {
+                    val bits = BitTreeConverter.treeToBits(tree)
+                    countMap[bits] =
+                        Pair(countMap.getOrDefault(bits, Pair(0, tree)).first + 1, tree)
+                }
+
+                // Find all results that have at least two matching fragments
+                val potentialResults = mutableListOf<Pair<Int, Tree>>()
+                for ((_, pair) in countMap) {
+                    val (count, tree) = pair
+                    if (count >= 2 && tree.children.size==1) { // NOTE: only keeping the 2-towers
+                        potentialResults.add(Pair(count, tree))
+                    }
+                }
+
+                // From all the results, take the biggest tree (we might be matching also the subtree)
+                // Note: we compute the tree length in a sketchy way, using `toString`
+                if (potentialResults.isNotEmpty()) {
+                    var longestResult = potentialResults[0].first
+                    var longestResultTreeSize = 0
+                    for (res in potentialResults) {
+                        val treeSize = res.second.toString().length/2
+                        if (treeSize >= longestResultTreeSize) {
+                            longestResult = res.first
+                            longestResultTreeSize = treeSize
+                        }
+                    }
+
+                    // Final check: only accept the tree has more than 20 Nodes.
+                    // TODO: This can be greatly refactored
+                    if (longestResultTreeSize > 20) {
+                        val longestResultTreeSizeWithoutFrame = longestResultTreeSize - 2
+                        results += "[CC 2.0] ${longestResult} Fragments, ${longestResultTreeSizeWithoutFrame} Nodes"
+                    }
+                }
+            }
 
             var out = ""
             for (r in results) {
