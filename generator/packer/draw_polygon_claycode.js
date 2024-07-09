@@ -21,9 +21,7 @@ function drawFrame(
 ) {
   // Sorted from outer to inner
   const frame_paddings = [
-    5,
-    5,
-    5,
+    15,
   ];
 
   drawPolygon(polygon, color);
@@ -97,7 +95,7 @@ export function drawClaycode(
   color = WHITE
 ) {
   [polygon, color] = drawFrame(polygon, min_node_area, color);
-  
+
   drawClaycodeRec(
     node,
     polygon,
