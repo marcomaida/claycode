@@ -26,4 +26,9 @@ class FpsCounter(private val maxSamples : Int) {
         val avg = runningSum/ringBuffer.size
         return 1/(avg/1000)
     }
+
+    public fun resetLastSample(timestampMs: Long)
+    {
+        lastTimestamp = timestampMs
+    }
 }

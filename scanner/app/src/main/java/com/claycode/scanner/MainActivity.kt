@@ -109,6 +109,10 @@ class MainActivity : ComponentActivity() {
                                 }
                                 updateFps(fpsCounter.addSample(System.currentTimeMillis()))
                             }
+                            else
+                            {
+                                fpsCounter.resetLastSample(System.currentTimeMillis())
+                            }
 
                             currFrame.close()
                         }
