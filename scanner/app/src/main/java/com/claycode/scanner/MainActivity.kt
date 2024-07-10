@@ -45,11 +45,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.claycode.scanner.ui.theme.ClaycodeScannerTheme
 
-const val TARGET_SIZE_PCT = 0.9f;
+const val TARGET_SIZE_PCT = 0.9f
+const val FRAME_COUNTER_MAX_SAMPLES = 50
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ensureHasCameraPermissions();
+        ensureHasCameraPermissions()
+        val fpsCounter = FpsCounter(FRAME_COUNTER_MAX_SAMPLES)
 
         setContent {
             ClaycodeScannerTheme {
@@ -62,6 +65,7 @@ class MainActivity : ComponentActivity() {
                 val (showResult, updateShowResult) = remember { mutableStateOf(false) }
                 val (latestDecodedText, updateLatestDecodedText) = remember { mutableStateOf("") }
                 val (infoText, updateInfoText) = remember { mutableStateOf("Touch to scan...") }
+                val (currFps, updateFps) = remember { mutableStateOf(0.0) }
 
                 val controller = remember {
                     LifecycleCameraController(applicationContext).apply {
@@ -78,6 +82,7 @@ class MainActivity : ComponentActivity() {
                             ContextCompat.getMainExecutor(applicationContext)
                         ) { currFrame ->
                             if (analysisEnabled) {
+                                val frameStartTime = System.currentTimeMillis()
                                 val bitMap = currFrame.toBitmap()
                                 val (potentialCount, foundCount, outText) = ClaycodeDecoder.decode(
                                     bitMap, TARGET_SIZE_PCT
@@ -103,6 +108,7 @@ class MainActivity : ComponentActivity() {
                                 } else {
                                     updateInfoText("Potential Claycodes: $potentialCount ")
                                 }
+                                updateFps(fpsCounter.addSample(System.currentTimeMillis() - frameStartTime))
                             }
 
                             currFrame.close()
@@ -113,6 +119,21 @@ class MainActivity : ComponentActivity() {
                 /* Compose UI */
                 Box(modifier = Modifier.fillMaxSize()) {
                     CameraPreview(controller = controller, modifier = Modifier.fillMaxSize())
+
+                    // Fps counter
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .background(Color.Black)
+                            .padding(5.dp)
+                    ) {
+                        Text(
+                            text = "%.1f".format(currFps),
+                            style = TextStyle(fontSize = 15.sp),
+                            color = Color.White,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
 
                     if (!showResult) {
                         // Target square
