@@ -82,7 +82,6 @@ class MainActivity : ComponentActivity() {
                             ContextCompat.getMainExecutor(applicationContext)
                         ) { currFrame ->
                             if (analysisEnabled) {
-                                val frameStartTime = System.currentTimeMillis()
                                 val bitMap = currFrame.toBitmap()
                                 val (potentialCount, foundCount, outText) = ClaycodeDecoder.decode(
                                     bitMap, TARGET_SIZE_PCT
@@ -108,7 +107,7 @@ class MainActivity : ComponentActivity() {
                                 } else {
                                     updateInfoText("Potential Claycodes: $potentialCount ")
                                 }
-                                updateFps(fpsCounter.addSample(System.currentTimeMillis() - frameStartTime))
+                                updateFps(fpsCounter.addSample(System.currentTimeMillis()))
                             }
 
                             currFrame.close()
