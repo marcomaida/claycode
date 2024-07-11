@@ -125,7 +125,7 @@ a {
 
 .tree-gen-label {
   font-size: 15pt;
-  text-align: right;
+  text-align: middle;
   color: whitesmoke;
 }
 
@@ -134,6 +134,13 @@ a {
   vertical-align: middle;
   text-align: left;
   width: 50pt;
+}
+
+.tree_gen_val_long {
+  font-size: 15pt;
+  vertical-align: middle;
+  text-align: left;
+  width: 300pt;
 }
 
 .change_shape_div {

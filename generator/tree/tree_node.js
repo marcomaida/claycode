@@ -38,4 +38,53 @@ export class TreeNode {
   isLeaf() {
     return this.children.length === 0;
   }
+
+  toString() {
+    let result = '';
+
+    function serialize(node) {
+      if (!node) return;
+
+      result += '(';
+      for (const child of node.children) {
+        serialize(child);
+      }
+      result += ')';
+    }
+
+    serialize(this);
+    return result;
+  }
+
+  static fromString(str) {
+    if (!str || str[0] !== '(' || str[str.length - 1] !== ')') return null;
+
+    let stack = [];
+    let root = null;
+    let currentNode = null;
+
+    for (let char of str) {
+      if (char === '(') {
+        let newNode = new TreeNode();
+        if (currentNode) {
+          currentNode.children.push(newNode);
+          newNode.father = currentNode;
+        } else {
+          root = newNode;
+        }
+        stack.push(newNode);
+        currentNode = newNode;
+      } else if (char === ')') {
+        if (!stack.length) {
+          return null; // Unbalanced brackets
+        }
+        stack.pop();
+        currentNode = stack.length ? stack[stack.length - 1] : null;
+      } else {
+        return null; // Invalid character in string
+      }
+    }
+
+    return root;
+  }
 }
