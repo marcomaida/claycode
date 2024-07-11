@@ -10,6 +10,7 @@ import { TreeNode } from "../tree/tree_node.js";
 
 const app = initPIXI();
 const infoText = initInfoText();
+const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
 const inputNumNodes = document.getElementById("inputNumNodes");
 
@@ -81,8 +82,18 @@ function generateRandomTree(N) {
 }
 
 function polygonView() {
-  let current_tree = generateRandomTree(inputNumNodes.value);
-  current_tree = duplicateTreeNTimes(current_tree, inputNumFragments.value)
+
+  let current_tree = Tree.fromString(inputTreeTopology.value)
+  if (!current_tree) {
+    inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
+    current_tree = Tree.fromString(inputTreeTopology.value)
+    if (!current_tree) {
+      throw `current tree cannot be null after the tree was generated`;
+    }
+  }
+
+  clearDrawing();
+  current_tree = duplicateTreeNTimes(current_tree, inputNumFragments.value);
 
   let infoSuffix = ``;
 
@@ -172,8 +183,13 @@ document.addEventListener("keydown", function (event) {
 });
 
 polygonView();
+
+inputTreeTopology.addEventListener("input", () => debounce(polygonView, 100));
 inputNumFragments.addEventListener("input", () => debounce(polygonView, 100));
-inputNumNodes.addEventListener("input", () => debounce(polygonView, 100));
+inputNumNodes.addEventListener("input", () => {
+  inputTreeTopology.value = ""
+  debounce(polygonView, 100);
+});
 window.onresize = function () {
   debounce(polygonView, 50);
 };

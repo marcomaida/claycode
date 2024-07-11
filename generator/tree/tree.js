@@ -1,4 +1,4 @@
-const SEED_COLLIDER_SEGMENTS = 10;
+import { TreeNode } from "./tree_node.js";
 
 export class Tree {
   constructor(root) {
@@ -8,6 +8,18 @@ export class Tree {
 
     this.initialize_nodes(this.root, "X", 0);
     this.compute_weights(1);
+  }
+
+  toString() {
+    return this.root.toString()
+  }
+
+  static fromString(str) {
+    let root = TreeNode.fromString(str)
+    if (root)
+      return new Tree(root)
+    else
+      return null
   }
 
   /**

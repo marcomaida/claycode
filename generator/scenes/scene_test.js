@@ -4,4 +4,5 @@ import {} from "../test/test_vector.js";
 import {} from "../test/test_geometry.js";
 import {} from "../test/test_polygon_partition.js";
 import {} from "../test/test_conversion.js";
+import {} from "../test/test_tree.js";
 test_heading("OK!");
