@@ -142,6 +142,7 @@ class ClaycodeDecoder {
 
                         // Match database, otherwise print generic metadata
                         results += when(bits) {
+                            BitString("00001011011011010100101010111110100001001000001") -> "https://www.facebook.com/sharartegrafica.it/"
                             BitString("000011001001100001110000001000011100111111010001100001001111100000000010010001011001101001000100010101100101") -> "https://www.instagram.com/shara.arte.grafica"
                             else -> "[CC 2.0] $numFragments Fragments, ${longestResultTreeSize - 2} Nodes"
                         }
