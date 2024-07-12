@@ -113,23 +113,23 @@ class ClaycodeDecoder {
                 }
 
                 // Find all results that have at least two matching fragments
-                val potentialResults = mutableListOf<Pair<Int, Tree>>()
-                for ((_, pair) in countMap) {
+                val potentialResults = mutableListOf<Triple<Int, Tree, BitString>>()
+                for ((bits, pair) in countMap) {
                     val (count, tree) = pair
                     if (count >= 2 && tree.children.size==1) { // NOTE: only keeping the 2-towers
-                        potentialResults.add(Pair(count, tree))
+                        potentialResults.add(Triple(count, tree, bits))
                     }
                 }
 
                 // From all the results, take the biggest tree (we might be matching also the subtree)
                 // Note: we compute the tree length in a sketchy way, using `toString`
                 if (potentialResults.isNotEmpty()) {
-                    var longestResult = potentialResults[0].first
+                    var longestResult = potentialResults[0]
                     var longestResultTreeSize = 0
                     for (res in potentialResults) {
                         val treeSize = res.second.toString().length/2
                         if (treeSize >= longestResultTreeSize) {
-                            longestResult = res.first
+                            longestResult = res
                             longestResultTreeSize = treeSize
                         }
                     }
@@ -137,8 +137,15 @@ class ClaycodeDecoder {
                     // Final check: only accept the tree has more than 20 Nodes.
                     // TODO: This can be greatly refactored
                     if (longestResultTreeSize > 20) {
-                        val longestResultTreeSizeWithoutFrame = longestResultTreeSize - 2
-                        results += "[CC 2.0] ${longestResult} Fragments, ${longestResultTreeSizeWithoutFrame} Nodes"
+                        val (numFragments, _, bits) = longestResult;
+                        Log.i("CC2.0", bits.toString())
+
+                        // Match database, otherwise print generic metadata
+                        results += when(bits) {
+                            BitString("000011001001100001110000001000011100111111010001100001001111100000000010010001011001101001000100010101100101") -> "https://www.instagram.com/shara.arte.grafica"
+                            else -> "[CC 2.0] $numFragments Fragments, ${longestResultTreeSize - 2} Nodes"
+                        }
+
                     }
                 }
             }
