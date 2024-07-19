@@ -1,8 +1,9 @@
 package com.claycode.scanner.data_structures
 
-public class Tree(var children: Array<Tree> = arrayOf()) {
+public class Tree(var children: MutableList<Tree> = mutableListOf()) {
     fun addChild(child: Tree) {
-        assert(!children.contains(child)) { "Tree was added as child twice" }
+        // We remove this assertion as it massively slows down the code
+        // assert(!children.contains(child)) { "Tree was added as child twice" }
 
         children += child
     }
