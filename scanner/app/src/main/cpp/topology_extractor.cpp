@@ -25,7 +25,8 @@ void logRelativeTime(const std::string &tag, std::chrono::time_point<std::chrono
     LOGI("Performance", "%s:%lld", tag.c_str(), delta);
 }
 
-AndroidBitmapInfo getImageInfo(JNIEnv *env, void ** pixels, const jobject& bitmap) {
+AndroidBitmapInfo getImageInfo(JNIEnv *env, void **pixels, const jobject &bitmap)
+{
     AndroidBitmapInfo info;
     if (AndroidBitmap_getInfo(env, bitmap, &info) < 0 ||
         info.format != ANDROID_BITMAP_FORMAT_RGBA_8888 ||
@@ -45,8 +46,9 @@ AndroidBitmapInfo getImageInfo(JNIEnv *env, void ** pixels, const jobject& bitma
  * - Remove alpha channel
  */
 cv::Mat prepareInputImage(JNIEnv *env,
-                          const jobject& bitmap, const AndroidBitmapInfo& info, void* pixels,
-                          jint left, jint top, jint width, jint height) {
+                          const jobject &bitmap, const AndroidBitmapInfo &info, void *pixels,
+                          jint left, jint top, jint width, jint height)
+{
     if (left < 0 || top < 0 || left + width > info.width || top + height > info.height)
     {
         throw "Invalid image crop region";
@@ -59,12 +61,6 @@ cv::Mat prepareInputImage(JNIEnv *env,
     // Crop
     cv::Rect cropRegion(left, top, width, height);
     img = img(cropRegion);
-
-    // Discard alpha
-    cv::cvtColor(img, img, cv::COLOR_RGBA2RGB);
-
-    // Mean Shift Filtering
-    // cv::pyrMeanShiftFiltering(img, img, 10, 100);
 
     return img;
 }
@@ -94,7 +90,7 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     cv::Mat img = prepareInputImage(env, bitmap, info, pixels, left, top, width, height);
 
     // Convert to grayscale
-    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
+    cv::cvtColor(img, img, cv::COLOR_RGBA2GRAY);
 
     logRelativeTime("OpenCV", startTime);
 
@@ -121,15 +117,16 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
     int rows = touch_graph.size();
 
     jclass int_class_array = env->FindClass("[I");
-    if (int_class_array == nullptr) throw "Unable to find array class";
+    if (int_class_array == nullptr)
+        throw "Unable to find array class";
     jobjectArray result = env->NewObjectArray(rows, int_class_array, nullptr);
     for (int i = 0; i < rows; ++i)
     {
         int cols = touch_graph[i].size();
         jintArray inner_array = env->NewIntArray(cols);
         env->SetIntArrayRegion(inner_array, 0, cols, &touch_graph[i][0]); // Copy the data
-        env->SetObjectArrayElement(result, i, inner_array);  // Set the jintArray in the jobjectArray
-        env->DeleteLocalRef(inner_array); // Clean up local reference
+        env->SetObjectArrayElement(result, i, inner_array);               // Set the jintArray in the jobjectArray
+        env->DeleteLocalRef(inner_array);                                 // Clean up local reference
     }
 
     logRelativeTime("Populate Output Array", startTime);
@@ -160,12 +157,27 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractParentsArray(
     cv::Mat img = prepareInputImage(env, bitmap, info, pixels, left, top, width, height);
 
     // Convert to grayscale, threshold
-    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
-    cv::threshold(img, img, 127, 255, cv::THRESH_BINARY);
+    cv::cvtColor(img, img, cv::COLOR_RGBA2GRAY);
+
+    // Bilateral
+    cv::Mat img_bil;
+    cv::bilateralFilter(img, img_bil, 3, 75, 75);
+
+    // Adaptive threshold
+    int kernel_size_threshold = std::max(13 * width * height / 1000000, 9);
+    if (kernel_size_threshold % 2 == 0)
+    {
+        kernel_size_threshold += 1;
+    }
+    cv::adaptiveThreshold(img_bil, img_bil, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, kernel_size_threshold, 2);
+
+    // Dilate
+    // cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(2, 2));
+    // cv::dilate(img_bil, img_bil, element, cv::Point(-1, -1), 1);
 
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
-    cv::findContours(img, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    cv::findContours(img_bil, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
     logRelativeTime("OpenCV", startTime);
 

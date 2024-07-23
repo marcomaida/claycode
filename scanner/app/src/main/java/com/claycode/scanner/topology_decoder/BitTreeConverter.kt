@@ -16,7 +16,7 @@ class BitTreeConverter {
             @RequiresApi(Build.VERSION_CODES.TIRAMISU)
             fun populateTreeOfNumber(root: Tree, n: BigInteger) {
                 val dec = numberToSquareDecomposition(n)
-                root.children = dec.map { Tree() }.toTypedArray()
+                root.children = dec.map { Tree() }.toMutableList()
                 root.children.forEachIndexed { i, c ->
                     populateTreeOfNumber(c, dec[i])
                 }
