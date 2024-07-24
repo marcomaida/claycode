@@ -15,6 +15,11 @@ const inputNumFragments = document.getElementById("inputNumFragments");
 const inputNumNodes = document.getElementById("inputNumNodes");
 
 
+const window_width = window.innerWidth;
+const window_height = window.innerHeight;
+const SHORTER_WINDOW_DIMENSION = Math.min(window_width / 2, window_height / 2);
+
+
 function duplicateTreeNTimes(tree, N) {
   // Create a new root node
   const newRoot = new TreeNode();
@@ -175,7 +180,8 @@ function debounce(func, delay) {
 
 document.addEventListener("keydown", function (event) {
   if (event.key == "Enter") {
-    current_shape = (current_shape + 1) % SHAPES.length;
+    // NOTE: disabling change shape for now
+    // current_shape = (current_shape + 1) % SHAPES.length;
     debounce(polygonView, 100);
   }
   if (event.key == " ") {
@@ -198,7 +204,6 @@ window.onresize = function () {
 /****** 
  *  DROP MANAGEMENT
  ******/
-
 let dropArea = app.view;
 // Prevent default drag behaviors
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -221,14 +226,170 @@ function handleDrop(e) {
     let texture = PIXI.Texture.from(reader.result);
     let sprite = new PIXI.Sprite(texture);
 
-    let targetWidth = 250;  // Desired width
-    let targetHeight = 250; // Desired height
-    sprite.width = targetWidth;
-    sprite.height = targetHeight;
-
+    sprite.width = SHORTER_WINDOW_DIMENSION;
+    sprite.height = SHORTER_WINDOW_DIMENSION;
     sprite.x = app.screen.width / 2;
     sprite.y = app.screen.height / 2;
     sprite.anchor.set(0.5);
     app.stage.addChild(sprite);
+
+    // Create another texture with only the transparent points colored red
+    let baseTexture = texture.baseTexture;
+    let resource = baseTexture.resource;
+    let image = new Image();
+    image.src = resource.url;
+
+    image.onload = () => {
+      let canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      let context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0);
+
+      let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      let data = imageData.data;
+
+      // Function to get the pixel index
+      function getPixelIndex(x, y) {
+        return (y * canvas.width + x) * 4;
+      }
+
+      // Function to close small islands
+      function closeSmallIslands() {
+        let visited = new Uint8Array(canvas.width * canvas.height);
+        let threshold = (canvas.width * canvas.height) * 0.01; // 1% of the image
+        let islands = [];
+
+        for (let y = 0; y < canvas.height; y++) {
+          for (let x = 0; x < canvas.width; x++) {
+            let idx = getPixelIndex(x, y);
+            if (data[idx + 3] !== 0 && !visited[y * canvas.width + x]) {
+              let queue = [[x, y]];
+              let island = [];
+
+              while (queue.length > 0) {
+                let [qx, qy] = queue.pop();
+                let qIdx = getPixelIndex(qx, qy);
+
+                if (qx < 0 || qx >= canvas.width || qy < 0 || qy >= canvas.height) continue;
+                if (data[qIdx + 3] === 0 || visited[qy * canvas.width + qx]) continue;
+
+                visited[qy * canvas.width + qx] = 1;
+                island.push([qx, qy]);
+
+                queue.push([qx - 1, qy]);
+                queue.push([qx + 1, qy]);
+                queue.push([qx, qy - 1]);
+                queue.push([qx, qy + 1]);
+              }
+
+              if (island.length < threshold) {
+                islands.push(island);
+              }
+            }
+          }
+        }
+
+        for (let island of islands) {
+          for (let [ix, iy] of island) {
+            let idx = getPixelIndex(ix, iy);
+            data[idx + 3] = 0; // Make the pixel fully transparent
+          }
+        }
+      }
+
+      closeSmallIslands();
+
+      // Function to compute contours
+      function computeContours() {
+        let contours = [];
+        let visited = new Uint8Array(canvas.width * canvas.height);
+
+        let directions = [
+          [-1, -1], [0, -1], [1, -1],
+          [-1, 0], [1, 0],
+          [-1, 1], [0, 1], [1, 1]
+        ];
+
+        for (let y = 0; y < canvas.height; y++) {
+          for (let x = 0; x < canvas.width; x++) {
+            let idx = getPixelIndex(x, y);
+            if (data[idx + 3] !== 0 && !visited[y * canvas.width + x]) {
+              let contour = [];
+              let stack = [[x, y]];
+
+              while (stack.length > 0) {
+                let [cx, cy] = stack.pop();
+                let cIdx = getPixelIndex(cx, cy);
+
+                if (cx < 0 || cx >= canvas.width || cy < 0 || cy >= canvas.height) continue;
+                if (visited[cy * canvas.width + cx]) continue;
+
+                visited[cy * canvas.width + cx] = 1;
+                contour.push([cx, cy]);
+
+                for (let [dx, dy] of directions) {
+                  let nx = cx + dx;
+                  let ny = cy + dy;
+                  let nIdx = getPixelIndex(nx, ny);
+
+                  if (nx < 0 || nx >= canvas.width || ny < 0 || ny >= canvas.height) continue;
+                  if (data[nIdx + 3] !== 0 && !visited[ny * canvas.width + nx]) {
+                    stack.push([nx, ny]);
+                  }
+                }
+              }
+
+              contours.push(contour);
+            }
+          }
+        }
+
+        return contours;
+      }
+
+      let contours = computeContours();
+      for (let i = 0; i < contours.length; i += 10000) {
+        let contour = contours[i];
+        for (let j = 0; j < contour.length; j++) {
+          let [x, y] = contour[j];
+
+          // Draw a circle at each contour point
+          let circle = new PIXI.Graphics();
+          circle.beginFill(0xFF0000); // Red color
+          circle.drawCircle(0, 0, 2); // Radius of 2 pixels
+          circle.endFill();
+          circle.x = x;
+          circle.y = y;
+          app.stage.addChild(circle);
+        }
+      }
+      console.log(contours); // Output the contours
+
+      for (let i = 0; i < data.length; i += 4) {
+        let alpha = data[i + 3];
+        if (alpha === 0) {
+          data[i] = 255;   // Red
+          data[i + 1] = 0; // Green
+          data[i + 2] = 0; // Blue
+          data[i + 3] = 255; // Fully opaque
+        } else {
+          // Make other pixels fully transparent
+          data[i + 3] = 0;
+        }
+      }
+
+      context.putImageData(imageData, 0, 0);
+
+      let newTexture = PIXI.Texture.from(canvas);
+      let newSprite = new PIXI.Sprite(newTexture);
+
+      newSprite.width = SHORTER_WINDOW_DIMENSION;
+      newSprite.height = SHORTER_WINDOW_DIMENSION;
+      newSprite.x = app.screen.width / 2;
+      newSprite.y = app.screen.height / 2;
+      newSprite.anchor.set(0.5);
+      app.stage.addChild(newSprite);
+    }
   }
 }
