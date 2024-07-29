@@ -177,6 +177,13 @@ export function getVerticesPercPositions(polygon) {
   return percs;
 }
 
+
+export function translatePolygon(polygon, translate_vec) {
+  for (const point of polygon) {
+    point.add(translate_vec);
+  }
+}
+
 export function scalePolygon(polygon, scale_vec) {
   const center = centroid(polygon);
 

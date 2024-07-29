@@ -6,80 +6,13 @@ import { drawClaycode } from "../packer/draw_polygon_claycode.js";
 import { circlePolygon } from "../geometry/geometry.js";
 import { updateInfoText, initInfoText, initPIXI } from "./utils.js";
 import { Tree } from "../tree/tree.js";
-import { TreeNode } from "../tree/tree_node.js";
+import { generateRandomTree, duplicateTreeNTimes } from "../tree/util.js"
 
 const app = initPIXI();
 const infoText = initInfoText();
 const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
 const inputNumNodes = document.getElementById("inputNumNodes");
-
-function duplicateTreeNTimes(tree, N) {
-  // Create a new root node
-  const newRoot = new TreeNode();
-
-  // Function to deep clone a tree node
-  function cloneNode(node) {
-    const newNode = new TreeNode(null, []);
-    newNode.label = node.label;
-    newNode.numDescendants = node.numDescendants;
-    newNode.weight = node.weight;
-
-    for (const child of node.children) {
-      const newChild = cloneNode(child);
-      newChild.father = newNode;
-      newNode.children.push(newChild);
-    }
-
-    return newNode;
-  }
-
-  // Duplicate the original tree N times and add to the new root
-  for (let i = 0; i < N; i++) {
-    // Clone tree
-    const clonedTree = cloneNode(tree.root);
-
-    // Add an intermediate node to make a 2-tower
-    const frameNode = new TreeNode(newRoot, [clonedTree]);
-    clonedTree.father = frameNode;
-    newRoot.children.push(frameNode);
-  }
-
-  // Initialize the new tree
-  const newTree = new Tree(newRoot);
-  newTree.initialize_nodes(newRoot, "X", 0);
-  newTree.compute_weights(1);
-
-  return newTree;
-}
-
-function generateRandomTree(N) {
-  if (N <= 0) return null;
-
-  // Helper function to create a tree node
-  function createNode(father = null) {
-    return new TreeNode(father, []);
-  }
-
-  // Create the root node
-  const root = createNode();
-  let nodes = [root];
-  for (let n = 0; n < N; n++) {
-    // pick a random node, add a child. 
-    // This over-represents lower-level nodes, leading to trees that are wider
-    const node = nodes[Math.floor(Math.random() * nodes.length)];
-    const newNode = createNode(node);
-    node.children.push(newNode);
-    nodes.push(newNode);
-  }
-
-  // Initialize the tree
-  const tree = new Tree(root);
-  tree.initialize_nodes(root, "X", 0);
-  tree.compute_weights(1);
-
-  return tree;
-}
 
 function polygonView() {
 
