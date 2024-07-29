@@ -47,6 +47,8 @@ export function duplicateTreeNTimes(tree, N) {
 // A root is created. Then, for each iteration, a random existing node is chosen and a 
 // child is added to it. Naturally, this will bias towards short trees.
 export function generateRandomTree(N) {
+    const MIN_LEVEL_1_CHILDREN = 3;
+
     if (N <= 0) return null;
 
     // Helper function to create a tree node
@@ -60,7 +62,10 @@ export function generateRandomTree(N) {
     for (let n = 0; n < N; n++) {
         // pick a random node, add a child. 
         // This over-represents lower-level nodes, leading to trees that are wider
-        const node = nodes[Math.floor(Math.random() * nodes.length)];
+        let node = nodes[Math.floor(Math.random() * nodes.length)];
+        if (n < MIN_LEVEL_1_CHILDREN) {
+            node = nodes[0]; // force the root for the first 3 nodes 
+        }
         const newNode = createNode(node);
         node.children.push(newNode);
         nodes.push(newNode);

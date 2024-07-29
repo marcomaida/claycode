@@ -1,12 +1,11 @@
 import { } from "../geometry/vector.js";
-import { area } from "../geometry/geometry.js";
 import { } from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { circlePolygon } from "../geometry/geometry.js";
+import { circlePolygon, area } from "../geometry/geometry.js";
 import { updateInfoText, initInfoText, initPIXI } from "./utils.js";
 import { Tree } from "../tree/tree.js";
-import { generateRandomTree } from "../tree/util.js";
+import { generateRandomTree, duplicateTreeNTimes } from "../tree/util.js";
 import { createBinaryImage } from "../image_processing/binary_image.js"
 import { computeContourPolygons } from "../image_processing/contour.js"
 import { drawPolygon } from "../packer/draw.js";
@@ -20,13 +19,6 @@ const inputNumNodes = document.getElementById("inputNumNodes");
 let current_texture = null;
 let current_sprite = null;
 let current_polygons = null;
-
-
-let SHAPES = [
-  // [num_edges, scale, rotation_deg]
-  [4, new PIXI.Vec(1, 1), 45],
-];
-let current_shape = 0;
 
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
@@ -98,6 +90,29 @@ async function loadImage(texture) {
   imagePolygonView();
 }
 
+// Given a set of polygons, and a target number of fragments, 
+// distributes the framents so that they best fit in the set of polygons.
+// Polygons with more area will proportionally get more fragments
+// Polygons with an area smaller than minAreaPerc will get no fragments
+function distributeFragments(polygons, targetNumFragments, minAreaPerc) {
+  const total_area = polygons.reduce((acc, p) => acc + area(p), 0);
+  const minArea = minAreaPerc * total_area;
+
+  const areas = polygons.map((p) => area(p));
+  const filteredTotalArea = areas.reduce((acc, curr) => curr >= minArea ? acc + curr : acc, 0);
+
+  const fragmentsDistribution = polygons.map((p) => {
+    const polygonArea = area(p);
+    if (polygonArea < minArea) {
+      return 0;
+    }
+    const proportion = polygonArea / filteredTotalArea;
+    return Math.round(proportion * targetNumFragments);
+  });
+
+  return fragmentsDistribution;
+}
+
 // Debug default picture
 let imageUrl = `${window.location.origin}/images/testpug.png`
 PIXI.Loader.shared.add(imageUrl).load(async (loader, resources) => {
@@ -128,9 +143,9 @@ function getWindowDimension() {
 
 function imagePolygonView() {
   let infoSuffix = ``;
-
   let [WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_DIMENSION] = getWindowDimension();
 
+  //****  Get tree
   let current_tree = Tree.fromString(inputTreeTopology.value)
   if (!current_tree) {
     inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
@@ -140,60 +155,84 @@ function imagePolygonView() {
     }
   }
 
-  let polygon = circlePolygon(
+  //****  Draw background and border
+  let BORDER_SIZE = 0.1
+  let borderExternal = circlePolygon(
+    new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
+    SPRITE_DIMENSION * (0.707106 + BORDER_SIZE), // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
+    4, new PIXI.Vec(1, 1), 45
+  );
+  let borderInternal = circlePolygon(
     new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
     SPRITE_DIMENSION * 0.707106, // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
-    SHAPES[current_shape][0],
-    SHAPES[current_shape][1],
-    SHAPES[current_shape][2]
+    4, new PIXI.Vec(1, 1), 45
   );
+  clearDrawing();
 
-  // Try to draw for a certain max number of times
-  const MAX_TRIES = 10; // TODO put back to reasonable number
-  let tries = 0;
+  drawPolygon(borderExternal, 0xFFFFFF);
+  drawPolygon(borderInternal, 0x000000);
 
-  // Start with large padding, decrease at each fail
-  let baseline_padding = Math.lerp(
-    20,
-    2,
-    Math.min(current_tree.root.numDescendants, 300) / 300
-  );
+  if (current_polygons) {
+    //*** Distribute fragments
+    let MIN_AREA_PERC = 0.0 // if a polygon occupies less than this percent of the total area, it is ignored
+    let fragmentsDistribution = distributeFragments(current_polygons, inputNumFragments.value, MIN_AREA_PERC)
+    infoSuffix += ` - [${fragmentsDistribution}]`;
 
-  let node_padding_max = baseline_padding;
-  let node_padding_min = 2;
+    for (let i = 0; i < current_polygons.length; i++) {
+      let numFragmentsToDraw = fragmentsDistribution[i]
+      let polygon = current_polygons[i]
+      if (numFragmentsToDraw == 0) {
+        // Polygon is too small. Just draw it to fill space
+        drawPolygon(polygon, 0xFFFFFF);
+        continue;
+      }
 
-  while (tries < MAX_TRIES) {
-    // Decrease padding if it keeps failing
-    const padding = Math.lerp(
-      node_padding_max,
-      node_padding_min,
-      tries / MAX_TRIES
-    );
-    current_tree.compute_weights(padding);
+      // Generate a tree that contains the number of fragments we want
+      // NOTE: if the number of input fragment is one, this function will add
+      // an extra root, which IS currently needed by the scanner.
+      let tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
 
-    let min_node_area = area(polygon) * 0.0002;
+      // Try to draw for a certain max number of times
+      const MAX_TRIES = 100;
+      let tries = 0;
 
-    try {
-      clearDrawing();
-      drawClaycode(current_tree.root, polygon, padding, min_node_area);
-      break;
-    } catch (error) {
-      tries++;
-      if (tries == MAX_TRIES) {
-        clearDrawing();
-        infoSuffix += "- Failed to Pack :(";
-        break;
+      // Start with large padding, decrease at each fail
+      let baseline_padding = Math.lerp(
+        20,
+        2,
+        Math.min(tree.root.numDescendants, 300) / 300
+      );
+
+      let node_padding_max = baseline_padding;
+      let node_padding_min = 2;
+
+      while (tries < MAX_TRIES) {
+        // Decrease padding if it keeps failing
+        const padding = Math.lerp(
+          node_padding_max,
+          node_padding_min,
+          tries / MAX_TRIES
+        );
+        tree.compute_weights(padding);
+
+        let min_node_area = area(polygon) * 0.0005;
+        try {
+          drawClaycode(tree.root, polygon, padding, min_node_area, 0xFFFFFF, false);
+          break;
+        } catch (error) {
+          tries++;
+          if (tries == MAX_TRIES) {
+            let msg = "- Failed to Pack :("
+            if (!infoSuffix.includes(msg)) {
+              infoSuffix += "- Failed to Pack :(";
+            }
+            break;
+          }
+        }
       }
     }
   }
 
   updateInfoText(null, current_tree, infoSuffix);
-
-  // TODO: turn into fragment packing
-  if (current_polygons) {
-    for (let polygon of current_polygons) {
-      drawPolygon(polygon, 0xFF0000);
-    }
-  }
 }
 

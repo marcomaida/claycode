@@ -92,9 +92,12 @@ export function drawClaycode(
   polygon,
   node_padding,
   min_node_area,
-  color = WHITE
+  color = WHITE,
+  mustDrawFrame = true,
 ) {
-  [polygon, color] = drawFrame(polygon, min_node_area, color);
+  if (mustDrawFrame) {
+    [polygon, color] = drawFrame(polygon, min_node_area, color);
+  }
 
   drawClaycodeRec(
     node,
