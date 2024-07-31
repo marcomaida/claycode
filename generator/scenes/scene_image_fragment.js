@@ -148,8 +148,7 @@ function imagePolygonView() {
   //****  Get tree
   let current_tree = Tree.fromString(inputTreeTopology.value)
   if (!current_tree) {
-    // inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
-    inputTreeTopology.value = "()";
+    inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
     current_tree = Tree.fromString(inputTreeTopology.value)
     if (!current_tree) {
       throw `current tree cannot be null after the tree was generated`;
@@ -219,7 +218,6 @@ function imagePolygonView() {
         let min_node_area = area(polygon) * 0.0005;
         try {
           drawClaycode(tree.root, polygon, padding, min_node_area, 0xFFFFFF, false);
-          // drawPolygon(polygon);
           break;
         } catch (error) {
           tries++;

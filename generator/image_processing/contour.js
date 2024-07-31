@@ -119,9 +119,9 @@ function extractPolygonsFromContours(contouredBinaryImage)
                 if (currRow == row && currCol == col) {
                     console.assert(neighboringContours.length == 2);
                 } else {
-                    // console.assert(neighboringContours.length <= 1); // TODO This shouldn't fail!
+                    // Warning: this does not guarantee that there won't be branching
+                    console.assert(neighboringContours.length <= 2);
                 }
-                // console.assert(neighboringContours.length <= 2); // TODO This shouldn't fail!
 
                 polygon.push({x: currRow, y: currCol});
                 mat[currRow][currCol] = VISITED;
@@ -181,11 +181,8 @@ export function computeContourPolygons(binaryImage, center, size) {
     binaryImage = addPadding(binaryImage);
     binaryImage = markContous(binaryImage);
     let polygons = extractPolygonsFromContours(binaryImage);
-    console.log(polygons);
-    polygons = polygons.map((poly) => simplify(poly, 1, false));
+    polygons = polygons.map((poly) => simplify(poly, 3, false));
     let pixiPolygons = posArraysToPixiVecArrays(polygons, center, size);
-    console.log(polygons);
-    console.log(pixiPolygons);
 
     return pixiPolygons;
 }
