@@ -8,37 +8,50 @@ export function closeSmallIslands(binaryImage, island_percentage_threshold) {
     const threshold = (width * height) * island_percentage_threshold;
     const islands = [];
 
+    // Function to perform flood fill and collect island pixels
+    function floodFill(x, y) {
+        const stack = [[x, y]];
+        const island = [];
+        let idx;
+
+        while (stack.length) {
+            const [cx, cy] = stack.pop();
+            idx = cy * width + cx;
+
+            if (cx < 0 || cy < 0 || cx >= width || cy >= height || visited[idx] || binaryImage[cy][cx] === 0) {
+                continue;
+            }
+
+            visited[idx] = 1;
+            island.push([cx, cy]);
+
+            stack.push([cx + 1, cy]);
+            stack.push([cx - 1, cy]);
+            stack.push([cx, cy + 1]);
+            stack.push([cx, cy - 1]);
+        }
+
+        return island;
+    }
+
+    // Find all islands
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            if (binaryImage[y][x] === 1 && !visited[getPixelIndex({ width: width, height: height }, x, y)]) {
-                let queue = [[x, y]];
-                let island = [];
-
-                while (queue.length > 0) {
-                    let [qx, qy] = queue.pop();
-                    if (qx < 0 || qx >= width || qy < 0 || qy >= height) continue;
-                    if (binaryImage[qy][qx] === 0 || visited[getPixelIndex({ width: width, height: height }, qx, qy)]) continue;
-
-                    visited[getPixelIndex({ width: width, height: height }, qx, qy)] = 1;
-                    island.push([qx, qy]);
-
-                    queue.push([qx - 1, qy]);
-                    queue.push([qx + 1, qy]);
-                    queue.push([qx, qy - 1]);
-                    queue.push([qx, qy + 1]);
-                }
-
-                if (island.length < threshold) {
-                    islands.push(island);
-                }
+            if (binaryImage[y][x] === 1 && !visited[y * width + x]) {
+                const island = floodFill(x, y);
+                islands.push(island);
             }
         }
     }
 
-    for (let island of islands) {
-        for (let [ix, iy] of island) {
-            binaryImage[iy][ix] = 0; // Make the pixel value 0 (remove the island)
+    // Remove small islands
+    for (const island of islands) {
+        if (island.length < threshold) {
+            for (const [x, y] of island) {
+                binaryImage[y][x] = 0;
+            }
         }
     }
-}
 
+    return binaryImage;
+}
