@@ -19,6 +19,9 @@ const inputNumNodes = document.getElementById("inputNumNodes");
 let current_texture = null;
 let current_sprite = null;
 let current_polygons = null;
+let current_frame_color = 0xffffff
+let current_fore_color = 0xffffff
+let current_back_color = 0x000000
 
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
@@ -89,6 +92,21 @@ async function loadImage(texture) {
 
   imagePolygonView();
 }
+
+/*****
+ * Color management
+ */
+document.addEventListener('coloris:pick', event => {
+  const hexString = event.detail.color.replace('#', '');
+  const hexNumber = parseInt(hexString, 16);
+  if (event.detail.currentEl.id == "frameColorPicker")
+    current_frame_color = hexNumber
+  if (event.detail.currentEl.id == "foreColorPicker")
+    current_fore_color = hexNumber
+  if (event.detail.currentEl.id == "backColorPicker")
+    current_back_color = hexNumber
+  debounce(imagePolygonView, 300);
+});
 
 // Given a set of polygons, and a target number of fragments, 
 // distributes the framents so that they best fit in the set of polygons.
@@ -169,8 +187,8 @@ function imagePolygonView() {
   );
   clearDrawing();
 
-  drawPolygon(borderExternal, 0xFFFFFF);
-  drawPolygon(borderInternal, 0x000000);
+  drawPolygon(borderExternal, current_frame_color);
+  drawPolygon(borderInternal, current_back_color);
 
   if (current_polygons) {
     //*** Distribute fragments
@@ -219,7 +237,7 @@ function imagePolygonView() {
 
         let min_node_area = area(polygon) * 0.001;
         try {
-          drawClaycode(tree.root, polygon, padding, min_node_area, 0xFFFFFF, false);
+          drawClaycode(tree.root, polygon, padding, min_node_area, false, [current_fore_color, current_back_color], 0);
           break;
         } catch (error) {
           tries++;

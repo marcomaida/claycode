@@ -5,11 +5,6 @@ import { partitionPolygon } from "../geometry/polygon_partition.js";
 const BLACK = 0x000000;
 const WHITE = 0xffffff;
 
-function inverse_color(color) {
-  if (color === WHITE) return BLACK;
-  else return WHITE;
-}
-
 /* 
   Draw nested polygons with static paddings defined by frame_paddings.
   Return the next polygon and color to use.  
@@ -17,39 +12,45 @@ function inverse_color(color) {
 function drawFrame(
   polygon,
   min_node_area,
-  color
+  colors = [WHITE, BLACK],
+  color_index = 0
 ) {
+
   // Sorted from outer to inner
   const frame_paddings = [
     15,
   ];
 
-  drawPolygon(polygon, color);
-
   let curr_polygon = polygon;
-  let curr_color = color;
+  let curr_color = colors[color_index];
   for (const padding of frame_paddings) {
     drawPolygon(curr_polygon, curr_color);
     curr_polygon = padPolygon(curr_polygon, padding);
-    curr_color = inverse_color(curr_color);
+    color_index = (color_index + 1) % colors.length
+    curr_color = colors[color_index];
 
     if (area(curr_polygon) < min_node_area) {
       throw "Not enough space";
     }
   }
 
-  return [curr_polygon, curr_color];
+  return [curr_polygon, color_index];
 }
 
-function drawClaycodeRec(
+export function drawClaycode(
   node,
   polygon,
   node_padding,
   min_node_area,
-  color
+  mustDrawFrame = true,
+  colors = [WHITE, BLACK],
+  color_index = 0
 ) {
-  // Random color debug:
-  // color = Math.floor(Math.random() * 16777215).toString(16);
+  let color = colors[color_index];
+  if (mustDrawFrame) {
+    [polygon, color_index] = drawFrame(polygon, min_node_area, colors);
+  }
+  color = colors[color_index];
 
   drawPolygon(polygon, color);
   const sub_polygon = padPolygon(polygon, node_padding);
@@ -60,15 +61,17 @@ function drawClaycodeRec(
 
   if (node.children.length == 0) {
     // Draw leaf
-    drawPolygon(sub_polygon, inverse_color(color));
+    drawPolygon(sub_polygon, colors[(color_index + 1) % colors.length]);
     return;
   } else if (node.children.length == 1) {
-    drawClaycodeRec(
+    drawClaycode(
       node.children[0],
       sub_polygon,
       node_padding,
       min_node_area,
-      inverse_color(color)
+      false,
+      colors,
+      (color_index + 1) % colors.length
     );
   } else {
     const weights = Math.normalise(node.children.map((c) => c.weight));
@@ -76,34 +79,16 @@ function drawClaycodeRec(
 
     console.assert(partition.length == node.children.length);
     for (const [i, c] of node.children.entries()) {
-      drawClaycodeRec(
+      drawClaycode(
         c,
         partition[i],
         node_padding,
         min_node_area,
-        inverse_color(color)
+        false,
+        colors,
+        (color_index + 1) % colors.length
       );
     }
   }
 }
 
-export function drawClaycode(
-  node,
-  polygon,
-  node_padding,
-  min_node_area,
-  color = WHITE,
-  mustDrawFrame = true,
-) {
-  if (mustDrawFrame) {
-    [polygon, color] = drawFrame(polygon, min_node_area, color);
-  }
-
-  drawClaycodeRec(
-    node,
-    polygon,
-    node_padding,
-    min_node_area,
-    color
-  );
-}
