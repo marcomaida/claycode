@@ -156,7 +156,7 @@ function imagePolygonView() {
   }
 
   //****  Draw background and border
-  let BORDER_SIZE = 0.1
+  let BORDER_SIZE = 0.05
   let borderExternal = circlePolygon(
     new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
     SPRITE_DIMENSION * (0.707106 + BORDER_SIZE), // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
@@ -181,16 +181,18 @@ function imagePolygonView() {
     for (let i = 0; i < current_polygons.length; i++) {
       let numFragmentsToDraw = fragmentsDistribution[i]
       let polygon = current_polygons[i]
-      if (numFragmentsToDraw == 0) {
-        // Polygon is too small. Just draw it to fill space
-        drawPolygon(polygon, 0xFFFFFF);
-        continue;
-      }
 
       // Generate a tree that contains the number of fragments we want
       // NOTE: if the number of input fragment is one, this function will add
       // an extra root, which IS currently needed by the scanner.
-      let tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
+      let tree = null;
+      if (numFragmentsToDraw == 0) {
+        // Polygon is too small. Just draw a little random tree to fill space
+        tree = generateRandomTree(10);
+      }
+      else {
+        tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
+      }
 
       // Try to draw for a certain max number of times
       const MAX_TRIES = 100;
