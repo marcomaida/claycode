@@ -208,12 +208,12 @@ export function padPolygon(polygon, amount) {
     throw "Error padding polygon -- No space left";
   }
   // Taking the polygon with the largest area if there are multiple polygons
-  let padded = padded_pols.reduce(function(a, b){ return area(a) > area(b) ? a : b });
+  let padded = padded_pols.reduce(function (a, b) { return area(a) > area(b) ? a : b });
   padded.pop(); // Remove last element
 
   // Simplify polygon (need simplify.js format)
-  var padded_simplify = padded.map((p) => {return {x: p[0], y: p[1]};});
-  padded_simplify = simplify(padded_simplify, 3, false);
+  var padded_simplify = padded.map((p) => { return { x: p[0], y: p[1] }; });
+  padded_simplify = simplify(padded_simplify, 1, false);
   padded = padded_simplify.map((p) => [p.x, p.y]);
 
   let polygon_padded = padded.map((p) => new PIXI.Vec(p[0], p[1]));

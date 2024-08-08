@@ -28,10 +28,17 @@ export function duplicateTreeNTimes(tree, N) {
         // Clone tree
         const clonedTree = cloneNode(tree.root);
 
-        // Add an intermediate node to make a 2-tower
-        const frameNode = new TreeNode(newRoot, [clonedTree]);
-        clonedTree.father = frameNode;
-        newRoot.children.push(frameNode);
+        if (N > 1) {
+            // Add an intermediate node to make a 2-tower
+            const frameNode = new TreeNode(newRoot, [clonedTree]);
+            clonedTree.father = frameNode;
+            newRoot.children.push(frameNode);
+        }
+        else {
+            // In the N=1 case, we do not need to make a 2-tower; it is
+            // done automatically as there is only 1 child
+            newRoot.children.push(clonedTree);
+        }
     }
 
     // Initialize the new tree

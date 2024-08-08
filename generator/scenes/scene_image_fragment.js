@@ -217,7 +217,7 @@ function imagePolygonView() {
         );
         tree.compute_weights(padding);
 
-        let min_node_area = area(polygon) * 0.0005;
+        let min_node_area = area(polygon) * 0.001;
         try {
           drawClaycode(tree.root, polygon, padding, min_node_area, 0xFFFFFF, false);
           break;
