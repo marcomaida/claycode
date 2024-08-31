@@ -18,10 +18,10 @@ function getNeighbors(mat, row, col, directions) {
     if (row < 0 || col < 0 || row >= mat.length || col >= mat[0].length) return ret;
 
     for (const [i, j] of directions) {
-        if (row+i < 0 || col+j < 0 || row+i >= mat.length || col+j >= mat[0].length) {
+        if (row + i < 0 || col + j < 0 || row + i >= mat.length || col + j >= mat[0].length) {
             continue;
         }
-        ret.push([row+i, col+j]);
+        ret.push([row + i, col + j]);
     }
 
     return ret;
@@ -32,18 +32,18 @@ function addPadding(binaryImage) {
     const numRows = binaryImage.length;
     const numCols = binaryImage[0].length;
     const paddedMatrix = [];
-  
+
     // Create top border
     paddedMatrix.push(new Array(numCols + 2).fill(FULL));
-  
+
     // Add padding to each row of the original matrix
     for (let i = 0; i < numRows; i++) {
-      paddedMatrix.push([FULL, ...binaryImage[i], FULL]);
+        paddedMatrix.push([FULL, ...binaryImage[i], FULL]);
     }
-  
+
     // Create bottom border
     paddedMatrix.push(new Array(numCols + 2).fill(FULL));
-  
+
     return paddedMatrix;
 }
 
@@ -74,7 +74,7 @@ function fill(matrix, row, col) {
     return mat;
 }
 
-function markContous(binaryImage) {
+function markContours(binaryImage) {
     const numRows = binaryImage.length;
     const numCols = binaryImage[0].length;
     let markedMatrix = binaryImage;
@@ -97,8 +97,7 @@ function markContous(binaryImage) {
 }
 
 // Returns array of polygons in the format {x : Number, y : Number}
-function extractPolygonsFromContours(contouredBinaryImage)
-{
+function extractPolygonsFromContours(contouredBinaryImage) {
     let ret = [];
     const numRows = contouredBinaryImage.length;
     const numCols = contouredBinaryImage[0].length;
@@ -123,7 +122,7 @@ function extractPolygonsFromContours(contouredBinaryImage)
                     console.assert(neighboringContours.length <= 2);
                 }
 
-                polygon.push({x: currRow, y: currCol});
+                polygon.push({ x: currRow, y: currCol });
                 mat[currRow][currCol] = VISITED;
                 if (neighboringContours.length > 0) {
                     currRow = neighboringContours[0][0];
@@ -142,7 +141,7 @@ function extractPolygonsFromContours(contouredBinaryImage)
     ret.forEach(
         (poly) => console.assert(
             getNeighbors(mat, poly[0][0], poly[0][1], allDirections).some(
-                (point) => point.x == poly[poly.length-1][0] && point.y == poly[poly.length-1][1]
+                (point) => point.x == poly[poly.length - 1][0] && point.y == poly[poly.length - 1][1]
             )
         )
     );
@@ -150,8 +149,7 @@ function extractPolygonsFromContours(contouredBinaryImage)
     return ret;
 }
 
-function posArraysToPixiVecArrays(polygons, center, size)
-{
+function posArraysToPixiVecArrays(polygons, center, size) {
     const topLeftX = center.x - size / 2;
     const topLeftY = center.y - size / 2;
     return polygons.map(
@@ -160,7 +158,7 @@ function posArraysToPixiVecArrays(polygons, center, size)
         )
     );
 }
-  
+
 /*
     INPUT
     [0, 0, 0],
@@ -179,7 +177,7 @@ function posArraysToPixiVecArrays(polygons, center, size)
 export function computeContourPolygons(binaryImage, center, size) {
     binaryImage = closeSmallIslands(binaryImage, 0.01);
     binaryImage = addPadding(binaryImage);
-    binaryImage = markContous(binaryImage);
+    binaryImage = markContours(binaryImage);
     let polygons = extractPolygonsFromContours(binaryImage);
     polygons = polygons.map((poly) => simplify(poly, 3, false));
     let pixiPolygons = posArraysToPixiVecArrays(polygons, center, size);
