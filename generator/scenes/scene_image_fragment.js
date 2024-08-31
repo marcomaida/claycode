@@ -19,6 +19,9 @@ const inputNumNodes = document.getElementById("inputNumNodes");
 let current_texture = null;
 let current_sprite = null;
 let current_polygons = null;
+let current_frame_color = 0xffffff
+let current_fore_color = 0xffffff
+let current_back_color = 0x000000
 
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
@@ -90,6 +93,21 @@ async function loadImage(texture) {
   imagePolygonView();
 }
 
+/*****
+ * Color management
+ */
+document.addEventListener('coloris:pick', event => {
+  const hexString = event.detail.color.replace('#', '');
+  const hexNumber = parseInt(hexString, 16);
+  if (event.detail.currentEl.id == "frameColorPicker")
+    current_frame_color = hexNumber
+  if (event.detail.currentEl.id == "foreColorPicker")
+    current_fore_color = hexNumber
+  if (event.detail.currentEl.id == "backColorPicker")
+    current_back_color = hexNumber
+  debounce(imagePolygonView, 300);
+});
+
 // Given a set of polygons, and a target number of fragments, 
 // distributes the framents so that they best fit in the set of polygons.
 // Polygons with more area will proportionally get more fragments
@@ -114,7 +132,7 @@ function distributeFragments(polygons, targetNumFragments, minAreaPerc) {
 }
 
 // Debug default picture
-let imageUrl = `${window.location.origin}/images/testpug.png`
+let imageUrl = `${window.location.origin}/images/simplifiedpug.png`
 PIXI.Loader.shared.add(imageUrl).load(async (loader, resources) => {
   let texture = PIXI.Texture.from(resources[imageUrl].url);
   await loadImage(texture)
@@ -156,7 +174,7 @@ function imagePolygonView() {
   }
 
   //****  Draw background and border
-  let BORDER_SIZE = 0.1
+  let BORDER_SIZE = 0.05
   let borderExternal = circlePolygon(
     new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
     SPRITE_DIMENSION * (0.707106 + BORDER_SIZE), // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
@@ -169,8 +187,8 @@ function imagePolygonView() {
   );
   clearDrawing();
 
-  drawPolygon(borderExternal, 0xFFFFFF);
-  drawPolygon(borderInternal, 0x000000);
+  drawPolygon(borderExternal, current_frame_color);
+  drawPolygon(borderInternal, current_back_color);
 
   if (current_polygons) {
     //*** Distribute fragments
@@ -181,16 +199,18 @@ function imagePolygonView() {
     for (let i = 0; i < current_polygons.length; i++) {
       let numFragmentsToDraw = fragmentsDistribution[i]
       let polygon = current_polygons[i]
-      if (numFragmentsToDraw == 0) {
-        // Polygon is too small. Just draw it to fill space
-        drawPolygon(polygon, 0xFFFFFF);
-        continue;
-      }
 
       // Generate a tree that contains the number of fragments we want
       // NOTE: if the number of input fragment is one, this function will add
       // an extra root, which IS currently needed by the scanner.
-      let tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
+      let tree = null;
+      if (numFragmentsToDraw == 0) {
+        // Polygon is too small. Just draw a little random tree to fill space
+        tree = generateRandomTree(10);
+      }
+      else {
+        tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
+      }
 
       // Try to draw for a certain max number of times
       const MAX_TRIES = 100;
@@ -215,9 +235,9 @@ function imagePolygonView() {
         );
         tree.compute_weights(padding);
 
-        let min_node_area = area(polygon) * 0.0005;
+        let min_node_area = area(polygon) * 0.001;
         try {
-          drawClaycode(tree.root, polygon, padding, min_node_area, 0xFFFFFF, false);
+          drawClaycode(tree.root, polygon, padding, min_node_area, false, [current_fore_color, current_back_color], 0);
           break;
         } catch (error) {
           tries++;

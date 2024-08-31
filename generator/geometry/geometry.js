@@ -1,5 +1,6 @@
 import { } from "./polygon_offset.js";
 import { } from "../geometry/vector.js";
+import "../image_processing/simplify.js";
 
 // Smallest unit, used to avoid floating point precision issues
 export const EPS = 0.0000001;
@@ -206,8 +207,15 @@ export function padPolygon(polygon, amount) {
   if (padded_pols.length == 0) {
     throw "Error padding polygon -- No space left";
   }
-  let padded = padded_pols[0];
+  // Taking the polygon with the largest area if there are multiple polygons
+  let padded = padded_pols.reduce(function (a, b) { return area(a) > area(b) ? a : b });
   padded.pop(); // Remove last element
+
+  // Simplify polygon (need simplify.js format)
+  var padded_simplify = padded.map((p) => { return { x: p[0], y: p[1] }; });
+  padded_simplify = simplify(padded_simplify, 1, false);
+  padded = padded_simplify.map((p) => [p.x, p.y]);
+
   let polygon_padded = padded.map((p) => new PIXI.Vec(p[0], p[1]));
   return polygon_padded;
 }

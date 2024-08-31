@@ -129,6 +129,13 @@ a {
   color: whitesmoke;
 }
 
+.color_picker {
+  font-size: 12pt;
+  text-align: middle;
+  width: 60pt;
+  color: whitesmoke;
+}
+
 .tree_gen_val {
   font-size: 20pt;
   vertical-align: middle;
