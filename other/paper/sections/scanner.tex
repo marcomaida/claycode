@@ -1,3 +1,11 @@
 \section{Scanner}
 
-\lipsum[1]
+High-level explanation of scanner pipeline. 
+
+\subsection[topology]{Topology extraction}
+
+We employ pre-processing on the image to remove noise, then we classify each region with a unique id, and build an undirected graph describing which regions are touching. We call this a \textit{touch graph}. In the following, we describe an algorithm which extracts a tree given a touch graph.
+
+\subsection[falsePositives]{Avoiding false positives}
+
+We employed different strategies including CRCs, known prefixes, and known number of descendants.
