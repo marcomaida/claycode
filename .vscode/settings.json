@@ -78,5 +78,30 @@
         "variant": "cpp",
         "vector": "cpp",
         "algorithm": "cpp"
-    }
+    },
+    // ****************************************
+    // Latex workshop build settings
+    // ****************************************
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "Run pdflatex on main.tex",
+            "tools": [
+                {
+                    "name": "pdflatex-main",
+                    "command": "pdflatex",
+                    "args": [
+                        "-interaction=nonstopmode",
+                        "-synctex=1",
+                        "-file-line-error",
+                        "main.tex" // This ensures main.tex is always compiled
+                    ]
+                }
+            ]
+        }
+    ],
+    "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+    // If the following option is off, latex will autosave. 
+    // This is quite annoying as it triggers latex error while you're writing.
+    "files.autoSave": "off"
 }
