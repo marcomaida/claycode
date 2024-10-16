@@ -25,7 +25,7 @@
 
 \newtoggle{unnumberedsections} % Create toggle for a class option
 \settoggle{unnumberedsections}{false} % Default value for the class option
-\DeclareOption{unnumberedsections}{\settoggle{unnumberedsections}{true}} % Set the class option toggle if the class option was used in the template
+\DeclareOption{unnumberedsections}{\settoggle{unnumberedsections}{false}} % Set the class option toggle if the class option was used in the template
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}} % Pass through any extra options specified to the base class
 \ProcessOptions\relax % Process class options
@@ -37,7 +37,7 @@
 %----------------------------------------------------------------------------------------
 
 \usepackage{graphicx} % Required for including images
-\graphicspath{{Figures/}{./}} % Specifies where to look for included images (trailing slash required)
+\graphicspath{{figures/}{./}} % Specifies where to look for included images (trailing slash required)
 
 \usepackage[bottom, hang]{footmisc} % Force footnotes to the bottom of the page and to the left margin
 \setlength{\footnotemargin}{6pt} % Horizontal space between the footnote marker and text
@@ -211,6 +211,12 @@
 	linkcolor=black, % Color for \nameref links
 	citecolor=black, % Color of reference citations
 }
+
+%----------------------------------------------------------------------------------------
+%	OTHER
+%----------------------------------------------------------------------------------------
+
+\usepackage{lipsum}
 
 %----------------------------------------------------------------------------------------
 %	CUSTOM COMMANDS
