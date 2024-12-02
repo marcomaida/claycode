@@ -1,8 +1,9 @@
 import { textToBits } from "../conversion/convert.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
-import { area } from "../geometry/geometry.js";
+import { area, circlePolygon } from "../geometry/geometry.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { circlePolygon } from "../geometry/geometry.js";
+import { createMouseHeadPolygon } from "../geometry/shapes.js";
+import { TreeNode } from "../tree/tree_node.js";
 
 export function initPIXI() {
   const app = new PIXI.Application({
@@ -89,21 +90,23 @@ export function drawPolygonClaycode(
   // If there are few nodes, be ambitious with padding
   // Once reached a certain limit, start from the minimum
   let node_padding_max = Math.lerp(
-    15,
+    5,
     node_padding_min,
     Math.min(current_tree.root.numDescendants, 600) / 600
   );
 
-  let polygon = circlePolygon(
-    polygon_center,
-    polygon_size,
-    POLYGON_SHAPES[current_shape][0],
-    POLYGON_SHAPES[current_shape][1],
-    POLYGON_SHAPES[current_shape][2]
-  );
+  // let polygon = circlePolygon(
+  //   polygon_center,
+  //   polygon_size,
+  //   POLYGON_SHAPES[current_shape][0],
+  //   POLYGON_SHAPES[current_shape][1],
+  //   POLYGON_SHAPES[current_shape][2]
+  // );
+
+  let polygon = createMouseHeadPolygon(polygon_center, polygon_size * .6)
 
   // Try to draw for a certain max number of times
-  const MAX_TRIES = 200;
+  const MAX_TRIES = 100;
   let tries = 0;
   while (tries < MAX_TRIES) {
     // Decrease padding if it keeps failing
