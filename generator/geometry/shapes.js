@@ -1,8 +1,8 @@
 import { centroid, findClosestPointIndex, getCircleIntersections, isPointInPolygon, perimeter, scalePolygon, translatePolygon } from "./geometry.js";
 
 export function createMouseHeadPolygon(center, scale) {
-    const EARS_RADIUS = 0.55;
-    const EARS_OFFSET = 0.99;
+    const EARS_RADIUS = 0.65;
+    const EARS_OFFSET = 1.05;
     const NUM_SEGMENTS = 100;
     const theta = Array.from({ length: NUM_SEGMENTS }, (_, i) => (i * 2 * Math.PI) / NUM_SEGMENTS);
 
