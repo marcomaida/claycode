@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script src="../pixi.mini.js"></script>
+    <script type="module" src="../page_loader.js"></script>
+    <script type="module" src="/scenes/scene_compare.js"></script>
+</head>
+
+<body style="position: relative;">
+    <div id="pixiDiv" class="pixi-div"></div>
+    <div class="elements-div">
+        <div id="headerDiv"></div>
+        <div id="pixiDiv" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+    
+        <div id="compare-codes"style="margin-left:55%; flex:auto; display: flex; align-items: center; margin-top: 20pt;">
+            <!-- Slider for Distortion -->
+            <div style="position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%);">
+                <label for="distortionSlider" style="margin-right: 10px;color: white;">Distort</label>
+                <input type="range" id="distortionSlider" min="0" max="100" value="0" step="1">
+            </div>
+    
+            <!-- Slider for Animation -->
+            <div style="position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%);">
+                <label for="animateSlider" style="color: white";>Animate</label>
+                <input type="range" id="animateSlider" min="0" max="100" value="0" step="1">
+            </div>
+        </div>
+        <div id="footerDiv"></div>
+    </div>
+</body>
+
+</html>
