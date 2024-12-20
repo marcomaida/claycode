@@ -19,14 +19,22 @@ class TreeNode:
 		self.longest_descending_path = max([c._compute_longest_descending_path() 
 							  for c in self.children], default=0) + 1
 		return self.longest_descending_path
+
+	def _compute_weight(self):
+		self.weight = 1 + sum([c._compute_weight() for c in self.children], 0)
+		return self.weight
 	
 	def initialize(self):
 		# compute metadata in each this node and children
 		self._compute_descendants()
 		self._compute_longest_descending_path()
-		self.weight = sum ((node.longest_descending_path 
-					  		for node in iterate_tree_depth_first(self)))
+		self._compute_weight()
+  		# self.weight = sum ((node.longest_descending_path 
+					  		# for node in iterate_tree_depth_first(self)))
 
+	def get_total_weight(self):
+		return sum (node.weight for node in iterate_tree_depth_first(self))
+		
 	def __repr__(self) -> str:
 		return f"{str(self.children)}"
 	
