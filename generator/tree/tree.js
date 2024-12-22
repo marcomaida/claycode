@@ -5,9 +5,11 @@ export class Tree {
     this.root = root;
 
     this.maxDepth = 0;
+    this.polygon = null;
 
     this.initialize_nodes(this.root, "X", 0);
     this.compute_weights(1);
+    this.compute_depth(0);
   }
 
   toString() {
@@ -45,6 +47,10 @@ export class Tree {
   compute_weights(node_padding) {
     compute_weights_(this.root, node_padding);
   }
+
+  compute_depth(node_depth) {
+    compute_depth_(this.root, node_depth);
+  }
 }
 
 function compute_weights_(node, node_padding) {
@@ -76,6 +82,13 @@ function compute_weights_(node, node_padding) {
 
   node.weight = children_weight + node_padding;
   node.weight = Math.max(node.weight, 1);
+}
+
+function compute_depth_(node, node_depth) {
+  node.depth = node_depth;
+  for (const c of node.children) {
+    compute_depth_(c, node_depth + 1);
+  }
 }
 
 export function* treeIterator(tree) {

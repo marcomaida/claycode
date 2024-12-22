@@ -2,6 +2,7 @@ import { textToBits } from "../conversion/convert.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
 import { area, circlePolygon } from "../geometry/geometry.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
+import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
 import { createMouseHeadPolygon } from "../geometry/shapes.js";
 import { TreeNode } from "../tree/tree_node.js";
 
@@ -95,15 +96,15 @@ export function drawPolygonClaycode(
     Math.min(current_tree.root.numDescendants, 600) / 600
   );
 
-  // let polygon = circlePolygon(
-  //   polygon_center,
-  //   polygon_size,
-  //   POLYGON_SHAPES[current_shape][0],
-  //   POLYGON_SHAPES[current_shape][1],
-  //   POLYGON_SHAPES[current_shape][2]
-  // );
+  let polygon = circlePolygon(
+    polygon_center,
+    polygon_size,
+    POLYGON_SHAPES[current_shape][0],
+    POLYGON_SHAPES[current_shape][1],
+    POLYGON_SHAPES[current_shape][2]
+  );
 
-  let polygon = createMouseHeadPolygon(polygon_center, polygon_size * .6)
+  // let polygon = createMouseHeadPolygon(polygon_center, polygon_size * .6)
 
   // Try to draw for a certain max number of times
   const MAX_TRIES = 100;
@@ -121,14 +122,18 @@ export function drawPolygonClaycode(
 
     try {
       clearDrawing();
-      drawClaycode(current_tree.root, polygon, padding, min_node_area);
-      return true;
+      // padding, min_node_area
+      let brush = new DefaultBrush(PackerBrush.Shape.SQUARE, padding, min_node_area);
+      if (drawClaycode(current_tree.root, polygon, brush))
+        return true;
     } catch (error) {
-      tries++;
-      if (tries == MAX_TRIES) {
-        clearDrawing();
-        return false;
-      }
+      console.error(error);
+    }
+
+    tries++;
+    if (tries == MAX_TRIES) {
+      clearDrawing();
+      return false;
     }
   }
 }

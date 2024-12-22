@@ -14,6 +14,9 @@ export class TreeNode {
        also all its descendants. The UoM is irrelevant, as long as
        all nodes are weighted using the same heuristics. */
     this.weight = null;
+
+    /* Root is at depth zero. Other nodes have depth parent+1  */
+    this.depth = null;
   }
 
   /**

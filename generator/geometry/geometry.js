@@ -224,7 +224,7 @@ export function padPolygon(polygon, amount) {
   const data = offset.data(polygon_vec);
   var padded_pols = data.padding(amount);
   if (padded_pols.length == 0) {
-    throw "Error padding polygon -- No space left";
+    return null;
   }
   // Taking the polygon with the largest area if there are multiple polygons
   let padded = padded_pols.reduce(function (a, b) { return area(a) > area(b) ? a : b });
