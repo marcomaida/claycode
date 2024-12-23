@@ -63,16 +63,15 @@ export class PackerBrush {
         return this.minNodeArea;
     }
 
-    drawNode(polygon, sub_polygon, node) {
+    drawNode(polygon, node) {
         // Draw element
-        let color_idx = [node.depth % 2]
+        let color_idx = (node.depth + 1) % 2
         drawPolygon(polygon, this.colors[color_idx]);
+    }
 
-        // Leaf extra step: Draw inner element
-        if (node.isLeaf()) {
-            let next_color_idx = (node.depth + 1) % 2
-            drawPolygon(sub_polygon, this.colors[next_color_idx]);
-        }
+    drawRoot(polygon) {
+        // Draw element
+        drawPolygon(polygon, this.colors[0]);
     }
 }
 

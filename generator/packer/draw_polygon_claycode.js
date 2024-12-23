@@ -1,12 +1,16 @@
 import { area, padPolygon } from "../geometry/geometry.js";
 import { partitionPolygon } from "../geometry/polygon_partition.js";
 
-export function drawClaycode(
+export function drawClaycode(tree, polygon, packerBrush) {
+  packerBrush.drawRoot(polygon);
+  return _drawClaycode(tree.root, polygon, packerBrush);
+}
+
+export function _drawClaycode(
   node,
   polygon,
   packerBrush,
 ) {
-
   /* 
    * First, make sure there is enough free space
    */
@@ -18,28 +22,21 @@ export function drawClaycode(
   /* 
    * Next, draw node
    */
-  packerBrush.drawNode(polygon, subPolygon, node);
-  if (node.children.length == 1) {
-    return drawClaycode(
-      node.children[0],
-      subPolygon,
+  packerBrush.drawNode(subPolygon, node);
+
+  /* 
+    * Finally, partition the node and recursively call the function
+    */
+  const weights = Math.normalise(node.children.map((c) => c.weight));
+  const partition = partitionPolygon(subPolygon, weights);
+  console.assert(partition.length == node.children.length);
+  for (const [i, c] of node.children.entries()) {
+    if (!_drawClaycode(
+      c,
+      partition[i],
       packerBrush
-    );
-  } else {
-    /* 
-     * Finally, partition the node and recursively call the function
-     */
-    const weights = Math.normalise(node.children.map((c) => c.weight));
-    const partition = partitionPolygon(subPolygon, weights);
-    console.assert(partition.length == node.children.length);
-    for (const [i, c] of node.children.entries()) {
-      if (!drawClaycode(
-        c,
-        partition[i],
-        packerBrush
-      )) {
-        return false;
-      }
+    )) {
+      return false;
     }
   }
 

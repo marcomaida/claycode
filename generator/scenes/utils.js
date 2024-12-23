@@ -124,7 +124,7 @@ export function drawPolygonClaycode(
       clearDrawing();
       // padding, minNodeArea
       let brush = new DefaultBrush(PackerBrush.Shape.SQUARE, padding, minNodeArea);
-      if (drawClaycode(current_tree.root, polygon, brush))
+      if (drawClaycode(current_tree, polygon, brush))
         return true;
     } catch (error) {
       console.error(error);
