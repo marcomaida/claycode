@@ -3,6 +3,7 @@ export class TreeNode {
     this.father = father;
     this.children = children;
     this.label = null;
+    this.polygon = null;
     this.tree = null;
 
     for (const c of children) {
@@ -40,6 +41,14 @@ export class TreeNode {
 
   isLeaf() {
     return this.children.length === 0;
+  }
+
+  setPolygon(polygon) {
+    this.polygon = polygon;
+  }
+
+  getPolygon() {
+    return this.polygon;
   }
 
   toString() {

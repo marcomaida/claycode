@@ -4,40 +4,39 @@ import { partitionPolygon } from "../geometry/polygon_partition.js";
 export function drawClaycode(
   node,
   polygon,
-  packer_brush,
+  packerBrush,
 ) {
+
   /* 
    * First, make sure there is enough free space
    */
-  let node_padding = packer_brush.getNodePadding();
-  let min_node_area = packer_brush.getMinNodeArea();
-  const sub_polygon = padPolygon(polygon, node_padding);
-  if (sub_polygon === null || area(sub_polygon) < min_node_area) {
+  const subPolygon = padPolygon(polygon, packerBrush.getNodePadding());
+  if (subPolygon === null || area(subPolygon) < packerBrush.getMinNodeArea()) {
     return false;
   }
 
   /* 
    * Next, draw node
    */
-  packer_brush.drawNode(polygon, sub_polygon, node);
+  packerBrush.drawNode(polygon, subPolygon, node);
   if (node.children.length == 1) {
     return drawClaycode(
       node.children[0],
-      sub_polygon,
-      packer_brush
+      subPolygon,
+      packerBrush
     );
   } else {
     /* 
      * Finally, partition the node and recursively call the function
      */
     const weights = Math.normalise(node.children.map((c) => c.weight));
-    const partition = partitionPolygon(sub_polygon, weights);
+    const partition = partitionPolygon(subPolygon, weights);
     console.assert(partition.length == node.children.length);
     for (const [i, c] of node.children.entries()) {
       if (!drawClaycode(
         c,
         partition[i],
-        packer_brush
+        packerBrush
       )) {
         return false;
       }

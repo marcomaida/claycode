@@ -215,14 +215,20 @@ export function scalePolygon(polygon, scale_vec) {
 // Returns a smaller polygon which is padded a certain amount
 export function padPolygon(polygon, amount) {
   /* Must do some weird stuff to make the format match with what
-       the library expects. My library does not want the first and last
-       poing to be equal, and works with a vector structure instead of
-       with nested arrays. */
+     the library expects. My library does not want the first and last
+     point to be equal, and works with a vector structure instead of
+     with nested arrays. */
   let polygon_vec = polygon.map((p) => [p.x, p.y]);
   polygon_vec.push(polygon_vec[0].slice(0)); // copy first element
-  var offset = new Offset();
-  const data = offset.data(polygon_vec);
-  var padded_pols = data.padding(amount);
+  var padded_pols = [];
+  try {
+    var offset = new Offset();
+    const offset_data = offset.data(polygon_vec);
+    padded_pols = offset_data.padding(amount);
+  }
+  catch {
+    return null;
+  }
   if (padded_pols.length == 0) {
     return null;
   }

@@ -5,7 +5,6 @@ export class Tree {
     this.root = root;
 
     this.maxDepth = 0;
-    this.polygon = null;
 
     this.initialize_nodes(this.root, "X", 0);
     this.compute_weights(1);
