@@ -2,16 +2,19 @@ import { } from "../geometry/vector.js";
 import { } from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { circlePolygon, area } from "../geometry/geometry.js";
-import { updateInfoText, initInfoText, initPIXI } from "./utils.js";
+import { area } from "../geometry/geometry.js";
+import { createCirclePolygon } from "../geometry/shapes.js";
+import * as utils from "./utils.js";
 import { Tree } from "../tree/tree.js";
 import { generateRandomTree, duplicateTreeNTimes } from "../tree/util.js";
 import { createBinaryImage } from "../image_processing/binary_image.js"
 import { computeContourPolygons } from "../image_processing/contour.js"
 import { drawPolygon } from "../packer/draw.js";
+import { packClaycode } from "../packer/pack.js";
 
-const app = initPIXI();
-const infoText = initInfoText();
+
+const app = utils.initPIXI();
+const infoText = utils.initInfoText();
 const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
 const inputNumNodes = document.getElementById("inputNumNodes");
@@ -175,12 +178,12 @@ function imagePolygonView() {
 
   //****  Draw background and border
   let BORDER_SIZE = 0.05
-  let borderExternal = circlePolygon(
+  let borderExternal = createCirclePolygon(
     new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
     SPRITE_DIMENSION * (0.707106 + BORDER_SIZE), // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
     4, new PIXI.Vec(1, 1), 45
   );
-  let borderInternal = circlePolygon(
+  let borderInternal = createCirclePolygon(
     new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
     SPRITE_DIMENSION * 0.707106, // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
     4, new PIXI.Vec(1, 1), 45
@@ -212,47 +215,18 @@ function imagePolygonView() {
         tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
       }
 
-      // Try to draw for a certain max number of times
-      const MAX_TRIES = 100;
-      let tries = 0;
-
-      // Start with large padding, decrease at each fail
-      let baseline_padding = Math.lerp(
-        20,
-        2,
-        Math.min(tree.root.numDescendants, 300) / 300
+      const success = utils.drawPolygonClaycode(
+        current_tree,
+        polygon
       );
-
-      let node_padding_max = baseline_padding;
-      let node_padding_min = 2;
-
-      while (tries < MAX_TRIES) {
-        // Decrease padding if it keeps failing
-        const padding = Math.lerp(
-          node_padding_max,
-          node_padding_min,
-          tries / MAX_TRIES
-        );
-        tree.compute_weights(padding);
-
-        let min_node_area = area(polygon) * 0.001;
-        try {
-          drawClaycode(tree.root, polygon, padding, min_node_area, false, [current_fore_color, current_back_color], 0);
-          break;
-        } catch (error) {
-          tries++;
-          if (tries == MAX_TRIES) {
-            let msg = "- Failed to Pack :("
-            if (!infoSuffix.includes(msg)) {
-              infoSuffix += "- Failed to Pack :(";
-            }
-            break;
-          }
-        }
-      }
+      utils.updateInfoText(
+        null,
+        current_tree,
+        success ? "" : "- Failed to Pack :("
+      );
     }
   }
 
-  updateInfoText(null, current_tree, infoSuffix);
+  utils.updateInfoText(null, current_tree, infoSuffix);
 }
 

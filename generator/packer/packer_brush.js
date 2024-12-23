@@ -1,4 +1,6 @@
 import { drawPolygon } from "./draw.js";
+import { area, matchPolygonsCentroids } from "../geometry/geometry.js";
+import { createStarPolygon, createMouseHeadPolygon, createCirclePolygon } from "../geometry/shapes.js";
 
 export class PackerBrush {
     // Enum for polygon shapes
@@ -6,13 +8,11 @@ export class PackerBrush {
         UNSPECIFIED: 'unspecified',
         SQUARE: 'square',
         CIRCLE: 'circle',
-        MICKEY: 'mickey',
+        MOUSE: 'mouse',
+        STAR: 'star',
     });
 
-    constructor(codeShape, leafShape, colors, nodePadding, minNodeArea) {
-        if (!Object.values(PackerBrush.Shape).includes(codeShape)) {
-            throw new Error('Invalid polygon shape.');
-        }
+    constructor(leafShape, colors) {
         if (!Object.values(PackerBrush.Shape).includes(leafShape)) {
             throw new Error('Invalid leaf shape.');
         }
@@ -20,63 +20,59 @@ export class PackerBrush {
             throw new Error('Colors must be an array of valid hex color values.');
         }
 
-        this.codeShape = codeShape;
         this.leafShape = leafShape;
-        this.nodePadding = nodePadding;
-        this.minNodeArea = minNodeArea;
         this.colors = colors;
         this.color_index = 0;
-
-        // this.colors = [
-        // 0x003399, // Darker Blue (adjusted tone)
-        // 0x0057B7, // Original Blue (official EU flag color)
-
-        // 0x113CCF, // Persian Blue
-        // 0xFCD018, // Blast Off Yellow
-
-        // 0x3CAEA3, // Teal
-        // 0xF6D55C, // Yellow
-        // 0xED553B  // Coral Red
-
-        // 0x4B0082, // Indigo
-        // 0x800080, // Purple
-        // 0x8A2BE2, // Blue Violet
-        // 0x9932CC, // Dark Orchid
-        // 0xBA55D3, // Medium Orchid
-        // 0xDA70D6, // Orchid
-        // 0xD8BFD8, // Thistle
-        // 0xE6E6FA, // Lavender
-        // 0xFF00FF, // Magenta
-        // 0x9400D3  // Dark Violet
-        // ];
     }
 
-    getCodeShape() {
-        return this.codeShape;
-    }
-
-    getNodePadding() {
-        return this.nodePadding;
-    }
-
-    getMinNodeArea() {
-        return this.minNodeArea;
-    }
-
-    drawNode(polygon, node) {
-        // Draw element
-        let color_idx = (node.depth + 1) % 2
-        drawPolygon(polygon, this.colors[color_idx]);
+    drawNode(node) {
+        // Handle custom leaf
+        if (node.isLeaf() && this.leafShape != PackerBrush.Shape.UNSPECIFIED) {
+            this.drawCustomLeaf(node);
+        }
+        else {
+            let color = this.colors[(node.depth + 1) % 2]
+            drawPolygon(node.getPolygon(), color);
+        }
     }
 
     drawRoot(polygon) {
-        // Draw element
         drawPolygon(polygon, this.colors[0]);
+    }
+
+    drawCustomLeaf(node) {
+        let color = this.colors[(node.depth + 1) % 2]
+        let originalPolygon = node.getPolygon();
+        let customPolygon = null;
+        let baseRadius = Math.sqrt(area(originalPolygon) / Math.PI);
+        switch (this.leafShape) {
+            case PackerBrush.Shape.CIRCLE:
+                customPolygon = createCirclePolygon(new PIXI.Vec(0, 0), 0.8 * baseRadius, 10)
+                break;
+            case PackerBrush.Shape.MOUSE:
+                customPolygon = createMouseHeadPolygon(new PIXI.Vec(0, 0), 0.5 * baseRadius)
+                break;
+            case PackerBrush.Shape.STAR:
+                customPolygon = createStarPolygon(new PIXI.Vec(0, 0), 0.7 * baseRadius, 5);
+                break;
+            default:
+                throw "Unsupported leaf shape requested";
+        }
+
+        matchPolygonsCentroids(originalPolygon, customPolygon);
+        drawPolygon(customPolygon, color);
     }
 }
 
+
 export class DefaultBrush extends PackerBrush {
-    constructor(shape, nodePadding, minNodeArea) {
-        super(shape, PackerBrush.Shape.UNSPECIFIED, [0xFFFFFF, 0x000000], nodePadding, minNodeArea);
+    constructor() {
+        super(PackerBrush.Shape.UNSPECIFIED, [0xFFFFFF, 0x000000]);
+    }
+}
+
+export class MouseBrush extends PackerBrush {
+    constructor() {
+        super(PackerBrush.Shape.STAR, [0xFCD018, 0x113CCF]);
     }
 }

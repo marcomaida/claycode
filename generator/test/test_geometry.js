@@ -3,7 +3,7 @@ import {
   EPS,
   pickPointOnPerimeter,
   getVerticesPercPositions,
-  circlePolygon,
+  createCirclePolygon,
   segmentSegmentIntersection,
   segmentPolygonIntersections,
   isPointInPolygon,
@@ -27,8 +27,8 @@ try {
     new PIXI.Vec(7, 1),
   ];
   const square_reverse = [...square].reverse();
-  const circle_r3_e100000 = circlePolygon(new PIXI.Vec(4, 4), 3, 100000);
-  const circle_r3_e1000 = circlePolygon(new PIXI.Vec(4, 4), 3, 1000);
+  const circle_r3_e100000 = createCirclePolygon(new PIXI.Vec(4, 4), 3, 100000);
+  const circle_r3_e1000 = createCirclePolygon(new PIXI.Vec(4, 4), 3, 1000);
 
   test_section("area");
   assert_eq(area(square), 36);

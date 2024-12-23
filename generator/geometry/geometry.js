@@ -5,29 +5,6 @@ import "../image_processing/simplify.js";
 // Smallest unit, used to avoid floating point precision issues
 export const EPS = 0.0000001;
 
-export function circlePolygon(
-  center,
-  radius,
-  numSegments,
-  scale_vec = new PIXI.Vec(1, 1),
-  rotation_deg = 0
-) {
-  const circle = Array(numSegments).fill(new PIXI.Vec(0, 0));
-  const rotation_rad = (rotation_deg / 180) * Math.PI;
-  for (var i = 0; i < numSegments; i++) {
-    const angle = (i / numSegments) * 2 * Math.PI + rotation_rad;
-    circle[i] = new PIXI.Vec(
-      Math.cos(angle) * radius,
-      Math.sin(angle) * radius
-    );
-    circle[i].add(center);
-  }
-
-  scalePolygon(circle, scale_vec);
-
-  return circle;
-}
-
 /**
  * Helper function to determine whether there is an intersection between the two polygons described
  * by the lists of vertices. Uses the Separating Axis Theorem
@@ -358,4 +335,53 @@ export function isPointInPolygon(polygon, point) {
   }
 
   return inside;
+}
+
+/**
+ * Given two polygons, translates `child` so that its centroid 
+ * is the same as `parent`
+ */
+export function matchPolygonsCentroids(parent, child) {
+  const translationVector = centroid(parent).sub(centroid(child));
+  translatePolygon(child, translationVector);
+}
+
+/**
+ * Fits the child polygon inside the parent polygon by:
+ * - Translating the child polygon's centroid to align with the parent's centroid.
+ * - Iteratively scaling the child polygon down until all its points are contained within the parent polygon.
+ * - Sweeps the scale down until it works, then gives up and returns false
+ */
+export function fitPolygonInPolygon(parent, child) {
+  // Ensure the input polygons are valid
+  if (!parent || parent.length === 0 || !child || child.length === 0) {
+    throw "Incorrect inputs";
+  }
+
+  matchPolygonsCentroids(child, translationVector);
+
+  let previousScale = 1;
+  const MAX_TRIES = 20;
+  for (let scaleFactor = 1; scaleFactor >= 0.01; scaleFactor -= 1 / MAX_TRIES) {
+    // Scale the child polygon
+    let scaleWithPrevious = scaleFactor / previousScale; // Avoid cumulative effects
+    scalePolygon(child, new PIXI.Vec(scaleWithPrevious, scaleWithPrevious));
+
+    // Check if all points of the child polygon are inside the parent polygon
+    let allPointsInside = true;
+    for (const point of child) {
+      if (!isPointInPolygon(parent, point)) {
+        allPointsInside = false;
+        break;
+      }
+    }
+    if (allPointsInside) {
+      return child;
+    }
+
+    previousScale = scaleFactor;
+  }
+
+  // If the function fails to fit the child polygon, return null
+  return null;
 }

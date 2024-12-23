@@ -3,13 +3,13 @@ import { area } from "../geometry/geometry.js";
 import { } from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { circlePolygon } from "../geometry/geometry.js";
-import { updateInfoText, initInfoText, initPIXI } from "./utils.js";
+import { createCirclePolygon } from "../geometry/shapes.js";
+import * as utils from "./utils.js";
 import { Tree } from "../tree/tree.js";
 import { generateRandomTree, duplicateTreeNTimes } from "../tree/util.js"
 
-const app = initPIXI();
-const infoText = initInfoText();
+const app = utils.initPIXI();
+const infoText = utils.initInfoText();
 const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
 const inputNumNodes = document.getElementById("inputNumNodes");
@@ -28,60 +28,24 @@ function polygonView() {
   clearDrawing();
   current_tree = duplicateTreeNTimes(current_tree, inputNumFragments.value);
 
-  let infoSuffix = ``;
-
-  const window_width = window.innerWidth;
-  const window_height = window.innerHeight;
-
-  const shorter = Math.min(window_width / 2, window_height / 2);
-  let polygon = circlePolygon(
-    new PIXI.Vec(window_width / 2, window_height / 2),
-    shorter * 0.7,
-    SHAPES[current_shape][0],
-    SHAPES[current_shape][1],
-    SHAPES[current_shape][2]
+  const polygon_center = new PIXI.Vec(
+    window.innerWidth * 0.5,
+    window.innerHeight / 2
   );
+  const polygon_size =
+    Math.min(window.innerWidth / 2, window.innerHeight / 2) * 0.7;
 
-  // Try to draw for a certain max number of times
-  const MAX_TRIES = 400;
-  let tries = 0;
-
-  // Start with large padding, decrease at each fail
-  let baseline_padding = Math.lerp(
-    20,
-    2,
-    Math.min(current_tree.root.numDescendants, 300) / 300
+  clearDrawing();
+  const polygon = utils.getPolygonOfIndex(current_shape, polygon_center, polygon_size);
+  const success = utils.drawPolygonClaycode(
+    current_tree,
+    polygon
   );
-
-  let node_padding_max = baseline_padding;
-  let node_padding_min = 2;
-
-  while (tries < MAX_TRIES) {
-    // Decrease padding if it keeps failing
-    const padding = Math.lerp(
-      node_padding_max,
-      node_padding_min,
-      tries / MAX_TRIES
-    );
-    current_tree.compute_weights(padding);
-
-    let min_node_area = area(polygon) * 0.0002;
-
-    try {
-      clearDrawing();
-      drawClaycode(current_tree.root, polygon, padding, min_node_area);
-      break;
-    } catch (error) {
-      tries++;
-      if (tries == MAX_TRIES) {
-        clearDrawing();
-        infoSuffix += "- Failed to Pack :(";
-        break;
-      }
-    }
-  }
-
-  updateInfoText(null, current_tree, infoSuffix);
+  utils.updateInfoText(
+    null,
+    current_tree,
+    success ? "" : "- Failed to Pack :("
+  );
 }
 
 let SHAPES = [
@@ -107,7 +71,7 @@ function debounce(func, delay) {
 
 document.addEventListener("keydown", function (event) {
   if (event.key == "Enter") {
-    current_shape = (current_shape + 1) % SHAPES.length;
+    current_shape = (current_shape + 1) % utils.POLYGON_SHAPES.length;
     debounce(polygonView, 100);
   }
   if (event.key == " ") {
