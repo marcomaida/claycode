@@ -15,6 +15,7 @@ import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
 
 
 const app = utils.initPIXI();
+await utils.showChangeShapeLabel(true, "Repack");
 const infoText = utils.initInfoText();
 const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
