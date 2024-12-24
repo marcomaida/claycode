@@ -1,5 +1,7 @@
-import { area, createCirclePolygon } from "../geometry/geometry.js";
-
+import { area } from "../geometry/geometry.js";
+import {
+  createCirclePolygon,
+} from "../geometry/shapes.js";
 import { cutPolygon } from "../geometry/polygon_partition.js";
 import { assert_eq, assert_nearly_eq, test_heading } from "./test_utils.js";
 
