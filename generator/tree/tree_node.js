@@ -3,6 +3,7 @@ export class TreeNode {
     this.father = father;
     this.children = children;
     this.label = null;
+    this.polygon = null;
     this.tree = null;
 
     for (const c of children) {
@@ -14,6 +15,9 @@ export class TreeNode {
        also all its descendants. The UoM is irrelevant, as long as
        all nodes are weighted using the same heuristics. */
     this.weight = null;
+
+    /* Root is at depth zero. Other nodes have depth parent+1  */
+    this.depth = null;
   }
 
   /**
@@ -37,6 +41,14 @@ export class TreeNode {
 
   isLeaf() {
     return this.children.length === 0;
+  }
+
+  setPolygon(polygon) {
+    this.polygon = polygon;
+  }
+
+  getPolygon() {
+    return this.polygon;
   }
 
   toString() {

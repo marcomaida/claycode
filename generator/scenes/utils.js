@@ -1,8 +1,10 @@
 import { textToBits } from "../conversion/convert.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
-import { area } from "../geometry/geometry.js";
+import { area, circlePolygon } from "../geometry/geometry.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { circlePolygon } from "../geometry/geometry.js";
+import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
+import { createMouseHeadPolygon } from "../geometry/shapes.js";
+import { TreeNode } from "../tree/tree_node.js";
 
 export function initPIXI() {
   const app = new PIXI.Application({
@@ -88,10 +90,10 @@ export function drawPolygonClaycode(
 
   // If there are few nodes, be ambitious with padding
   // Once reached a certain limit, start from the minimum
-  let node_padding_max = Math.lerp(
+  let nodePaddingMax = Math.lerp(
     15,
     node_padding_min,
-    Math.min(current_tree.root.numDescendants, 600) / 600
+    Math.min(current_tree.root.numDescendants, 400) / 400
   );
 
   let polygon = circlePolygon(
@@ -102,30 +104,36 @@ export function drawPolygonClaycode(
     POLYGON_SHAPES[current_shape][2]
   );
 
+  // let polygon = createMouseHeadPolygon(polygon_center, polygon_size * .6)
+
   // Try to draw for a certain max number of times
-  const MAX_TRIES = 200;
+  const MAX_TRIES = 100;
   let tries = 0;
   while (tries < MAX_TRIES) {
     // Decrease padding if it keeps failing
     const padding = Math.lerp(
-      node_padding_max,
+      nodePaddingMax,
       node_padding_min,
       tries / MAX_TRIES
     );
     current_tree.compute_weights(padding);
 
-    let min_node_area = area(polygon) * 0.0003;
+    let minNodeArea = area(polygon) * 0.0002;
 
     try {
       clearDrawing();
-      drawClaycode(current_tree.root, polygon, padding, min_node_area);
-      return true;
+      // padding, minNodeArea
+      let brush = new DefaultBrush(PackerBrush.Shape.SQUARE, padding, minNodeArea);
+      if (drawClaycode(current_tree.root, polygon, brush))
+        return true;
     } catch (error) {
-      tries++;
-      if (tries == MAX_TRIES) {
-        clearDrawing();
-        return false;
-      }
+      console.error(error);
+    }
+
+    tries++;
+    if (tries == MAX_TRIES) {
+      clearDrawing();
+      return false;
     }
   }
 }

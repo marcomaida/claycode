@@ -178,6 +178,25 @@ export function getVerticesPercPositions(polygon) {
   return percs;
 }
 
+export function findClosestPointIndex(points, target) {
+  const [tx, ty] = target;
+
+  if (points.length === 0) {
+    return -1; // Return -1 if no points are available
+  }
+
+  return points.reduce((closest, point, index) => {
+    const [x, y] = point;
+    const distance = Math.sqrt((x - tx) ** 2 + (y - ty) ** 2);
+
+    if (closest === null || distance < closest.distance) {
+      return { index, distance };
+    }
+
+    return closest;
+  }, null).index;
+}
+
 
 export function translatePolygon(polygon, translate_vec) {
   for (const point of polygon) {
@@ -196,16 +215,22 @@ export function scalePolygon(polygon, scale_vec) {
 // Returns a smaller polygon which is padded a certain amount
 export function padPolygon(polygon, amount) {
   /* Must do some weird stuff to make the format match with what
-       the library expects. My library does not want the first and last
-       poing to be equal, and works with a vector structure instead of
-       with nested arrays. */
+     the library expects. My library does not want the first and last
+     point to be equal, and works with a vector structure instead of
+     with nested arrays. */
   let polygon_vec = polygon.map((p) => [p.x, p.y]);
   polygon_vec.push(polygon_vec[0].slice(0)); // copy first element
-  var offset = new Offset();
-  const data = offset.data(polygon_vec);
-  var padded_pols = data.padding(amount);
+  var padded_pols = [];
+  try {
+    var offset = new Offset();
+    const offset_data = offset.data(polygon_vec);
+    padded_pols = offset_data.padding(amount);
+  }
+  catch {
+    return null;
+  }
   if (padded_pols.length == 0) {
-    throw "Error padding polygon -- No space left";
+    return null;
   }
   // Taking the polygon with the largest area if there are multiple polygons
   let padded = padded_pols.reduce(function (a, b) { return area(a) > area(b) ? a : b });
@@ -290,6 +315,30 @@ export function segmentPolygonIntersections(polygon, a, b, exclude_ab) {
   }
 
   return intersections;
+}
+
+export function getCircleIntersections(x0, y0, r0, x1, y1, r1) {
+  const d = Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
+
+  // Non-intersecting
+  if (d > r0 + r1) return null;
+  // One circle within the other
+  if (d < Math.abs(r0 - r1)) return null;
+  // Coincident circles
+  if (d === 0 && r0 === r1) return null;
+
+  const a = (r0 ** 2 - r1 ** 2 + d ** 2) / (2 * d);
+  const h = Math.sqrt(r0 ** 2 - a ** 2);
+  const x2 = x0 + (a * (x1 - x0)) / d;
+  const y2 = y0 + (a * (y1 - y0)) / d;
+
+  const x3 = x2 + (h * (y1 - y0)) / d;
+  const y3 = y2 - (h * (x1 - x0)) / d;
+
+  const x4 = x2 - (h * (y1 - y0)) / d;
+  const y4 = y2 + (h * (x1 - x0)) / d;
+
+  return [[x3, y3], [x4, y4]];
 }
 
 export function isPointInPolygon(polygon, point) {
