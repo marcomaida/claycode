@@ -3,13 +3,15 @@ import {
   EPS,
   pickPointOnPerimeter,
   getVerticesPercPositions,
-  createCirclePolygon,
   segmentSegmentIntersection,
   segmentPolygonIntersections,
   isPointInPolygon,
   circularity,
   perimeter,
 } from "../geometry/geometry.js";
+import {
+  createCirclePolygon,
+} from "../geometry/shapes.js";
 import {
   assert_eq,
   assert_true,
