@@ -1,7 +1,9 @@
-import {} from "../geometry/vector.js";
-import {} from "../geometry/math.js";
+import { } from "../geometry/vector.js";
+import { } from "../geometry/math.js";
 import { textToTree } from "../conversion/convert.js";
 import * as utils from "./utils.js";
+import { packClaycode } from "../packer/pack.js";
+import { clearDrawing } from "../packer/draw.js";
 
 // Update function
 function polygonView() {
@@ -17,11 +19,12 @@ function polygonView() {
   );
   const polygon_size =
     Math.min(window.innerWidth / 2, window.innerHeight / 2) * 0.7;
+
+  clearDrawing();
+  const polygon = utils.getPolygonOfIndex(current_shape, polygon_center, polygon_size);
   const success = utils.drawPolygonClaycode(
     current_tree,
-    current_shape,
-    polygon_center,
-    polygon_size
+    polygon
   );
   utils.updateInfoText(
     inputText,

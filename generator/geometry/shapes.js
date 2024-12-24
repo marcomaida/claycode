@@ -1,9 +1,32 @@
 import { centroid, findClosestPointIndex, getCircleIntersections, isPointInPolygon, perimeter, scalePolygon, translatePolygon } from "./geometry.js";
 
+export function createCirclePolygon(
+    center,
+    radius,
+    numSegments,
+    scale_vec = new PIXI.Vec(1, 1),
+    rotation_deg = 0
+) {
+    const circle = Array(numSegments).fill(new PIXI.Vec(0, 0));
+    const rotation_rad = (rotation_deg / 180) * Math.PI;
+    for (var i = 0; i < numSegments; i++) {
+        const angle = (i / numSegments) * 2 * Math.PI + rotation_rad;
+        circle[i] = new PIXI.Vec(
+            Math.cos(angle) * radius,
+            Math.sin(angle) * radius
+        );
+        circle[i].add(center);
+    }
+
+    scalePolygon(circle, scale_vec);
+
+    return circle;
+}
+
 export function createMouseHeadPolygon(center, scale) {
     const EARS_RADIUS = 0.65;
     const EARS_OFFSET = 1.05;
-    const NUM_SEGMENTS = 100;
+    const NUM_SEGMENTS = 50;
     const theta = Array.from({ length: NUM_SEGMENTS }, (_, i) => (i * 2 * Math.PI) / NUM_SEGMENTS);
 
     // Define basic circles
@@ -48,41 +71,21 @@ export function createMouseHeadPolygon(center, scale) {
     translatePolygon(polygon, center)
     scalePolygon(polygon, new PIXI.Vec(scale, -scale))
 
-    console.log(polygon)
     return polygon
 }
 
-export function createStarPolygon(inputPolygon, numPoints, rotation = (Math.random() * 2 * Math.PI)) {
-    const center = centroid(inputPolygon); // Find the center of the input polygon
-    let outerRadius = perimeter(inputPolygon) / (2 * numPoints); // Initial guess for outer radius 
-    let innerRadius = outerRadius * 0.5; // Inner radius is half of the outer radius
+export function createStarPolygon(center, outerRadius, numPoints, rotation = (Math.random() * 2 * Math.PI)) {
+    const innerRadius = outerRadius * 0.5; // Inner radius is half of the outer radius
     const step = (2 * Math.PI) / (numPoints * 2); // Angle step for star points
-    let star;
+    const star = [];
 
-    const MAX_TRIES = 20;
-    for (let i = 0; i < MAX_TRIES; i++) {
-        star = [];
-        for (let i = 0; i < numPoints * 2; i++) {
-            const angle = i * step + rotation; // Apply random rotation
-            const radius = i % 2 === 0 ? outerRadius : innerRadius; // Alternate between outer and inner radius
-            const x = center.x + radius * Math.cos(angle);
-            const y = center.y + radius * Math.sin(angle);
-            star.push(new PIXI.Vec(x, y));
-        }
-
-        // Check if the star is fully contained in the input polygon
-        if (star.every((point) => isPointInPolygon(inputPolygon, point))) {
-            return star;
-        }
-
-        outerRadius *= 0.95; // Reduce the outer radius slightly and try again
-        innerRadius = outerRadius * 0.5; // Inner radius is half of the outer radius
-
-        if (i == MAX_TRIES - 1) {
-            //console.log("Failed to pack star");
-        }
+    for (let i = 0; i < numPoints * 2; i++) {
+        const angle = i * step + rotation; // Apply rotation
+        const radius = i % 2 === 0 ? outerRadius : innerRadius; // Alternate between outer and inner radius
+        const x = center.x + radius * Math.cos(angle);
+        const y = center.y + radius * Math.sin(angle);
+        star.push(new PIXI.Vec(x, y));
     }
 
-    return star
-
+    return star;
 }

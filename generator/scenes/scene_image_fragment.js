@@ -2,20 +2,25 @@ import { } from "../geometry/vector.js";
 import { } from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { circlePolygon, area } from "../geometry/geometry.js";
-import { updateInfoText, initInfoText, initPIXI } from "./utils.js";
+import { area } from "../geometry/geometry.js";
+import { createCirclePolygon } from "../geometry/shapes.js";
+import * as utils from "./utils.js";
 import { Tree } from "../tree/tree.js";
 import { generateRandomTree, duplicateTreeNTimes } from "../tree/util.js";
 import { createBinaryImage } from "../image_processing/binary_image.js"
 import { computeContourPolygons } from "../image_processing/contour.js"
 import { drawPolygon } from "../packer/draw.js";
+import { packClaycode } from "../packer/pack.js";
+import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
 
-const app = initPIXI();
-const infoText = initInfoText();
+
+const app = utils.initPIXI();
+const infoText = utils.initInfoText();
 const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
 const inputNumNodes = document.getElementById("inputNumNodes");
 
+let current_trees_and_polygons = null;
 let current_texture = null;
 let current_sprite = null;
 let current_polygons = null;
@@ -26,20 +31,23 @@ let current_back_color = 0x000000
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
 let timerId;
-function debounce(func, delay) {
-  infoText.textContent = `Packing...`;
+function debounce(func, delay, useLastTrees = false) {
+  if (useLastTrees === false) {
+    infoText.textContent = `Packing...`;
+  }
+
   clearTimeout(timerId);
-  timerId = setTimeout(func, delay);
+  timerId = setTimeout(() => func(useLastTrees), delay);
 }
 
 document.addEventListener("keydown", function (event) {
   if (event.key == "Enter") {
     // NOTE: disabling change shape for now
     // current_shape = (current_shape + 1) % SHAPES.length;
-    debounce(imagePolygonView, 100);
+    debounce(imagePolygonView, 100, false);
   }
   if (event.key == " ") {
-    debounce(imagePolygonView, 100);
+    debounce(imagePolygonView, 100, false);
   }
 });
 
@@ -90,7 +98,7 @@ async function loadImage(texture) {
   let binaryImage = await createBinaryImage(current_texture, SPRITE_DIMENSION)
   current_polygons = computeContourPolygons(binaryImage, new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), SPRITE_DIMENSION)
 
-  imagePolygonView();
+  debounce(imagePolygonView, 300, false);
 }
 
 /*****
@@ -105,7 +113,7 @@ document.addEventListener('coloris:pick', event => {
     current_fore_color = hexNumber
   if (event.detail.currentEl.id == "backColorPicker")
     current_back_color = hexNumber
-  debounce(imagePolygonView, 300);
+  debounce(imagePolygonView, 300, true);
 });
 
 // Given a set of polygons, and a target number of fragments, 
@@ -138,16 +146,14 @@ PIXI.Loader.shared.add(imageUrl).load(async (loader, resources) => {
   await loadImage(texture)
 });
 
-imagePolygonView();
-
-inputTreeTopology.addEventListener("input", () => debounce(imagePolygonView, 100));
-inputNumFragments.addEventListener("input", () => debounce(imagePolygonView, 100));
+inputTreeTopology.addEventListener("input", () => debounce(imagePolygonView, 100, false));
+inputNumFragments.addEventListener("input", () => debounce(imagePolygonView, 100, false));
 inputNumNodes.addEventListener("input", () => {
   inputTreeTopology.value = ""
-  debounce(imagePolygonView, 100);
+  debounce(imagePolygonView, 100, false);
 });
 window.onresize = function () {
-  debounce(imagePolygonView, 50);
+  debounce(imagePolygonView, 50, false);
 };
 
 
@@ -159,100 +165,96 @@ function getWindowDimension() {
   return [WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_DIMENSION];
 }
 
-function imagePolygonView() {
-  let infoSuffix = ``;
+function imagePolygonView(useLastTrees = false) {
+  if (useLastTrees && current_trees_and_polygons === null) {
+    // If the last packing was not successful, attempt to recompute 
+    useLastTrees = false;
+  }
+
+  if (!useLastTrees) {
+    let infoSuffix = ``;
+
+    //****  Get tree
+    let current_tree = Tree.fromString(inputTreeTopology.value)
+    if (!current_tree) {
+      inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
+      current_tree = Tree.fromString(inputTreeTopology.value)
+      if (!current_tree) {
+        throw `current tree cannot be null after the tree was generated`;
+      }
+    }
+
+    //******* Pack 
+    let success = true;
+    if (current_polygons) {
+      //*** Distribute fragments
+      let MIN_AREA_PERC = 0.0 // if a polygon occupies less than this percent of the total area, it is ignored
+      let fragmentsDistribution = distributeFragments(current_polygons, inputNumFragments.value, MIN_AREA_PERC)
+      infoSuffix += ` - [${fragmentsDistribution}]`;
+
+      current_trees_and_polygons = [];
+      for (let i = 0; i < current_polygons.length; i++) {
+        let numFragmentsToDraw = fragmentsDistribution[i]
+        let polygon = current_polygons[i]
+
+        // Generate a tree that contains the number of fragments we want
+        // NOTE: if the number of input fragment is one, this function will add
+        // an extra root, which IS currently needed by the scanner.
+        let tree = null;
+        if (numFragmentsToDraw == 0) {
+          // Polygon is too small. Just draw a little random tree to fill space
+          tree = generateRandomTree(8);
+        }
+        else {
+          tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
+        }
+
+        if (packClaycode(tree, polygon)) {
+          current_trees_and_polygons.push([tree, polygon]);
+        }
+        else {
+          current_trees_and_polygons = null
+          success = false;
+          break;
+        }
+
+        infoSuffix += (success ? "" : "- Failed to Pack :(");
+        utils.updateInfoText(
+          null,
+          current_tree,
+          infoSuffix,
+        );
+      }
+    }
+  }
   let [WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_DIMENSION] = getWindowDimension();
 
-  //****  Get tree
-  let current_tree = Tree.fromString(inputTreeTopology.value)
-  if (!current_tree) {
-    inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
-    current_tree = Tree.fromString(inputTreeTopology.value)
-    if (!current_tree) {
-      throw `current tree cannot be null after the tree was generated`;
-    }
-  }
-
-  //****  Draw background and border
-  let BORDER_SIZE = 0.05
-  let borderExternal = circlePolygon(
-    new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
-    SPRITE_DIMENSION * (0.707106 + BORDER_SIZE), // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
-    4, new PIXI.Vec(1, 1), 45
-  );
-  let borderInternal = circlePolygon(
-    new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
-    SPRITE_DIMENSION * 0.707106, // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
-    4, new PIXI.Vec(1, 1), 45
-  );
+  //****  Draw Claycode
   clearDrawing();
+  if (current_trees_and_polygons !== null) {
+    // Draw border
+    let BORDER_SIZE = 0.05
+    let borderExternal = createCirclePolygon(
+      new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
+      SPRITE_DIMENSION * (0.707106 + BORDER_SIZE), // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
+      4, new PIXI.Vec(1, 1), 45
+    );
+    let borderInternal = createCirclePolygon(
+      new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
+      SPRITE_DIMENSION * 0.707106, // Here we provide the RADIUS, so multiply by (sqrt(1/2 * 1/2 * 2))
+      4, new PIXI.Vec(1, 1), 45
+    );
 
-  drawPolygon(borderExternal, current_frame_color);
-  drawPolygon(borderInternal, current_back_color);
+    drawPolygon(borderExternal, current_frame_color);
+    drawPolygon(borderInternal, current_back_color);
 
-  if (current_polygons) {
-    //*** Distribute fragments
-    let MIN_AREA_PERC = 0.0 // if a polygon occupies less than this percent of the total area, it is ignored
-    let fragmentsDistribution = distributeFragments(current_polygons, inputNumFragments.value, MIN_AREA_PERC)
-    infoSuffix += ` - [${fragmentsDistribution}]`;
-
-    for (let i = 0; i < current_polygons.length; i++) {
-      let numFragmentsToDraw = fragmentsDistribution[i]
-      let polygon = current_polygons[i]
-
-      // Generate a tree that contains the number of fragments we want
-      // NOTE: if the number of input fragment is one, this function will add
-      // an extra root, which IS currently needed by the scanner.
-      let tree = null;
-      if (numFragmentsToDraw == 0) {
-        // Polygon is too small. Just draw a little random tree to fill space
-        tree = generateRandomTree(10);
-      }
-      else {
-        tree = duplicateTreeNTimes(current_tree, numFragmentsToDraw);
-      }
-
-      // Try to draw for a certain max number of times
-      const MAX_TRIES = 100;
-      let tries = 0;
-
-      // Start with large padding, decrease at each fail
-      let baseline_padding = Math.lerp(
-        20,
-        2,
-        Math.min(tree.root.numDescendants, 300) / 300
-      );
-
-      let node_padding_max = baseline_padding;
-      let node_padding_min = 2;
-
-      while (tries < MAX_TRIES) {
-        // Decrease padding if it keeps failing
-        const padding = Math.lerp(
-          node_padding_max,
-          node_padding_min,
-          tries / MAX_TRIES
-        );
-        tree.compute_weights(padding);
-
-        let min_node_area = area(polygon) * 0.001;
-        try {
-          drawClaycode(tree.root, polygon, padding, min_node_area, false, [current_fore_color, current_back_color], 0);
-          break;
-        } catch (error) {
-          tries++;
-          if (tries == MAX_TRIES) {
-            let msg = "- Failed to Pack :("
-            if (!infoSuffix.includes(msg)) {
-              infoSuffix += "- Failed to Pack :(";
-            }
-            break;
-          }
-        }
-      }
+    // Draw Claycode
+    for (const [tree, polygon] of current_trees_and_polygons) {
+      let brush = new PackerBrush(PackerBrush.Shape.STAR, [current_back_color, current_fore_color]);
+      drawClaycode(tree, polygon, brush)
     }
   }
-
-  updateInfoText(null, current_tree, infoSuffix);
 }
+
+
 

@@ -1,48 +1,18 @@
 import { area, padPolygon } from "../geometry/geometry.js";
 import { partitionPolygon } from "../geometry/polygon_partition.js";
 
-export function drawClaycode(
+export function drawClaycode(tree, polygon, brush) {
+  brush.drawRoot(polygon);
+  return _drawClaycode(tree.root, brush);
+}
+
+export function _drawClaycode(
   node,
-  polygon,
-  packerBrush,
+  brush,
 ) {
-
-  /* 
-   * First, make sure there is enough free space
-   */
-  const subPolygon = padPolygon(polygon, packerBrush.getNodePadding());
-  if (subPolygon === null || area(subPolygon) < packerBrush.getMinNodeArea()) {
-    return false;
+  brush.drawNode(node);
+  for (const c of node.children) {
+    _drawClaycode(c, brush);
   }
-
-  /* 
-   * Next, draw node
-   */
-  packerBrush.drawNode(polygon, subPolygon, node);
-  if (node.children.length == 1) {
-    return drawClaycode(
-      node.children[0],
-      subPolygon,
-      packerBrush
-    );
-  } else {
-    /* 
-     * Finally, partition the node and recursively call the function
-     */
-    const weights = Math.normalise(node.children.map((c) => c.weight));
-    const partition = partitionPolygon(subPolygon, weights);
-    console.assert(partition.length == node.children.length);
-    for (const [i, c] of node.children.entries()) {
-      if (!drawClaycode(
-        c,
-        partition[i],
-        packerBrush
-      )) {
-        return false;
-      }
-    }
-  }
-
-  return true;
 }
 

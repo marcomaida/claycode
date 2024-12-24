@@ -1,4 +1,4 @@
-import { area, circlePolygon } from "../geometry/geometry.js";
+import { area, createCirclePolygon } from "../geometry/geometry.js";
 
 import { cutPolygon } from "../geometry/polygon_partition.js";
 import { assert_eq, assert_nearly_eq, test_heading } from "./test_utils.js";
@@ -11,7 +11,7 @@ try {
     new PIXI.Vec(7, 7),
     new PIXI.Vec(7, 1),
   ];
-  const circle_r3_e100000 = circlePolygon(new PIXI.Vec(4, 4), 3, 100000);
+  const circle_r3_e100000 = createCirclePolygon(new PIXI.Vec(4, 4), 3, 100000);
 
   const [l_cut_sq, r_cut_sq] = cutPolygon(square, 0, square[0], 2, square[2]);
   assert_eq(area(l_cut_sq), area(r_cut_sq));

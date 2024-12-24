@@ -1,6 +1,7 @@
-import {} from "../geometry/vector.js";
-import {} from "../geometry/math.js";
+import { } from "../geometry/vector.js";
+import { } from "../geometry/math.js";
 import { textToTree } from "../conversion/convert.js";
+import { clearDrawing } from "../packer/draw.js";
 import * as utils from "./utils.js";
 
 function updateQR(input_text, size) {
@@ -54,11 +55,11 @@ function polygonView() {
     window.innerWidth * 0.25,
     window.innerHeight / 2
   );
+  clearDrawing();
+  const polygon = utils.getPolygonOfIndex(current_shape, polygon_center, polygon_size);
   const success = utils.drawPolygonClaycode(
-    current_tree_boost,
-    current_shape,
-    polygon_center,
-    polygon_size
+    current_tree,
+    polygon
   );
   utils.updateInfoText(
     input_text,
