@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="style.css" />
+  <!-- <script src="https://pixijs.download/release/pixi.min.js"></script> -->
+  <script src="../pixi.mini.js"></script>
+  <script type="module" src="../page_loader.js"></script>
+  <script type="module" src="/scenes/scene_image_claycode.js"></script>
+  <link rel="stylesheet" href="/image_processing/coloris.min.css" />
+  <script src="/image_processing/coloris.min.js"></script>
+</head>
+
+<body>
+  <div id="pixiDiv" style="z-index:0; position: fixed;"></div>
+  <div id="mainDiv" style="z-index:1; position: fixed;">
+    <div class="elements-div">
+      <div id="headerDiv"></div>
+      <div style="flex:auto;"></div>
+      <div class="tree-gen-label">
+        Frame:
+        <input class="color_picker" id="frameColorPicker" type="text" data-coloris value="#ffffff">
+        <run style="margin-left: 20pt;"></run>
+        Back:
+        <input class="color_picker" id="backColorPicker" type="text" data-coloris value="#000000">
+        <run style="margin-left: 20pt;"></run>
+        Fore:
+        <input class="color_picker" id="foreColorPicker" type="text" data-coloris value="#ffffff">
+        <run style="margin-left: 20pt;"></run>
+        Num Fragments:
+        <input type="number" id="inputNumFragments" maxlength="5" value="1" class="tree_gen_val" />
+      </div>
+      <div id="footerDiv"></div>
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+    Coloris.setInstance('.color_picker', {
+      themeMode: 'dark',
+      swatches: [
+        '#264653',
+        '#2a9d8f',
+        '#e9c46a',
+        '#f4a261',
+        '#e76f51',
+        '#d62828',
+        '#023e8a',
+        '#0077b6',
+        '#0096c7',
+        '#00b4d8',
+        '#48cae4'
+      ]
+    })
+  </script>
+</body>
+
+</html>

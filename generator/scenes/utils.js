@@ -66,9 +66,11 @@ export function debounce(func, delay, timerId) {
   return setTimeout(func, delay);
 }
 
-export async function showChangeShapeLabel(is_visible) {
-  const changeShapeLabel = await getElementByIdAndKeepTrying("changeShapeDiv");
-  changeShapeLabel.style.visibility = is_visible ? "visible" : "collapse";
+export async function showChangeShapeLabel(isVisible, message = "Change Shape") {
+  const changeShapeDiv = await getElementByIdAndKeepTrying("changeShapeDiv");
+  changeShapeDiv.style.visibility = isVisible ? "visible" : "collapse";
+  const changeShapeText = await getElementByIdAndKeepTrying("changeShapeText");
+  changeShapeText.textContent = message;
 }
 
 // Shape management

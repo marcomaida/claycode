@@ -140,7 +140,7 @@ a {
   font-size: 20pt;
   vertical-align: middle;
   text-align: left;
-  width: 50pt;
+  width: 40pt;
 }
 
 .tree_gen_val_long {
@@ -164,15 +164,14 @@ a {
   background-color: #252525;
   border: none;
   color: rgb(213, 213, 213);
-  padding: 5pt 10pt;
+  padding: 5pt 3pt;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 10pt;
+  font-size: 9pt;
   cursor: pointer;
   border-radius: 4pt;
-  margin-top: 40pt;
-  margin-left: 2pt;
+  margin-left: 3pt;
   transform: translate(0, -50%);
 }
 
