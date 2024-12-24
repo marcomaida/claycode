@@ -12,23 +12,29 @@ export class PackerBrush {
         STAR: 'star',
     });
 
-    constructor(leafShape, colors) {
-        if (!Object.values(PackerBrush.Shape).includes(leafShape)) {
-            throw new Error('Invalid leaf shape.');
-        }
-        if (!Array.isArray(colors) || !colors.every(hexColor => typeof hexColor === 'number' && hexColor >= 0x000000 && hexColor <= 0xffffff)) {
+    constructor(colors, leafColors, leafShapes) {
+        if (!Array.isArray(colors) || !colors.every(c => typeof c === 'number' && c >= 0x000000 && c <= 0xffffff)) {
             throw new Error('Colors must be an array of valid hex color values.');
         }
+        if (!Array.isArray(leafColors) || !leafColors.every(c => typeof c === 'number' && c >= 0x000000 && c <= 0xffffff)
+            || colors.length != leafColors.length) {
+            throw new Error('Colors must be an array of valid hex color values, and match `colors` size.');
+        }
+        if (!Array.isArray(leafShapes) || !leafColors.every(el => !Object.values(PackerBrush.Shape).includes(el))
+            || colors.length != leafShapes.length) {
+            throw new Error('Leaf shapes must be an array of valid shapes, and match `colors` size.');
+        }
 
-        this.leafShape = leafShape;
         this.colors = colors;
+        this.leafColors = leafColors;
+        this.leafShapes = leafShapes;
         this.color_index = 0;
     }
 
     drawNode(node) {
         // Handle custom leaf
-        if (node.isLeaf() && this.leafShape != PackerBrush.Shape.UNSPECIFIED) {
-            this.drawCustomLeaf(node);
+        if (node.isLeaf()) {
+            this.drawLeaf(node);
         }
         else {
             let color = this.colors[(node.depth + 1) % 2]
@@ -40,12 +46,19 @@ export class PackerBrush {
         drawPolygon(polygon, this.colors[0]);
     }
 
-    drawCustomLeaf(node) {
-        let color = this.colors[(node.depth + 1) % 2]
+    drawLeaf(node) {
+        let color = this.leafColors[(node.depth + 1) % 2]
+        let shape = this.leafShapes[(node.depth) % 2]
         let originalPolygon = node.getPolygon();
         let customPolygon = null;
         let baseRadius = Math.sqrt(area(originalPolygon) / Math.PI);
-        switch (this.leafShape) {
+        switch (shape) {
+            case PackerBrush.Shape.UNSPECIFIED:
+                customPolygon = originalPolygon;
+                break;
+            case PackerBrush.Shape.SQUARE:
+                customPolygon = createCirclePolygon(new PIXI.Vec(0, 0), 0.8 * baseRadius, 4, new PIXI.Vec(1, 1), 45)
+                break;
             case PackerBrush.Shape.CIRCLE:
                 customPolygon = createCirclePolygon(new PIXI.Vec(0, 0), 0.8 * baseRadius, 10)
                 break;
@@ -67,12 +80,8 @@ export class PackerBrush {
 
 export class DefaultBrush extends PackerBrush {
     constructor() {
-        super(PackerBrush.Shape.UNSPECIFIED, [0xFFFFFF, 0x000000]);
-    }
-}
-
-export class MouseBrush extends PackerBrush {
-    constructor() {
-        super(PackerBrush.Shape.STAR, [0xFCD018, 0x113CCF]);
+        const colors = [0xFFFFFF, 0x000000];
+        const shapes = [PackerBrush.Shape.UNSPECIFIED, PackerBrush.Shape.UNSPECIFIED];
+        super(colors, colors, shapes);
     }
 }

@@ -3,6 +3,7 @@ import { } from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
 import { area } from "../geometry/geometry.js";
+import { textToTree } from "../conversion/convert.js";
 import { createCirclePolygon } from "../geometry/shapes.js";
 import * as utils from "./utils.js";
 import { Tree } from "../tree/tree.js";
@@ -11,15 +12,13 @@ import { createBinaryImage } from "../image_processing/binary_image.js"
 import { computeContourPolygons } from "../image_processing/contour.js"
 import { drawPolygon } from "../packer/draw.js";
 import { packClaycode } from "../packer/pack.js";
-import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
-
+import { PackerBrush } from "../packer/packer_brush.js";
 
 const app = utils.initPIXI();
-await utils.showChangeShapeLabel(true, "Repack");
+const inputTextBox = await utils.initInputText();
 const infoText = utils.initInfoText();
-const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
-const inputNumNodes = document.getElementById("inputNumNodes");
+await utils.showChangeShapeLabel(true, "Repack");
 
 let currentTreesAndPolygons = null;
 let currentTexture = null;
@@ -28,6 +27,8 @@ let currentPolygons = null;
 let currentFrameColor = 0xffffff
 let currentColorA = 0xffffff
 let currentColorB = 0x000000
+let currentLeafColorA = 0xffffff
+let currentLeafColorB = 0x000000
 
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
@@ -40,18 +41,6 @@ function debounce(func, delay, useLastTrees = false) {
   clearTimeout(timerId);
   timerId = setTimeout(() => func(useLastTrees), delay);
 }
-
-document.addEventListener("keydown", function (event) {
-  if (event.key == "Enter") {
-    // NOTE: disabling change shape for now
-    // current_shape = (current_shape + 1) % SHAPES.length;
-    debounce(imagePolygonView, 100, false);
-  }
-  if (event.key == " ") {
-    debounce(imagePolygonView, 100, false);
-  }
-});
-
 
 /****** 
  *  DROP MANAGEMENT
@@ -67,6 +56,7 @@ function preventDefaults(e) {
   e.stopPropagation();
 }
 dropArea.addEventListener('drop', handleDrop, false);
+document.getElementById("spacerDiv").addEventListener('drop', handleDrop, false);
 async function handleDrop(e) {
   let file = e.dataTransfer.files[0];
 
@@ -102,6 +92,39 @@ async function loadImage(texture) {
   debounce(imagePolygonView, 300, false);
 }
 
+
+/*****
+ * Leaf Shape Management
+ */
+function loadLeafShapePicker(selectElement) {
+  if (!selectElement) {
+    console.error("Select element not found");
+    return;
+  }
+  for (const [key, value] of Object.entries(PackerBrush.Shape)) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(); // Format key for display
+    selectElement.appendChild(option);
+  }
+}
+
+let currentLeafShapeA = PackerBrush.Shape.UNSPECIFIED;
+const leafShapeAPicker = document.getElementById("leafShapeAPicker")
+loadLeafShapePicker(leafShapeAPicker);
+leafShapeAPicker.addEventListener("change", (event) => {
+  currentLeafShapeA = event.target.value;
+  debounce(imagePolygonView, 10, true);
+});
+
+let currentLeafShapeB = PackerBrush.Shape.UNSPECIFIED;
+const leafShapeBPicker = document.getElementById("leafShapeBPicker")
+loadLeafShapePicker(leafShapeBPicker);
+leafShapeBPicker.addEventListener("change", (event) => {
+  currentLeafShapeB = event.target.value;
+  debounce(imagePolygonView, 10, true);
+});
+
 /*****
  * Color management
  */
@@ -114,7 +137,11 @@ document.addEventListener('coloris:pick', event => {
     currentColorA = hexNumber
   if (event.detail.currentEl.id == "colorAPicker")
     currentColorB = hexNumber
-  debounce(imagePolygonView, 300, true);
+  if (event.detail.currentEl.id == "leafColorBPicker")
+    currentLeafColorA = hexNumber
+  if (event.detail.currentEl.id == "leafColorAPicker")
+    currentLeafColorB = hexNumber
+  debounce(imagePolygonView, 10, true);
 });
 
 // Given a set of polygons, and a target number of fragments, 
@@ -141,22 +168,25 @@ function distributeFragments(polygons, targetNumFragments, minAreaPerc) {
 }
 
 // Debug default picture
-let imageUrl = `${window.location.origin}/images/simplifiedpug.png`
+let imageUrl = `${window.location.origin}/images/astronaut.png`
 PIXI.Loader.shared.add(imageUrl).load(async (loader, resources) => {
   let texture = PIXI.Texture.from(resources[imageUrl].url);
   await loadImage(texture)
 });
 
-inputTreeTopology.addEventListener("input", () => debounce(imagePolygonView, 100, false));
-inputNumFragments.addEventListener("input", () => debounce(imagePolygonView, 100, false));
-inputNumNodes.addEventListener("input", () => {
-  inputTreeTopology.value = ""
-  debounce(imagePolygonView, 100, false);
+inputNumFragments.addEventListener("input", () => debounce(imagePolygonView, 200, false));
+inputTextBox.addEventListener("input", () => {
+  debounce(imagePolygonView, 200, false);
 });
 window.onresize = function () {
-  debounce(imagePolygonView, 50, false);
+  debounce(imagePolygonView, 200, false);
 };
 
+document.addEventListener("keydown", function (event) {
+  if (event.key == "Enter") {
+    debounce(imagePolygonView, 100, false);
+  }
+});
 
 function getWindowDimension() {
   const WINDOW_WIDTH = window.innerWidth;
@@ -176,14 +206,11 @@ function imagePolygonView(useLastTrees = false) {
     let infoSuffix = ``;
 
     //****  Get tree
-    let current_tree = Tree.fromString(inputTreeTopology.value)
-    if (!current_tree) {
-      inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
-      current_tree = Tree.fromString(inputTreeTopology.value)
-      if (!current_tree) {
-        throw `current tree cannot be null after the tree was generated`;
-      }
+    let inputText = document.getElementById("inputText").value;
+    if (inputText === "") {
+      inputText = " ";
     }
+    const current_tree = textToTree(inputText);
 
     //******* Pack 
     let success = true;
@@ -247,15 +274,16 @@ function imagePolygonView(useLastTrees = false) {
     );
 
     drawPolygon(borderExternal, currentFrameColor);
-    drawPolygon(borderInternal, currentColorB);
+    drawPolygon(borderInternal, currentColorA);
 
     // Draw Claycode
     for (const [tree, polygon] of currentTreesAndPolygons) {
-      let brush = new PackerBrush([currentColorB, currentColorA], [currentColorB, currentColorA], [PackerBrush.Shape.UNSPECIFIED, PackerBrush.Shape.UNSPECIFIED]);
+      let brush = new PackerBrush(
+        [currentColorA, currentColorB],
+        [currentLeafColorA, currentLeafColorB],
+        [currentLeafShapeA, currentLeafShapeB]
+      );
       drawClaycode(tree, polygon, brush)
     }
   }
 }
-
-
-

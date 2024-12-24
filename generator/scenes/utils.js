@@ -2,7 +2,7 @@ import { textToBits } from "../conversion/convert.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
 import { area } from "../geometry/geometry.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { MouseBrush, DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
+import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
 import { createMouseHeadPolygon, createCirclePolygon } from "../geometry/shapes.js";
 import { TreeNode } from "../tree/tree_node.js";
 import { packClaycode } from "../packer/pack.js";
@@ -66,9 +66,11 @@ export function debounce(func, delay, timerId) {
   return setTimeout(func, delay);
 }
 
-export async function showChangeShapeLabel(is_visible) {
-  const changeShapeLabel = await getElementByIdAndKeepTrying("changeShapeDiv");
-  changeShapeLabel.style.visibility = is_visible ? "visible" : "collapse";
+export async function showChangeShapeLabel(isVisible, message = "Change Shape") {
+  const changeShapeDiv = await getElementByIdAndKeepTrying("changeShapeDiv");
+  changeShapeDiv.style.visibility = isVisible ? "visible" : "collapse";
+  const changeShapeText = await getElementByIdAndKeepTrying("changeShapeText");
+  changeShapeText.textContent = message;
 }
 
 // Shape management
