@@ -250,7 +250,7 @@ function imagePolygonView(useLastTrees = false) {
 
     // Draw Claycode
     for (const [tree, polygon] of currentTreesAndPolygons) {
-      let brush = new PackerBrush(PackerBrush.Shape.STAR, [currentColorB, currentColorA], [currentColorB, currentColorA]);
+      let brush = new PackerBrush([currentColorB, currentColorA], [currentColorB, currentColorA], [PackerBrush.Shape.UNSPECIFIED, PackerBrush.Shape.UNSPECIFIED]);
       drawClaycode(tree, polygon, brush)
     }
   }

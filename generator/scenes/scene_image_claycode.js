@@ -56,6 +56,7 @@ function preventDefaults(e) {
   e.stopPropagation();
 }
 dropArea.addEventListener('drop', handleDrop, false);
+document.getElementById("spacerDiv").addEventListener('drop', handleDrop, false);
 async function handleDrop(e) {
   let file = e.dataTransfer.files[0];
 
@@ -90,6 +91,39 @@ async function loadImage(texture) {
 
   debounce(imagePolygonView, 300, false);
 }
+
+
+/*****
+ * Leaf Shape Management
+ */
+function loadLeafShapePicker(selectElement) {
+  if (!selectElement) {
+    console.error("Select element not found");
+    return;
+  }
+  for (const [key, value] of Object.entries(PackerBrush.Shape)) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(); // Format key for display
+    selectElement.appendChild(option);
+  }
+}
+
+let currentLeafShapeA = PackerBrush.Shape.UNSPECIFIED;
+const leafShapeAPicker = document.getElementById("leafShapeAPicker")
+loadLeafShapePicker(leafShapeAPicker);
+leafShapeAPicker.addEventListener("change", (event) => {
+  currentLeafShapeA = event.target.value;
+  debounce(imagePolygonView, 10, true);
+});
+
+let currentLeafShapeB = PackerBrush.Shape.UNSPECIFIED;
+const leafShapeBPicker = document.getElementById("leafShapeBPicker")
+loadLeafShapePicker(leafShapeBPicker);
+leafShapeBPicker.addEventListener("change", (event) => {
+  currentLeafShapeB = event.target.value;
+  debounce(imagePolygonView, 10, true);
+});
 
 /*****
  * Color management
@@ -244,7 +278,11 @@ function imagePolygonView(useLastTrees = false) {
 
     // Draw Claycode
     for (const [tree, polygon] of currentTreesAndPolygons) {
-      let brush = new PackerBrush(PackerBrush.Shape.STAR, [currentColorA, currentColorB], [currentLeafColorA, currentLeafColorB]);
+      let brush = new PackerBrush(
+        [currentColorA, currentColorB],
+        [currentLeafColorA, currentLeafColorB],
+        [currentLeafShapeA, currentLeafShapeB]
+      );
       drawClaycode(tree, polygon, brush)
     }
   }

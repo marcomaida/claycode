@@ -16,7 +16,7 @@
   <div id="mainDiv" style="z-index:1; position: fixed;">
     <div class="elements-div">
       <div id="headerDiv"></div>
-      <div style="flex:auto;"></div>
+      <div id="spacerDiv" style="flex:auto;"></div>
       <div class="tree-gen-label" , style="margin-left: 20pt;">
         Frame:
         <input class="color_picker" id="frameColorPicker" type="text" data-coloris value="#ffffff">
@@ -29,9 +29,11 @@
         <run style="margin-left: 20pt;"></run>
         Leaf A:
         <input class="color_picker" id="leafColorAPicker" type="text" data-coloris value="#000000">
+        <select name="Leaf Shape A" id="leafShapeAPicker"></select>
         <run style="margin-left: 20pt;"></run>
         Leaf B:
         <input class="color_picker" id="leafColorBPicker" type="text" data-coloris value="#ffffff">
+        <select name="Leaf Shape B" id="leafShapeBPicker"></select>
         <run style="margin-left: 20pt;"></run>
         Num Fragments:
         <input type="number" id="inputNumFragments" maxlength="5" value="1" class="tree_gen_val" />
