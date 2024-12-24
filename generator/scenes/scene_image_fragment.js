@@ -20,13 +20,13 @@ const inputTreeTopology = document.getElementById("inputTreeTopology");
 const inputNumFragments = document.getElementById("inputNumFragments");
 const inputNumNodes = document.getElementById("inputNumNodes");
 
-let current_trees_and_polygons = null;
-let current_texture = null;
-let current_sprite = null;
-let current_polygons = null;
-let current_frame_color = 0xffffff
-let current_fore_color = 0xffffff
-let current_back_color = 0x000000
+let currentTreesAndPolygons = null;
+let currentTexture = null;
+let currentSprite = null;
+let currentPolygons = null;
+let currentFrameColor = 0xffffff
+let currentColorA = 0xffffff
+let currentColorB = 0x000000
 
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
@@ -78,25 +78,25 @@ async function handleDrop(e) {
 }
 
 async function loadImage(texture) {
-  if (current_sprite) {
-    current_sprite.destroy({ texture: true, baseTexture: true });
-    current_sprite = null;
-    current_texture = null;
-    current_polygons = null;
+  if (currentSprite) {
+    currentSprite.destroy({ texture: true, baseTexture: true });
+    currentSprite = null;
+    currentTexture = null;
+    currentPolygons = null;
   }
 
-  current_texture = texture;
-  current_sprite = new PIXI.Sprite(current_texture);
+  currentTexture = texture;
+  currentSprite = new PIXI.Sprite(currentTexture);
   let [WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_DIMENSION] = getWindowDimension();
-  current_sprite.width = SPRITE_DIMENSION;
-  current_sprite.height = SPRITE_DIMENSION;
-  current_sprite.x = WINDOW_WIDTH / 2;
-  current_sprite.y = WINDOW_HEIGHT / 2;
-  current_sprite.anchor.set(0.5);
-  app.stage.addChild(current_sprite);
+  currentSprite.width = SPRITE_DIMENSION;
+  currentSprite.height = SPRITE_DIMENSION;
+  currentSprite.x = WINDOW_WIDTH / 2;
+  currentSprite.y = WINDOW_HEIGHT / 2;
+  currentSprite.anchor.set(0.5);
+  app.stage.addChild(currentSprite);
 
-  let binaryImage = await createBinaryImage(current_texture, SPRITE_DIMENSION)
-  current_polygons = computeContourPolygons(binaryImage, new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), SPRITE_DIMENSION)
+  let binaryImage = await createBinaryImage(currentTexture, SPRITE_DIMENSION)
+  currentPolygons = computeContourPolygons(binaryImage, new PIXI.Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), SPRITE_DIMENSION)
 
   debounce(imagePolygonView, 300, false);
 }
@@ -108,11 +108,11 @@ document.addEventListener('coloris:pick', event => {
   const hexString = event.detail.color.replace('#', '');
   const hexNumber = parseInt(hexString, 16);
   if (event.detail.currentEl.id == "frameColorPicker")
-    current_frame_color = hexNumber
-  if (event.detail.currentEl.id == "foreColorPicker")
-    current_fore_color = hexNumber
-  if (event.detail.currentEl.id == "backColorPicker")
-    current_back_color = hexNumber
+    currentFrameColor = hexNumber
+  if (event.detail.currentEl.id == "colorBPicker")
+    currentColorA = hexNumber
+  if (event.detail.currentEl.id == "colorAPicker")
+    currentColorB = hexNumber
   debounce(imagePolygonView, 300, true);
 });
 
@@ -166,7 +166,7 @@ function getWindowDimension() {
 }
 
 function imagePolygonView(useLastTrees = false) {
-  if (useLastTrees && current_trees_and_polygons === null) {
+  if (useLastTrees && currentTreesAndPolygons === null) {
     // If the last packing was not successful, attempt to recompute 
     useLastTrees = false;
   }
@@ -186,16 +186,16 @@ function imagePolygonView(useLastTrees = false) {
 
     //******* Pack 
     let success = true;
-    if (current_polygons) {
+    if (currentPolygons) {
       //*** Distribute fragments
       let MIN_AREA_PERC = 0.0 // if a polygon occupies less than this percent of the total area, it is ignored
-      let fragmentsDistribution = distributeFragments(current_polygons, inputNumFragments.value, MIN_AREA_PERC)
+      let fragmentsDistribution = distributeFragments(currentPolygons, inputNumFragments.value, MIN_AREA_PERC)
       infoSuffix += ` - [${fragmentsDistribution}]`;
 
-      current_trees_and_polygons = [];
-      for (let i = 0; i < current_polygons.length; i++) {
+      currentTreesAndPolygons = [];
+      for (let i = 0; i < currentPolygons.length; i++) {
         let numFragmentsToDraw = fragmentsDistribution[i]
-        let polygon = current_polygons[i]
+        let polygon = currentPolygons[i]
 
         // Generate a tree that contains the number of fragments we want
         // NOTE: if the number of input fragment is one, this function will add
@@ -210,10 +210,10 @@ function imagePolygonView(useLastTrees = false) {
         }
 
         if (packClaycode(tree, polygon)) {
-          current_trees_and_polygons.push([tree, polygon]);
+          currentTreesAndPolygons.push([tree, polygon]);
         }
         else {
-          current_trees_and_polygons = null
+          currentTreesAndPolygons = null
           success = false;
           break;
         }
@@ -231,7 +231,7 @@ function imagePolygonView(useLastTrees = false) {
 
   //****  Draw Claycode
   clearDrawing();
-  if (current_trees_and_polygons !== null) {
+  if (currentTreesAndPolygons !== null) {
     // Draw border
     let BORDER_SIZE = 0.05
     let borderExternal = createCirclePolygon(
@@ -245,12 +245,12 @@ function imagePolygonView(useLastTrees = false) {
       4, new PIXI.Vec(1, 1), 45
     );
 
-    drawPolygon(borderExternal, current_frame_color);
-    drawPolygon(borderInternal, current_back_color);
+    drawPolygon(borderExternal, currentFrameColor);
+    drawPolygon(borderInternal, currentColorB);
 
     // Draw Claycode
-    for (const [tree, polygon] of current_trees_and_polygons) {
-      let brush = new PackerBrush(PackerBrush.Shape.STAR, [current_back_color, current_fore_color]);
+    for (const [tree, polygon] of currentTreesAndPolygons) {
+      let brush = new PackerBrush(PackerBrush.Shape.STAR, [currentColorB, currentColorA], [currentColorB, currentColorA]);
       drawClaycode(tree, polygon, brush)
     }
   }

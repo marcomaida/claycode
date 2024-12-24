@@ -2,7 +2,7 @@ import { textToBits } from "../conversion/convert.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
 import { area } from "../geometry/geometry.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
-import { MouseBrush, DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
+import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
 import { createMouseHeadPolygon, createCirclePolygon } from "../geometry/shapes.js";
 import { TreeNode } from "../tree/tree_node.js";
 import { packClaycode } from "../packer/pack.js";
