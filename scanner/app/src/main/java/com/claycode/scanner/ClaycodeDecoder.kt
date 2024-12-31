@@ -10,7 +10,6 @@ import com.claycode.scanner.topology_analysis.TopologyAnalyser
 import com.claycode.scanner.topology_decoder.BitTreeConverter
 import com.claycode.scanner.topology_decoder.BitsValidator
 import com.claycode.scanner.topology_decoder.TextBitsConverter
-import kotlin.time.Duration.Companion.seconds
 
 enum class DecodingStack {
     /**

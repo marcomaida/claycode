@@ -9,6 +9,7 @@
 
 #include "find_shapes.hpp"
 #include "build_touch_graph.hpp"
+#include "filters.hpp"
 
 // Add macros to log
 #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, __VA_ARGS__)
@@ -65,6 +66,7 @@ cv::Mat prepareInputImage(JNIEnv *env,
     return img;
 }
 
+int k = 2;
 /**
  * Extract touch graph using OpenCV for preprocessing,
  * and the proprietary stack to infer topology.
@@ -89,8 +91,18 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractTouchGraph(
      *****************/
     cv::Mat img = prepareInputImage(env, bitmap, info, pixels, left, top, width, height);
 
+    cv::Mat resizedImage;
+    cv::resize(img, resizedImage, cv::Size(), 0.4, 0.4, cv::INTER_LANCZOS4);
+    img = resizedImage;
+    img = slatFilters(img, k);
+    k++;
+    if (k > 6)
+    {
+        k = 2;
+    }
+
     // Convert to grayscale
-    cv::cvtColor(img, img, cv::COLOR_RGBA2GRAY);
+    // cv::cvtColor(img, img, cv::COLOR_RGBA2GRAY);
 
     logRelativeTime("OpenCV", startTime);
 
@@ -156,20 +168,34 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractParentsArray(
      *****************/
     cv::Mat img = prepareInputImage(env, bitmap, info, pixels, left, top, width, height);
 
-    // Convert to grayscale, threshold
-    cv::cvtColor(img, img, cv::COLOR_RGBA2GRAY);
+    cv::Mat resizedImage;
+    cv::resize(img, resizedImage, cv::Size(), 0.4, 0.4, cv::INTER_LANCZOS4);
+    img = resizedImage;
+    img = slatFilters(img, k);
+    k++;
+    if (k > 6)
+    {
+        k = 2;
+    }
+
+    cv::Mat grayscaleSegmented;
+    // img.convertTo(grayscaleSegmented, CV_8U, 255.0 / (k - 1)); // Normalize and convert to 8-bit
+    // LOGI("TEST", "SLAT DONE %i", img.channels());
+    //  Convert to grayscale, threshold
+
+    cv::cvtColor(img, grayscaleSegmented, cv::COLOR_RGB2GRAY);
 
     // Bilateral
-    cv::Mat img_bil;
-    cv::bilateralFilter(img, img_bil, 3, 75, 75);
+    // cv::Mat img_bil;
+    // cv::bilateralFilter(img, img_bil, 3, 75, 75);
 
     // Adaptive threshold
-    int kernel_size_threshold = std::max(13 * width * height / 1000000, 9);
-    if (kernel_size_threshold % 2 == 0)
-    {
-        kernel_size_threshold += 1;
-    }
-    cv::adaptiveThreshold(img_bil, img_bil, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, kernel_size_threshold, 2);
+    // int kernel_size_threshold = std::max(13 * width * height / 1000000, 9);
+    // if (kernel_size_threshold % 2 == 0)
+    //{
+    //    kernel_size_threshold += 1;
+    //}
+    // cv::adaptiveThreshold(img_bil, img_bil, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, kernel_size_threshold, 2);
 
     // Dilate
     // cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(2, 2));
@@ -177,7 +203,7 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractParentsArray(
 
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
-    cv::findContours(img_bil, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    cv::findContours(grayscaleSegmented, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
     logRelativeTime("OpenCV", startTime);
 
