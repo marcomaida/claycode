@@ -54,10 +54,10 @@ function generateRandomTree(
     return remainingNodes;
   }
 
-  const inner = new TreeNode(null, []);
-  _gen(inner, maxChildren, maxHeight, growProbability, 1, remainingNodes - 2);
-
-  return new Tree(new TreeNode(null, [inner]));
+  const root = new TreeNode(null, []);
+  _gen(root, maxChildren, maxHeight, growProbability, 1, remainingNodes - 2);
+  console.log(root.children.length);
+  return new Tree(root);
 }
 
 function polygonView() {

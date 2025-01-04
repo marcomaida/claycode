@@ -26,7 +26,7 @@ export function packClaycode(tree, polygon) {
             nodePaddingMin,
             tries / MAX_TRIES
         );
-        tree.compute_weights(padding);
+        tree.compute_footprints(padding);
         let minNodeArea = area(polygon) * 0.0002;
 
         try {
@@ -70,8 +70,8 @@ function packClaycodeIteration(
     /* 
      * Finally, partition the node and recursively call the function
      */
-    const weights = Math.normalise(node.children.map((c) => c.weight));
-    const partition = partitionPolygon(subPolygon, weights);
+    const footprints = Math.normalise(node.children.map((c) => c.footprint));
+    const partition = partitionPolygon(subPolygon, footprints);
     console.assert(partition.length == node.children.length);
     for (const [i, c] of node.children.entries()) {
         if (!packClaycodeIteration(

@@ -52,10 +52,10 @@ export function updateInfoText(inputText, currentTree, infoSuffix = "") {
   if (inputText !== null)
     infoText.textContent =
       `${inputText.length} Chars | ${textToBits(inputText).length} bits | ${currentTree.root.numDescendants
-      } Nodes ` + infoSuffix;
+      } Nodes | Footprint: ${currentTree.get_total_footprint()} ` + infoSuffix;
   else
     infoText.textContent =
-      `${currentTree.root.numDescendants} Nodes` + infoSuffix;
+      `${currentTree.root.numDescendants} Nodes | Footprint: ${currentTree.get_total_footprint()}` + infoSuffix;
 }
 
 // Helper function to avoid too many calls to the drawing function

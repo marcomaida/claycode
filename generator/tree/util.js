@@ -12,7 +12,7 @@ export function duplicateTreeNTimes(tree, N) {
         const newNode = new TreeNode(null, []);
         newNode.label = node.label;
         newNode.numDescendants = node.numDescendants;
-        newNode.weight = node.weight;
+        newNode.footprint = node.footprint;
 
         for (const child of node.children) {
             const newChild = cloneNode(child);
@@ -44,7 +44,7 @@ export function duplicateTreeNTimes(tree, N) {
     // Initialize the new tree
     const newTree = new Tree(newRoot);
     newTree.initialize_nodes(newRoot, "X", 0);
-    newTree.compute_weights(1);
+    newTree.compute_footprints(1);
 
     return newTree;
 }
@@ -81,7 +81,7 @@ export function generateRandomTree(N) {
     // Initialize the tree
     const tree = new Tree(root);
     tree.initialize_nodes(root, "X", 0);
-    tree.compute_weights(1);
+    tree.compute_footprints(1);
 
     return tree;
 }

@@ -14,7 +14,7 @@ export class TreeNode {
     /* Describes how much space is taken by this node, considering
        also all its descendants. The UoM is irrelevant, as long as
        all nodes are weighted using the same heuristics. */
-    this.weight = null;
+    this.footprint = null;
 
     /* Root is at depth zero. Other nodes have depth parent+1  */
     this.depth = null;

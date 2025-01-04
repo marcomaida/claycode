@@ -7,7 +7,7 @@ export class Tree {
     this.maxDepth = 0;
 
     this.initialize_nodes(this.root, "X", 0);
-    this.compute_weights(1);
+    this.compute_footprints(1);
     this.compute_depth(0);
   }
 
@@ -43,44 +43,31 @@ export class Tree {
     this.maxDepth = Math.max(this.maxDepth, depth);
   }
 
-  compute_weights(node_padding) {
-    compute_weights_(this.root, node_padding);
+  compute_footprints(node_padding) {
+    compute_footprints_(this.root, node_padding);
   }
 
   compute_depth(node_depth) {
     compute_depth_(this.root, node_depth);
   }
+
+  get_total_footprint() {
+    let total_fp = 0;
+    for (const node of treeIterator(this)) {
+      total_fp += node.footprint;
+    }
+    return total_fp;
+  }
 }
 
-function compute_weights_(node, node_padding) {
-  let children_weight = 0;
+function compute_footprints_(node, node_padding) {
+  let children_footprint = 0;
   for (const c of node.children) {
-    compute_weights_(c, node_padding);
-    children_weight += c.weight;
+    compute_footprints_(c, node_padding);
+    children_footprint += c.footprint;
   }
 
-  /* 
-     WEIGHT HEURISTIC
-     This heuristic tries to approximate how much space a node 
-     will take in a Claycode drawing. 
-
-     This heuristic assumes an ideal space distribution of the 
-     children, i.e., it assumes that the children are arranged
-     so that they form a perfect circle, which must be padded.
-             ___
-           /    p\    `O` is the area occupied by the children, 
-          |   O---|   while `p` is the padding to add to compute
-           \ ___ /    the parent's node area.
-
-  // const children_r = Math.sqrt(children_weight / Math.PI);
-  // const father_r = children_r + node_padding;
-  // node.weight = Math.pow(father_r, 2) * Math.PI;
-     
-    Not working well so I went back to basic +1 heuristic 
-  */
-
-  node.weight = children_weight + node_padding;
-  node.weight = Math.max(node.weight, 1);
+  node.footprint = children_footprint + 1;
 }
 
 function compute_depth_(node, node_depth) {
