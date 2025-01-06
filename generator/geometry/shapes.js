@@ -89,3 +89,41 @@ export function createStarPolygon(center, outerRadius, numPoints, rotation = (Ma
 
     return star;
 }
+
+export function createUPolygon(center, width, height, thickness, inner_thickness, scale_vec = new PIXI.Vec(1, 1), rotation_deg = 0) {
+    // Ensure the dimensions make sense
+    if (thickness >= width / 2 || thickness >= height) {
+        throw new Error("Thickness must be smaller than half the width and smaller than the height.");
+    }
+
+    // Define the points of the "U" shape
+    const halfWidth = width / 2;
+    const points = [
+        new PIXI.Vec(-halfWidth, 0),                            // Top left corner
+        new PIXI.Vec(-halfWidth, -height),                      // Bottom left corner
+        new PIXI.Vec(-halfWidth + thickness, -height),          // Bottom left inner
+        new PIXI.Vec(-halfWidth + thickness, -inner_thickness), // Left inner top
+        new PIXI.Vec(halfWidth - thickness, -inner_thickness),  // Right inner top
+        new PIXI.Vec(halfWidth - thickness, -height),           // Bottom right inner
+        new PIXI.Vec(halfWidth, -height),                       // Bottom right corner
+        new PIXI.Vec(halfWidth, 0),                             // Top right corner
+    ];
+
+    // Rotate the "U" shape if a rotation is provided
+    const rotation_rad = (rotation_deg / 180) * Math.PI;
+    if (rotation_deg !== 0) {
+        points.forEach(point => {
+            const x = point.x * Math.cos(rotation_rad) - point.y * Math.sin(rotation_rad);
+            const y = point.x * Math.sin(rotation_rad) + point.y * Math.cos(rotation_rad);
+            point.set(x, y);
+        });
+    }
+
+    // Translate the points to the center
+    translatePolygon(points, center);
+
+    // Scale the polygon
+    scalePolygon(points, scale_vec);
+
+    return points;
+}

@@ -1,6 +1,6 @@
 import { drawPolygon } from "./draw.js";
 import { area, matchPolygonsCentroids } from "../geometry/geometry.js";
-import { createStarPolygon, createMouseHeadPolygon, createCirclePolygon } from "../geometry/shapes.js";
+import { createStarPolygon, createMouseHeadPolygon, createCirclePolygon, createUPolygon } from "../geometry/shapes.js";
 
 export class PackerBrush {
     // Enum for polygon shapes
@@ -10,6 +10,7 @@ export class PackerBrush {
         CIRCLE: 'circle',
         MOUSE: 'mouse',
         STAR: 'star',
+        U: 'u',
     });
 
     constructor(colors, leafColors, leafShapes) {
@@ -67,6 +68,11 @@ export class PackerBrush {
                 break;
             case PackerBrush.Shape.STAR:
                 customPolygon = createStarPolygon(new PIXI.Vec(0, 0), 0.7 * baseRadius, 5);
+                break;
+            case PackerBrush.Shape.U:
+                const u = 0.8 * baseRadius;
+                const thickness = u / 3;
+                customPolygon = createUPolygon(new PIXI.Vec(0, 0), u, u * 1.8, thickness, thickness);
                 break;
             default:
                 throw "Unsupported leaf shape requested";
