@@ -27,10 +27,9 @@ export function packClaycode(tree, polygon) {
             tries / MAX_TRIES
         );
         tree.compute_footprints(padding);
-        let minNodeArea = area(polygon) * 0.0002;
 
         try {
-            if (packClaycodeIteration(tree.root, polygon, padding, minNodeArea)) {
+            if (packClaycodeIteration(tree.root, polygon, padding)) {
                 return true;
             }
         } catch (error) {
@@ -52,18 +51,18 @@ function packClaycodeIteration(
     node,
     polygon,
     padding,
-    minNodeArea,
 ) {
     /* 
      * First, make sure there is enough free space
      */
     const subPolygon = padPolygon(polygon, padding);
-    if (subPolygon === null || area(subPolygon) < minNodeArea) {
+    if (subPolygon === null) {
         return false;
     }
 
     /*
-     * Do leaf check: must be paddable
+     * Do leaf check: leaf node must be further paddable by padding/2. 
+     * This ensures that also leaves are of a minimum area.
      */
     if (node.isLeaf()) {
         const subsubPolygon = padPolygon(subPolygon, padding / 2);
@@ -87,8 +86,7 @@ function packClaycodeIteration(
         if (!packClaycodeIteration(
             c,
             partition[i],
-            padding,
-            minNodeArea
+            padding
         )) {
             return false;
         }
