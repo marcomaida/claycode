@@ -56,7 +56,6 @@ function generateRandomTree(
 
   const root = new TreeNode(null, []);
   _gen(root, maxChildren, maxHeight, growProbability, 1, remainingNodes - 2);
-  console.log(root.children.length);
   return new Tree(root);
 }
 

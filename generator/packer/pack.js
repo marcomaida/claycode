@@ -12,9 +12,9 @@ export function packClaycode(tree, polygon) {
     // Once reached a certain limit, start from the minimum
     let nodePaddingMin = 2;
     let nodePaddingMax = Math.lerp(
-        15,
-        nodePaddingMin,
-        Math.min(tree.root.numDescendants, 400) / 400
+        20,
+        nodePaddingMin + 2,
+        Math.min(tree.root.numDescendants, 700) / 700
     );
 
     const MAX_TRIES = 100;
@@ -27,10 +27,9 @@ export function packClaycode(tree, polygon) {
             tries / MAX_TRIES
         );
         tree.compute_footprints(padding);
-        let minNodeArea = area(polygon) * 0.0002;
 
         try {
-            if (packClaycodeIteration(tree.root, polygon, padding, minNodeArea)) {
+            if (packClaycodeIteration(tree.root, polygon, padding)) {
                 return true;
             }
         } catch (error) {
@@ -52,13 +51,12 @@ function packClaycodeIteration(
     node,
     polygon,
     padding,
-    minNodeArea,
 ) {
     /* 
-     * First, make sure there is enough free space
+     * Do first padding phase
      */
-    const subPolygon = padPolygon(polygon, padding);
-    if (subPolygon === null || area(subPolygon) < minNodeArea) {
+    const subPolygon = padPolygon(polygon, padding / 2);
+    if (subPolygon === null) {
         return false;
     }
 
@@ -67,18 +65,27 @@ function packClaycodeIteration(
      */
     node.setPolygon(subPolygon);
 
+    /*
+     * Do a second padding phase. Note that, in the case of leaves,
+     * this forces them to have a minimum area.
+     */
+    const subsubPolygon = padPolygon(subPolygon, padding / 2);
+    if (subsubPolygon === null) {
+        return false;
+    }
+
+
     /* 
      * Finally, partition the node and recursively call the function
      */
     const footprints = Math.normalise(node.children.map((c) => c.footprint));
-    const partition = partitionPolygon(subPolygon, footprints);
+    const partition = partitionPolygon(subsubPolygon, footprints);
     console.assert(partition.length == node.children.length);
     for (const [i, c] of node.children.entries()) {
         if (!packClaycodeIteration(
             c,
             partition[i],
-            padding,
-            minNodeArea
+            padding
         )) {
             return false;
         }
