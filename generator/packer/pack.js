@@ -12,9 +12,9 @@ export function packClaycode(tree, polygon) {
     // Once reached a certain limit, start from the minimum
     let nodePaddingMin = 2;
     let nodePaddingMax = Math.lerp(
-        15,
+        20,
         nodePaddingMin + 2,
-        Math.min(tree.root.numDescendants, 400) / 400
+        Math.min(tree.root.numDescendants, 700) / 700
     );
 
     const MAX_TRIES = 100;
