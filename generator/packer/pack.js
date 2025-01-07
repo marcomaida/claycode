@@ -55,20 +55,9 @@ function packClaycodeIteration(
     /* 
      * First, make sure there is enough free space
      */
-    const subPolygon = padPolygon(polygon, padding);
+    const subPolygon = padPolygon(polygon, padding / 2);
     if (subPolygon === null) {
         return false;
-    }
-
-    /*
-     * Do leaf check: leaf node must be further paddable by padding/2. 
-     * This ensures that also leaves are of a minimum area.
-     */
-    if (node.isLeaf()) {
-        const subsubPolygon = padPolygon(subPolygon, padding / 2);
-        if (subsubPolygon === null) {
-            return false;
-        }
     }
 
     /* 
@@ -76,11 +65,21 @@ function packClaycodeIteration(
      */
     node.setPolygon(subPolygon);
 
+    /*
+     * Do leaf check: leaf node must be further paddable by padding/2. 
+     * This ensures that also leaves are of a minimum area.
+     */
+    const subsubPolygon = padPolygon(subPolygon, padding / 2);
+    if (subsubPolygon === null) {
+        return false;
+    }
+
+
     /* 
      * Finally, partition the node and recursively call the function
      */
     const footprints = Math.normalise(node.children.map((c) => c.footprint));
-    const partition = partitionPolygon(subPolygon, footprints);
+    const partition = partitionPolygon(subsubPolygon, footprints);
     console.assert(partition.length == node.children.length);
     for (const [i, c] of node.children.entries()) {
         if (!packClaycodeIteration(
