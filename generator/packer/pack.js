@@ -13,7 +13,7 @@ export function packClaycode(tree, polygon) {
     let nodePaddingMin = 2;
     let nodePaddingMax = Math.lerp(
         15,
-        nodePaddingMin,
+        nodePaddingMin + 2,
         Math.min(tree.root.numDescendants, 400) / 400
     );
 
@@ -60,6 +60,16 @@ function packClaycodeIteration(
     const subPolygon = padPolygon(polygon, padding);
     if (subPolygon === null || area(subPolygon) < minNodeArea) {
         return false;
+    }
+
+    /*
+     * Do leaf check: must be paddable
+     */
+    if (node.isLeaf()) {
+        const subsubPolygon = padPolygon(subPolygon, padding / 2);
+        if (subsubPolygon === null) {
+            return false;
+        }
     }
 
     /* 
