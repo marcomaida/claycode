@@ -53,7 +53,7 @@ function packClaycodeIteration(
     padding,
 ) {
     /* 
-     * First, make sure there is enough free space
+     * Do first padding phase
      */
     const subPolygon = padPolygon(polygon, padding / 2);
     if (subPolygon === null) {
@@ -66,8 +66,8 @@ function packClaycodeIteration(
     node.setPolygon(subPolygon);
 
     /*
-     * Do leaf check: leaf node must be further paddable by padding/2. 
-     * This ensures that also leaves are of a minimum area.
+     * Do a second padding phase. Note that, in the case of leaves,
+     * this forces them to have a minimum area.
      */
     const subsubPolygon = padPolygon(subPolygon, padding / 2);
     if (subsubPolygon === null) {
