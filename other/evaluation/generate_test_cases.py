@@ -9,9 +9,9 @@ from itertools import product
 
 FOLDER_NAME = "template-cube-line-rotate"
 TEMPLATE_FILE = os.path.join(FOLDER_NAME, "template.csv")
-CONFIG_FILE = "evaluation/config.yaml"  # Path to your YAML config file
+CONFIG_FILE = "config.yaml"  # Path to your YAML config file
 
-IMAGES_FOLDER = "evaluation/images/testing-scenario"
+IMAGES_FOLDER = "images/testing-scenario"
 
 
 def load_config(config_path: str):
@@ -137,7 +137,7 @@ def assign_experiment_ids(experiments):
 
 def create_test_cases_for_all_images():
     """
-    1. Reads all images in `evaluation/images/testing-scenario/`.
+    1. Reads all images in `images/testing-scenario/`.
     2. For each image, obtains width/height.
     3. Generates squares/lines experiments specifically for that image's dimension.
     4. Appends them to a single CSV (template.csv) with a `filename` column.

@@ -26,8 +26,8 @@ TEMPLATE_CSV = os.path.join(EXPERIMENT_FOLDER, "template.csv")
 # e.g.: template-cube-line-rotate/experiment_20250103_103000
 
 # The location of images we reference in the CSV (filename column).
-# e.g., "evaluation/images/testing-scenario"
-IMAGES_FOLDER = "evaluation/images/testing-scenario"
+# e.g., "images/testing-scenario"
+IMAGES_FOLDER = "images/testing-scenario"
 
 # Temporary location for modified textures
 TEMP_TEXTURE = "images/temp/modified_texture.png"
@@ -152,7 +152,7 @@ def draw_line_on_image(image, exp, width, height):
 # ----------------------------
 
 plotter = pv.Plotter()
-plotter.add_background_image("evaluation/images/landscape.png")  # Optional
+plotter.add_background_image("images/landscape.png")  # Optional
 plotter.camera_position = [(0, 0, 5), (0, 0, 0), (0, 1, 0)]
 plotter.enable_lightkit()
 
@@ -257,6 +257,7 @@ def update_mesh(index: int):
     Loads the experiment at index, updates the 3D wave plane
     and draws line/square on the correct image. Then updates the texture.
     """
+    Path("images/temp").mkdir(parents=True, exist_ok=True)
     exps = Experiment.load_all()
     if index < 0 or index >= len(exps):
         print(f"Invalid index: {index}")
