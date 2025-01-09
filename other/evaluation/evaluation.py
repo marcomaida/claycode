@@ -230,6 +230,7 @@ def rotate_texture(image_path: str, angle: float) -> str:
 
     img = cv2.imread(image_path)
     if img is None:
+        print(f"[rotate_texture] Could not read {image_path}")
         return image_path
 
     h, w = img.shape[:2]
@@ -299,8 +300,6 @@ def update_mesh(index: int):
         wave_amplitude=exp.wave_amplitude,
         wave_frequency=exp.wave_frequency
     )
-    print (exp.rotation[0])
-    print (exp.rotation[1])
     plane.rotate_x(exp.rotation[0], inplace=True)
     plane.rotate_y(exp.rotation[1], inplace=True)
 
