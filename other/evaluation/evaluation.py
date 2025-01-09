@@ -230,7 +230,6 @@ def rotate_texture(image_path: str, angle: float) -> str:
 
     img = cv2.imread(image_path)
     if img is None:
-        print(f"[rotate_texture] Could not read {image_path}")
         return image_path
 
     h, w = img.shape[:2]
