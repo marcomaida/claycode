@@ -15,8 +15,8 @@ from eval_lib.experiment import Experiment
 # ----------------------------
 
 # The top-level folder holding the template plus scenario subfolders.
-# Example: "template-cube-line-rotate"
-EXPERIMENT_FOLDER = "template-cube-line-rotate"
+# Example: "results/template-cube-line-rotate"
+EXPERIMENT_FOLDER = "results/template-cube-line-rotate"
 
 # The base CSV file (e.g., "template.csv") inside that folder
 TEMPLATE_CSV = os.path.join(EXPERIMENT_FOLDER, "template.csv")

@@ -5,8 +5,8 @@ import ast
 import unittest
 
 class Experiment:
-    # By default, we assume your folder is "template-cube-line-rotate/template.csv".
-    CSV_FILE = "template-cube-line-rotate/template.csv"
+    # By default, we assume your folder is "results/template-cube-line-rotate/template.csv".
+    CSV_FILE = "results/template-cube-line-rotate/template.csv"
     _cached_experiments = None
 
     def __init__(self, experiment_id, successful, wave_amplitude=0.1, wave_frequency=0.2,

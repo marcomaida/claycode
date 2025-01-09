@@ -7,7 +7,7 @@ import cv2
 import yaml  # Ensure PyYAML is installed: pip install pyyaml
 from itertools import product
 
-FOLDER_NAME = "template-cube-line-rotate"
+FOLDER_NAME = "results/template-cube-line-rotate"
 TEMPLATE_FILE = os.path.join(FOLDER_NAME, "template.csv")
 CONFIG_FILE = "config.yaml"  # Path to your YAML config file
 
