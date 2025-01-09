@@ -159,7 +159,7 @@ plotter.enable_lightkit()
 
 def create_sinusoidal_plane_mesh(size=2.0, wave_amplitude=0.3, wave_frequency=3):
     half_size = size / 2
-    resolution = 100
+    resolution = 500
     x = np.linspace(-half_size, half_size, resolution)
     y = np.linspace(-half_size, half_size, resolution)
     xv, yv = np.meshgrid(x, y)
@@ -256,6 +256,8 @@ def update_mesh(index: int):
     Loads the experiment at index, updates the 3D wave plane
     and draws line/square on the correct image. Then updates the texture.
     """
+    plotter.reset_camera()
+
     global current_actor
     if current_actor != None:
         plotter.remove_actor(current_actor)
