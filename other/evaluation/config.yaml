@@ -1,9 +1,10 @@
 # This file contains the parameters to use to create the experiment template
 
 experiment_parameters:
-  wave_amplitude_range: [0.0, 1]
+  wave_amplitude_range: [0.0, 1, 2]
   wave_frequency_range: [3]
   square_dimension_perc_range: [0.5]
   line_thickness_perc_range: [0.01, 0.03]
   line_dimension_perc_range: [0.66]
   line_angle_range: [30]
+  rotation: [[0,0], [10,80], [80,10], [-70,0]]

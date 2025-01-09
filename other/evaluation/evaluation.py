@@ -35,6 +35,7 @@ TEMP_TEXTURE = "images/temp/modified_texture.png"
 # If you want rotation, you can define it here (0 means no rotation)
 ROTATION_ANGLE = 0
 
+current_actor = None
 
 # ----------------------------
 #   CREATE / LOAD SCENARIO
@@ -152,11 +153,9 @@ def draw_line_on_image(image, exp, width, height):
 # ----------------------------
 
 plotter = pv.Plotter()
-plotter.add_background_image("images/landscape.png")  # Optional
-plotter.camera_position = [(0, 0, 5), (0, 0, 0), (0, 1, 0)]
+plotter.add_background_image("images/landscape.jpg", 1.2)  # Optional
+plotter.camera_position = [(0, 0, 8), (0, 0, 0), (0, 1, 0)]
 plotter.enable_lightkit()
-
-plane = None  # We'll store the wave mesh
 
 def create_sinusoidal_plane_mesh(size=2.0, wave_amplitude=0.3, wave_frequency=3):
     half_size = size / 2
@@ -212,10 +211,10 @@ def update_experiment_text(exp):
         f"WaveFreq: {exp.wave_frequency}\n"
         f"SquarePos: {exp.square_position}\n"
         f"LinePos: {exp.line_center_coordinates}\n"
-        f"Outcome: {exp.successful}\n"
+        f"Rotation: {exp.rotation}\n"
     )
-    plotter.add_text(txt, position="upper_left", font_size=10,
-                     color="black", shadow=True, name="experiment_text")
+    plotter.add_text(txt, position="upper_left", font_size=15,
+                     color="white", shadow=False, name="experiment_text")
 
 def record_experiment_result(outcome: bool, index: int):
     exps = Experiment.load_all()
@@ -257,6 +256,11 @@ def update_mesh(index: int):
     Loads the experiment at index, updates the 3D wave plane
     and draws line/square on the correct image. Then updates the texture.
     """
+    global current_actor
+    if current_actor != None:
+        plotter.remove_actor(current_actor)
+        current_actor = None
+
     Path("images/temp").mkdir(parents=True, exist_ok=True)
     exps = Experiment.load_all()
     if index < 0 or index >= len(exps):
@@ -290,23 +294,25 @@ def update_mesh(index: int):
     rotated_path = rotate_texture(TEMP_TEXTURE, ROTATION_ANGLE)
 
     # Create or update the plane geometry based on wave
-    new_points = create_sinusoidal_plane_mesh(
+    assert current_actor == None, "Current actor was not deleted"
+    plane = create_sinusoidal_plane_mesh(
         size=2.0,
         wave_amplitude=exp.wave_amplitude,
         wave_frequency=exp.wave_frequency
-    ).points
-    plane.points = new_points
+    )
+    print (exp.rotation[0])
+    print (exp.rotation[1])
+    plane.rotate_x(exp.rotation[0], inplace=True)
+    plane.rotate_y(exp.rotation[1], inplace=True)
 
     # Load final texture
     new_tex = pv.read_texture(rotated_path)
 
     # Update the mesh
-    plotter.add_mesh(plane, texture=new_tex, show_edges=False, opacity=1)
+    current_actor = plotter.add_mesh(plane, texture=new_tex, show_edges=False, opacity=1)
 
     # Add experiment text
     update_experiment_text(exp)
-
-    plotter.render()
 
 
 # ----------------------------
@@ -393,23 +399,15 @@ if __name__ == "__main__":
 
     first_exp = exps[experiment_counter]
 
-    # 6) Create the initial plane with wave settings from the first experiment
-    plane = create_sinusoidal_plane_mesh(
-        size=2.0,
-        wave_amplitude=first_exp.wave_amplitude,
-        wave_frequency=first_exp.wave_frequency
-    )
-    plotter.add_mesh(plane, show_edges=False, opacity=1)
-
-    # 7) Key events
+    # 6) Key events
     plotter.add_key_event("z", goback_callback)
     plotter.add_key_event("Right", success_callback)
     plotter.add_key_event("Left", fail_callback)
 
-    # 8) Show the first incomplete experiment
+    # 7) Show the first incomplete experiment
     update_mesh(experiment_counter)
     write_scenario_csv(scenario_index, new_subfolder)
     scenario_index += 1
 
-    # 9) Start interactive session
+    # 8) Start interactive session
     plotter.show(title="Interactive Multi-Image Experiment with Pre-Calculated Positions")

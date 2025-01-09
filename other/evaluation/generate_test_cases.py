@@ -13,7 +13,6 @@ CONFIG_FILE = "config.yaml"  # Path to your YAML config file
 
 IMAGES_FOLDER = "images/testing-scenario"
 
-
 def load_config(config_path: str):
     """
     Load the YAML configuration file.
@@ -44,7 +43,7 @@ def get_all_image_files(images_dir: Path):
     ])
 
 
-def generate_square_experiments(params, width, height, filename, wave_amplitude, wave_frequency):
+def generate_square_experiments(params, width, height, filename, wave_amplitude, wave_frequency, rotation):
     """
     Generate square experiments for given wave amplitude and frequency.
     """
@@ -77,13 +76,14 @@ def generate_square_experiments(params, width, height, filename, wave_amplitude,
             "line_thickness_perc": 0.0,
             "line_dimension_perc": 0.0,
             "line_angle": 0,
+            "rotation": rotation,
             "filename": filename
         }
         experiments.append(experiment_data)
     return experiments
 
 
-def generate_line_experiments(params, width, height, filename, wave_amplitude, wave_frequency):
+def generate_line_experiments(params, width, height, filename, wave_amplitude, wave_frequency, rotation):
     """
     Generate line experiments for given wave amplitude and frequency.
     """
@@ -120,6 +120,7 @@ def generate_line_experiments(params, width, height, filename, wave_amplitude, w
             "line_thickness_perc": line_thickness_perc,
             "line_dimension_perc": line_dimension_perc,
             "line_angle": line_angle,
+            "rotation": rotation,
             "filename": filename
         }
         experiments.append(experiment_data)
@@ -176,22 +177,24 @@ def create_test_cases_for_all_images():
         filename = image_path.name  # e.g. "my_image.png"
 
         # --- SQUARE TEST CASES (for this specific image) ---
-        for wave_amplitude, wave_frequency in product(
+        for wave_amplitude, wave_frequency, rotation in product(
             params['wave_amplitude_range'],
-            params['wave_frequency_range']
+            params['wave_frequency_range'],
+            params['rotation'],
         ):
             squares = generate_square_experiments(
-                params, width, height, filename, wave_amplitude, wave_frequency
+                params, width, height, filename, wave_amplitude, wave_frequency, rotation
             )
             all_experiments.extend(squares)
 
         # --- LINE TEST CASES (for this specific image) ---
-        for wave_amplitude, wave_frequency in product(
+        for wave_amplitude, wave_frequency, rotation in product(
             params['wave_amplitude_range'],
-            params['wave_frequency_range']
+            params['wave_frequency_range'],
+            params['rotation'],
         ):
             lines = generate_line_experiments(
-                params, width, height, filename, wave_amplitude, wave_frequency
+                params, width, height, filename, wave_amplitude, wave_frequency, rotation
             )
             all_experiments.extend(lines)
 
@@ -202,7 +205,7 @@ def create_test_cases_for_all_images():
     fieldnames = [
         "experiment_id", "successful", "wave_amplitude", "wave_frequency",
         "square_position", "square_dimension_perc", "line_center_coordinates",
-        "line_thickness_perc", "line_dimension_perc", "line_angle",
+        "line_thickness_perc", "line_dimension_perc", "line_angle", "rotation",
         "filename"
     ]
 
@@ -220,14 +223,16 @@ def create_test_cases_for_all_images():
     expected_squares = len(all_image_files) * (
         len(params['wave_amplitude_range']) *
         len(params['wave_frequency_range']) *
-        len(params['square_dimension_perc_range'])
+        len(params['square_dimension_perc_range'])*
+        len(params['rotation'])
     )
     expected_lines = len(all_image_files) * (
         len(params['wave_amplitude_range']) *
         len(params['wave_frequency_range']) *
         len(params['line_thickness_perc_range']) *
         len(params['line_dimension_perc_range']) *
-        len(params['line_angle_range'])
+        len(params['line_angle_range']) *
+        len(params['rotation'])
     )
     expected_total = expected_squares + expected_lines
 

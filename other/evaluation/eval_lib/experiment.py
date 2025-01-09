@@ -11,7 +11,7 @@ class Experiment:
 
     def __init__(self, experiment_id, successful, wave_amplitude=0.1, wave_frequency=0.2,
                  square_position=None, square_dimension_perc=0.0, line_center_coordinates=None,
-                 line_thickness_perc=0.0, line_dimension_perc=0.0, line_angle=0.0,
+                 line_thickness_perc=0.0, line_dimension_perc=0.0, line_angle=0.0, rotation=[0,0],
                  filename=None):
         self.experiment_id = int(experiment_id)
         self.successful = successful
@@ -23,6 +23,7 @@ class Experiment:
         self.line_thickness_perc = float(line_thickness_perc)
         self.line_dimension_perc = float(line_dimension_perc)
         self.line_angle = float(line_angle)
+        self.rotation = rotation
 
         # NEW: Store which image file is used for this experiment
         self.filename = filename  # e.g., "some_image.png"
@@ -46,6 +47,7 @@ class Experiment:
             line_thickness_perc=float(data["line_thickness_perc"]),
             line_dimension_perc=float(data["line_dimension_perc"]),
             line_angle=float(data["line_angle"]),
+            rotation=safe_literal_eval(data["rotation"]),
             filename=data.get("filename", None)
         )
 
@@ -61,6 +63,7 @@ class Experiment:
             "line_thickness_perc": self.line_thickness_perc,
             "line_dimension_perc": self.line_dimension_perc,
             "line_angle": self.line_angle,
+            "rotation": self.rotation,
             # NEW: Include filename column
             "filename": self.filename
         }
@@ -91,7 +94,7 @@ class Experiment:
                 fieldnames = [
                     "experiment_id", "successful", "wave_amplitude", "wave_frequency",
                     "square_position", "square_dimension_perc", "line_center_coordinates",
-                    "line_thickness_perc", "line_dimension_perc", "line_angle",
+                    "line_thickness_perc", "line_dimension_perc", "line_angle", "rotation",
                     "filename"
                 ]
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
