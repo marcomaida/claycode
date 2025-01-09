@@ -295,7 +295,7 @@ def update_mesh(index: int):
         wave_amplitude=exp.wave_amplitude,
         wave_frequency=exp.wave_frequency
     ).points
-    plotter.update_coordinates(new_points, render=True)
+    plane.points = new_points
 
     # Load final texture
     new_tex = pv.read_texture(rotated_path)
