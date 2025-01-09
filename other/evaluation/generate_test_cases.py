@@ -7,6 +7,14 @@ import cv2
 import yaml  # Ensure PyYAML is installed: pip install pyyaml
 from itertools import product
 
+# Rotations will be generated in the range [-ROTATION_MIN_MAX, ROTATION_MIN_MAX]
+ROTATION_MIN_MAX = 20 
+NUMBER_OF_TEST_CASES_PER_EXPERIMENT=5
+
+# Min and max frequency of the sin wave that deforms the code
+MIN_WAVE_FREQUENCY = 1
+MAX_WAVE_FREQUENCY = 3
+
 FOLDER_NAME = "results/template-cube-line-rotate"
 TEMPLATE_FILE = os.path.join(FOLDER_NAME, "template.csv")
 CONFIG_FILE = "config.yaml"  # Path to your YAML config file
@@ -50,8 +58,6 @@ def generate_square_experiments(params, width, height, filename, wave_amplitude,
     experiments = []
     for square_dimension_perc in params['square_dimension_perc_range']:
         square_size = int(square_dimension_perc * min(width, height))
-        if square_size < 1:
-            continue
 
         margin = square_size // 2
         min_x = margin
@@ -177,26 +183,34 @@ def create_test_cases_for_all_images():
         filename = image_path.name  # e.g. "my_image.png"
 
         # --- SQUARE TEST CASES (for this specific image) ---
-        for wave_amplitude, wave_frequency, rotation in product(
+        for wave_amplitude, _ in product(
             params['wave_amplitude_range'],
-            params['wave_frequency_range'],
-            params['rotation'],
+            range(NUMBER_OF_TEST_CASES_PER_EXPERIMENT)
         ):
+            # Note: changing rotation to be random
+            wave_frequency = round(random.uniform(MIN_WAVE_FREQUENCY, MAX_WAVE_FREQUENCY),2)
+            random_rotation = [random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX),
+                               random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX)]
             squares = generate_square_experiments(
-                params, width, height, filename, wave_amplitude, wave_frequency, rotation
+                params, width, height, filename, wave_amplitude, wave_frequency, random_rotation
             )
             all_experiments.extend(squares)
 
         # --- LINE TEST CASES (for this specific image) ---
-        for wave_amplitude, wave_frequency, rotation in product(
-            params['wave_amplitude_range'],
-            params['wave_frequency_range'],
-            params['rotation'],
-        ):
-            lines = generate_line_experiments(
-                params, width, height, filename, wave_amplitude, wave_frequency, rotation
-            )
-            all_experiments.extend(lines)
+        # NOTE: we disabled lines for now. Re-enabling involves
+        # correctly handling NUMBER_OF_TEST_CASES_PER_EXPERIMENT
+
+        # for wave_amplitude, wave_frequency, _ in product(
+        #     params['wave_amplitude_range'],
+        #     params['wave_frequency_range'],
+        #     range(NUMBER_OF_TEST_CASES_PER_EXPERIMENT)
+        # ):
+        #     random_rotation = [random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX),
+        #                        random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX)]
+        #     lines = generate_line_experiments(
+        #         params, width, height, filename, wave_amplitude, wave_frequency, random_rotation
+        #     )
+        #     all_experiments.extend(lines)
 
     # Assign unique experiment IDs
     all_experiments = assign_experiment_ids(all_experiments)
@@ -222,17 +236,14 @@ def create_test_cases_for_all_images():
     # Calculate expected number of experiments
     expected_squares = len(all_image_files) * (
         len(params['wave_amplitude_range']) *
-        len(params['wave_frequency_range']) *
-        len(params['square_dimension_perc_range'])*
-        len(params['rotation'])
+        len(params['square_dimension_perc_range']) *
+        NUMBER_OF_TEST_CASES_PER_EXPERIMENT
     )
     expected_lines = len(all_image_files) * (
         len(params['wave_amplitude_range']) *
-        len(params['wave_frequency_range']) *
         len(params['line_thickness_perc_range']) *
         len(params['line_dimension_perc_range']) *
-        len(params['line_angle_range']) *
-        len(params['rotation'])
+        len(params['line_angle_range'])
     )
     expected_total = expected_squares + expected_lines
 
