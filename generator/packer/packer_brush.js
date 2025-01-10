@@ -1,5 +1,5 @@
 import { drawPolygon } from "./draw.js";
-import { area, matchPolygonsCentroids } from "../geometry/geometry.js";
+import { area, circularity, matchPolygonsCentroids } from "../geometry/geometry.js";
 import { createStarPolygon, createMouseHeadPolygon, createCirclePolygon, createUPolygon } from "../geometry/shapes.js";
 
 export class PackerBrush {
@@ -51,6 +51,7 @@ export class PackerBrush {
         let color = this.leafColors[(node.depth + 1) % 2]
         let shape = this.leafShapes[(node.depth) % 2]
         let originalPolygon = node.getPolygon();
+        let circ_root = Math.sqrt(circularity(originalPolygon)); // Heuristic to decide dimension of custom polygon
         let customPolygon = null;
         let baseRadius = Math.sqrt(area(originalPolygon) / Math.PI);
         switch (shape) {
@@ -58,21 +59,21 @@ export class PackerBrush {
                 customPolygon = originalPolygon;
                 break;
             case PackerBrush.Shape.SQUARE:
-                customPolygon = createCirclePolygon(new PIXI.Vec(0, 0), 0.8 * baseRadius, 4, new PIXI.Vec(1, 1), 45)
+                customPolygon = createCirclePolygon(new PIXI.Vec(0, 0), circ_root * baseRadius, 4, new PIXI.Vec(1, 1), 45)
                 break;
             case PackerBrush.Shape.CIRCLE:
-                customPolygon = createCirclePolygon(new PIXI.Vec(0, 0), 0.8 * baseRadius, 10)
+                customPolygon = createCirclePolygon(new PIXI.Vec(0, 0), circ_root * baseRadius, 10)
                 break;
             case PackerBrush.Shape.MOUSE:
-                customPolygon = createMouseHeadPolygon(new PIXI.Vec(0, 0), 0.5 * baseRadius)
+                customPolygon = createMouseHeadPolygon(new PIXI.Vec(0, 0), circ_root / 2 * baseRadius)
                 break;
             case PackerBrush.Shape.STAR:
-                customPolygon = createStarPolygon(new PIXI.Vec(0, 0), 0.7 * baseRadius, 5);
+                customPolygon = createStarPolygon(new PIXI.Vec(0, 0), circ_root * baseRadius, 5);
                 break;
             case PackerBrush.Shape.U:
                 const u = 0.8 * baseRadius;
                 const thickness = u / 3;
-                customPolygon = createUPolygon(new PIXI.Vec(0, 0), u, u * 1.8, thickness, thickness);
+                customPolygon = createUPolygon(new PIXI.Vec(0, 0), u, u * 1.8 * circ_root, thickness, thickness);
                 break;
             default:
                 throw "Unsupported leaf shape requested";
