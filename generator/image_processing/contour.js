@@ -179,7 +179,7 @@ export function computeContourPolygons(binaryImage, center, size) {
     binaryImage = addPadding(binaryImage);
     binaryImage = markContours(binaryImage);
     let polygons = extractPolygonsFromContours(binaryImage);
-    polygons = polygons.map((poly) => simplify(poly, 3, false));
+    polygons = polygons.map((poly) => simplify(poly, 1, false));
     let pixiPolygons = posArraysToPixiVecArrays(polygons, center, size);
 
     return pixiPolygons;
