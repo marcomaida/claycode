@@ -31,7 +31,7 @@ TEMP_TEXTURE = "images/temp/modified_texture.png"
 # Optional, rotation, you can define it here (0 means no rotation)
 ROTATION_ANGLE = 0
 
-CAMERA_POSITION = [(0, 0, 8), (0, 0, 0), (0, 1, 0)]
+CAMERA_POSITION = 'xy'
 
 current_actor = None
 
@@ -178,7 +178,7 @@ def update_mesh(index: int):
     exp = exps[index]
 
     plotter.camera_position = CAMERA_POSITION
-    plotter.camera_set = False  # Ensures camera position is applied during render
+    plotter.camera_set = False  
 
     # Remove old text
     plotter.remove_actor("experiment_text")
@@ -273,7 +273,8 @@ if __name__ == "__main__":
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     new_subfolder = base_path / f"experiment_{timestamp}"
     new_subfolder.mkdir(exist_ok=True)
-
+    update_mesh(0) # Runs the update_mesh without displaying it just to setup the environment properly
+    
     # If there's an old subfolder, copy its CSVs into the new one
     if old_sub and old_sub.is_dir():
         for csv_file in old_sub.glob("*.csv"):

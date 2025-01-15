@@ -7,8 +7,8 @@ import cv2
 import yaml  # Ensure PyYAML is installed: pip install pyyaml
 from itertools import product
 
-# Rotations will be generated in the range [-ROTATION_MIN_MAX, ROTATION_MIN_MAX]
-ROTATION_MIN_MAX = 20 
+ROTATION_MIN = 10
+ROTATION_MAX = 20
 NUMBER_OF_TEST_CASES_PER_EXPERIMENT=1
 
 # Min and max frequency of the sin wave that deforms the code
@@ -20,6 +20,12 @@ TEMPLATE_FILE = os.path.join(FOLDER_NAME, "template.csv")
 CONFIG_FILE = "config.yaml"  # Path to your YAML config file
 
 IMAGES_FOLDER = "images/testing-scenario"
+
+def random_rotation():
+    sign = random.choice([1, -1])
+    number = random.randint(ROTATION_MIN, ROTATION_MAX)
+
+    return sign * number
 
 def load_config(config_path: str):
     """
@@ -189,10 +195,9 @@ def create_test_cases_for_all_images():
         ):
             # Note: changing rotation to be random
             wave_frequency = round(random.uniform(MIN_WAVE_FREQUENCY, MAX_WAVE_FREQUENCY),2)
-            random_rotation = [random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX),
-                               random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX)]
+            rotation = [random_rotation() ,random_rotation()]
             squares = generate_square_experiments(
-                params, width, height, filename, wave_amplitude, wave_frequency, random_rotation
+                params, width, height, filename, wave_amplitude, wave_frequency, rotation
             )
             all_experiments.extend(squares)
 
@@ -205,10 +210,10 @@ def create_test_cases_for_all_images():
         #     params['wave_frequency_range'],
         #     range(NUMBER_OF_TEST_CASES_PER_EXPERIMENT)
         # ):
-        #     random_rotation = [random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX),
+        #     rotation = [random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX),
         #                        random.randint(-ROTATION_MIN_MAX, ROTATION_MIN_MAX)]
         #     lines = generate_line_experiments(
-        #         params, width, height, filename, wave_amplitude, wave_frequency, random_rotation
+        #         params, width, height, filename, wave_amplitude, wave_frequency, rotation
         #     )
         #     all_experiments.extend(lines)
 
