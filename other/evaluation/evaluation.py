@@ -31,7 +31,7 @@ TEMP_TEXTURE = "images/temp/modified_texture.png"
 # Optional, rotation, you can define it here (0 means no rotation)
 ROTATION_ANGLE = 0
 
-CAMERA_POSITION = 'xy'
+CAMERA_POSITION = [(0, 0, 8), (0, 0, 0), (0, 1, 0)]
 
 current_actor = None
 
@@ -116,6 +116,7 @@ def update_experiment_text(exp):
         f"SquarePos: {exp.square_position}\n"
         f"LinePos: {exp.line_center_coordinates}\n"
         f"Rotation: {exp.rotation}\n"
+        f"Scale: {exp.scale}\n"
     )
     plotter.add_text(txt, position="upper_left", font_size=15,
                      color="white", shadow=False, name="experiment_text")
@@ -215,10 +216,12 @@ def update_mesh(index: int):
 
     # Load final texture
     new_tex = pv.read_texture(rotated_path)
-
     # Update the mesh
+    plotter.suppress_rendering=True # Needed to avoid flickering
     current_actor = plotter.add_mesh(plane, texture=new_tex, ambient=0.4, show_edges=False, opacity=1)
-
+    plotter.camera.zoom(exp.scale)
+    plotter.suppress_rendering=False
+    
     # Add experiment text
     update_experiment_text(exp)
 

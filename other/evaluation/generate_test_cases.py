@@ -15,6 +15,9 @@ NUMBER_OF_TEST_CASES_PER_EXPERIMENT=1
 MIN_WAVE_FREQUENCY = 1
 MAX_WAVE_FREQUENCY = 2
 
+# Random scale (up or down) applied to the mesh. 
+MESH_SCALE_PERC_MAX = 0.1
+
 FOLDER_NAME = "results/template-cube-line-rotate"
 TEMPLATE_FILE = os.path.join(FOLDER_NAME, "template.csv")
 CONFIG_FILE = "config.yaml"  # Path to your YAML config file
@@ -57,7 +60,7 @@ def get_all_image_files(images_dir: Path):
     ])
 
 
-def generate_square_experiments(params, width, height, filename, wave_amplitude, wave_frequency, rotation):
+def generate_square_experiments(params, width, height, filename, wave_amplitude, wave_frequency, rotation, scale):
     """
     Generate square experiments for given wave amplitude and frequency.
     """
@@ -89,6 +92,7 @@ def generate_square_experiments(params, width, height, filename, wave_amplitude,
             "line_dimension_perc": 0.0,
             "line_angle": 0,
             "rotation": rotation,
+            "scale": scale,
             "filename": filename
         }
         experiments.append(experiment_data)
@@ -133,6 +137,7 @@ def generate_line_experiments(params, width, height, filename, wave_amplitude, w
             "line_dimension_perc": line_dimension_perc,
             "line_angle": line_angle,
             "rotation": rotation,
+            "scale": 0, # TODO implement
             "filename": filename
         }
         experiments.append(experiment_data)
@@ -196,8 +201,9 @@ def create_test_cases_for_all_images():
             # Note: changing rotation to be random
             wave_frequency = round(random.uniform(MIN_WAVE_FREQUENCY, MAX_WAVE_FREQUENCY),2)
             rotation = [random_rotation() ,random_rotation()]
+            scale = random.uniform(1.-MESH_SCALE_PERC_MAX, 1+MESH_SCALE_PERC_MAX)
             squares = generate_square_experiments(
-                params, width, height, filename, wave_amplitude, wave_frequency, rotation
+                params, width, height, filename, wave_amplitude, wave_frequency, rotation, scale
             )
             all_experiments.extend(squares)
 
@@ -225,7 +231,7 @@ def create_test_cases_for_all_images():
         "experiment_id", "successful", "wave_amplitude", "wave_frequency",
         "square_position", "square_dimension_perc", "line_center_coordinates",
         "line_thickness_perc", "line_dimension_perc", "line_angle", "rotation",
-        "filename"
+        "scale", "filename"
     ]
 
     with open(TEMPLATE_FILE, mode="w", newline="") as csvfile:
