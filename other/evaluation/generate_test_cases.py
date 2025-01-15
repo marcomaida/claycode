@@ -13,7 +13,7 @@ NUMBER_OF_TEST_CASES_PER_EXPERIMENT=3
 
 # Min and max frequency of the sin wave that deforms the code
 MIN_WAVE_FREQUENCY = 1
-MAX_WAVE_FREQUENCY = 3
+MAX_WAVE_FREQUENCY = 2
 
 FOLDER_NAME = "results/template-cube-line-rotate"
 TEMPLATE_FILE = os.path.join(FOLDER_NAME, "template.csv")
