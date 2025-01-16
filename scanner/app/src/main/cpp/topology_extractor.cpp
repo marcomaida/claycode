@@ -38,6 +38,9 @@ AndroidBitmapInfo getImageInfo(JNIEnv *env, void **pixels, const jobject &bitmap
     return info;
 }
 
+// Global variable for the zoom factor
+float globalZoomFactor = 1.0f;
+
 /**
  * Perform the initial part of the pipeline:
  * - Prepare OpenCV's image
@@ -57,10 +60,36 @@ cv::Mat prepareInputImage(JNIEnv *env,
     cv::Mat img(info.height, info.width, CV_8UC4, pixels);
 
     AndroidBitmap_unlockPixels(env, bitmap); // Unlocking pixels after processing
-
     // Crop
     cv::Rect cropRegion(left, top, width, height);
     img = img(cropRegion);
+
+    auto croppedWidth = width-left;
+    auto croppedHeight = height-top;
+
+    // Generate a random zoom level between 1.0 (no zoom) and 2.0 (200% zoom)
+    float zoomFactor = globalZoomFactor;
+    globalZoomFactor += 0.2;
+    if (globalZoomFactor > 2.5) {
+        globalZoomFactor = 1.0;
+    }
+
+    // Calculate new dimensions for zoomed image
+    int zoomedWidth = static_cast<int>(croppedWidth / zoomFactor);
+    int zoomedHeight = static_cast<int>(croppedHeight / zoomFactor);
+
+    // Ensure the zoomed region fits within the original image
+    int xOffset = (croppedWidth - zoomedWidth) / 2;
+    int yOffset = (croppedHeight - zoomedHeight) / 2;
+
+    // Create a ROI for the zoomed region
+    cv::Rect zoomRegion(xOffset, yOffset, zoomedWidth, zoomedHeight);
+    img = img(zoomRegion);
+
+    // Resize to original dimensions for consistent processing
+    cv::resize(img, img, cv::Size(info.width, info.height));
+
+    
 
     return img;
 }
