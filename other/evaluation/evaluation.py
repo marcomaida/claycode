@@ -14,7 +14,7 @@ import eval_lib.scenario as scenario
 #   GLOBAL SETTINGS
 # ----------------------------
 
-BASELINE_ZOOM = 0.6
+BASELINE_ZOOM = 0.5
 
 # The top-level folder holding the template plus scenario subfolders.
 # Example: "results/template-cube-line-rotate"
@@ -220,7 +220,7 @@ def update_mesh(index: int):
     new_tex = pv.read_texture(rotated_path)
     # Update the mesh
     plotter.suppress_rendering=True # Needed to avoid flickering
-    current_actor = plotter.add_mesh(plane, texture=new_tex, ambient=0.4, show_edges=False, opacity=1)
+    current_actor = plotter.add_mesh(plane, texture=new_tex, ambient=0.6, show_edges=False, opacity=1)
     plotter.camera.zoom(BASELINE_ZOOM * exp.scale)
     plotter.camera_position = CAMERA_POSITION
     plotter.suppress_rendering=False
