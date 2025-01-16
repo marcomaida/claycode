@@ -31,7 +31,7 @@ TEMP_TEXTURE = "images/temp/modified_texture.png"
 # Optional, rotation, you can define it here (0 means no rotation)
 ROTATION_ANGLE = 0
 
-CAMERA_POSITION = [(0, 0, 8), (0, 0, 0), (0, 1, 0)]
+CAMERA_POSITION = [(0, 0, 30), (0, 0, 0), (0, 1, 0)]
 
 current_actor = None
 
@@ -41,8 +41,8 @@ current_actor = None
 
 plotter = pv.Plotter()
 plotter.add_background_image("images/landscape.jpg", 1.2)  # Optional
-plotter.camera_position = CAMERA_POSITION
 plotter.enable_lightkit()
+#plotter.show_axes()
 
 def create_sinusoidal_plane_mesh(wave_amplitude, wave_frequency, grid_size=10, resolution=100):
     """
@@ -220,6 +220,7 @@ def update_mesh(index: int):
     plotter.suppress_rendering=True # Needed to avoid flickering
     current_actor = plotter.add_mesh(plane, texture=new_tex, ambient=0.4, show_edges=False, opacity=1)
     plotter.camera.zoom(exp.scale)
+    plotter.camera_position = CAMERA_POSITION
     plotter.suppress_rendering=False
     
     # Add experiment text
