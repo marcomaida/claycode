@@ -3,6 +3,7 @@ import pyvista as pv
 import numpy as np
 import time
 import os
+import math
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -14,7 +15,9 @@ import eval_lib.scenario as scenario
 #   GLOBAL SETTINGS
 # ----------------------------
 
-BASELINE_ZOOM = 0.5
+MAX_ANIMATION_STEPS = 500
+
+BASELINE_ZOOM = 1.0
 
 # The top-level folder holding the template plus scenario subfolders.
 # Example: "results/template-cube-line-rotate"
@@ -44,6 +47,14 @@ current_actor = None
 plotter = pv.Plotter()
 plotter.add_background_image("images/landscape.jpg", 1.2)  # Optional
 plotter.enable_lightkit()
+
+current_zoom = 1.0
+def set_zoom(step):
+    global current_zoom
+    val = 1. + 0.3 * math.sin(2 * math.pi * step / MAX_ANIMATION_STEPS)
+    plotter.camera.zoom(val/current_zoom)
+    current_zoom = val
+
 #plotter.show_axes()
 
 def create_sinusoidal_plane_mesh(wave_amplitude, wave_frequency, grid_size=10, resolution=100):
@@ -92,6 +103,8 @@ def show_key_popup(key: str):
         txt = "ACCEPTED"
     elif key == 'Left':
         txt = "REJECTED"
+    elif key == 'space':
+        txt = "ANIMATE"
     else:
         txt = f"KEY: {key}"
 
@@ -163,6 +176,7 @@ def rotate_texture(image_path: str, angle: float) -> str:
 
 
 def update_mesh(index: int):
+    
     """
     Loads the experiment at index, updates the 3D wave plane
     and draws line/square on the correct image. Then updates the texture.
@@ -221,7 +235,6 @@ def update_mesh(index: int):
     # Update the mesh
     plotter.suppress_rendering=True # Needed to avoid flickering
     current_actor = plotter.add_mesh(plane, texture=new_tex, ambient=0.6, show_edges=False, opacity=1)
-    plotter.camera.zoom(BASELINE_ZOOM * exp.scale)
     plotter.camera_position = CAMERA_POSITION
     plotter.suppress_rendering=False
     
@@ -262,6 +275,11 @@ def fail_callback():
     update_mesh(experiment_counter)
     scenario.write_scenario_csv(scenario_index, new_subfolder)
     scenario_index += 1
+    
+def start_animation_callback():
+    show_key_popup('space')
+    plotter.add_timer_event(max_steps=MAX_ANIMATION_STEPS, duration=0, callback=set_zoom)
+
 
 # ----------------------------
 #   MAIN
@@ -317,6 +335,7 @@ if __name__ == "__main__":
     plotter.add_key_event("z", goback_callback)
     plotter.add_key_event("Right", success_callback)
     plotter.add_key_event("Left", fail_callback)
+    plotter.add_key_event("space", start_animation_callback)
 
     # 7) Show the first incomplete experiment
     update_mesh(experiment_counter)

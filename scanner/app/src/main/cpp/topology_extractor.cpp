@@ -69,8 +69,8 @@ cv::Mat prepareInputImage(JNIEnv *env,
 
     // Generate a random zoom level between 1.0 (no zoom) and 2.0 (200% zoom)
     float zoomFactor = globalZoomFactor;
-    globalZoomFactor += 0.2;
-    if (globalZoomFactor > 2.5) {
+    globalZoomFactor += 0.1;
+    if (globalZoomFactor > 2) {
         globalZoomFactor = 1.0;
     }
 
