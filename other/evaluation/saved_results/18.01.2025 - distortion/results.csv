@@ -71,7 +71,7 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 69,False,0.2,1.61,"(270, 384)",0.5,,0.0,0.0,0.0,"(16, 20)",1.0170674298068711,_claycode2-fragment-8E5MS2e.png
 70,True,0.2,1.55,"(65, 105)",0.1,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode2-fragment-DPVvmG0KpNe4E.png
 71,True,0.2,1.55,"(192, 347)",0.2,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode2-fragment-DPVvmG0KpNe4E.png
-72,False,0.2,1.55,"(318, 552)",0.3,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode2-fragment-DPVvmG0KpNe4E.png
+72,True,0.2,1.55,"(318, 552)",0.3,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode2-fragment-DPVvmG0KpNe4E.png
 73,False,0.2,1.55,"(155, 408)",0.4,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode2-fragment-DPVvmG0KpNe4E.png
 74,False,0.2,1.55,"(376, 385)",0.5,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode2-fragment-DPVvmG0KpNe4E.png
 75,True,0.2,1.46,"(309, 437)",0.1,,0.0,0.0,0.0,"(-15, 13)",1.0102994873451774,_claycode2-fragment-DPVvmG0KpNe4E.png
@@ -671,7 +671,7 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 69,False,0.0,1.61,"(270, 384)",0.5,,0.0,0.0,0.0,"(16, 20)",1.0170674298068711,_claycode-fragment-8E5MS2e.png
 70,True,0.0,1.55,"(65, 105)",0.1,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode-fragment-DPVvmG0KpNe4E.png
 71,True,0.0,1.55,"(192, 347)",0.2,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode-fragment-DPVvmG0KpNe4E.png
-72,True,0.0,1.55,"(318, 552)",0.3,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode-fragment-DPVvmG0KpNe4E.png
+72,False,0.0,1.55,"(318, 552)",0.3,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode-fragment-DPVvmG0KpNe4E.png
 73,False,0.0,1.55,"(155, 408)",0.4,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode-fragment-DPVvmG0KpNe4E.png
 74,False,0.0,1.55,"(376, 385)",0.5,,0.0,0.0,0.0,"(13, -17)",1.029039165420928,_claycode-fragment-DPVvmG0KpNe4E.png
 75,True,0.0,1.46,"(309, 437)",0.1,,0.0,0.0,0.0,"(-15, 13)",1.0102994873451774,_claycode-fragment-DPVvmG0KpNe4E.png
@@ -779,7 +779,7 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 177,False,0.0,1.74,"(422, 426)",0.3,,0.0,0.0,0.0,"(-15, 13)",0.9756600866121882,_claycode-iO2nTqxQr98.png
 178,False,0.0,1.74,"(238, 348)",0.4,,0.0,0.0,0.0,"(-15, 13)",0.9756600866121882,_claycode-iO2nTqxQr98.png
 179,False,0.0,1.74,"(332, 356)",0.5,,0.0,0.0,0.0,"(-15, 13)",0.9756600866121882,_claycode-iO2nTqxQr98.png
-180,True,0.0,1.71,"(427, 97)",0.1,,0.0,0.0,0.0,"(-16, -15)",1.0615587879407955,_claycode-pscejHqqS.png
+180,False,0.0,1.71,"(427, 97)",0.1,,0.0,0.0,0.0,"(-16, -15)",1.0615587879407955,_claycode-pscejHqqS.png
 181,False,0.0,1.71,"(265, 132)",0.2,,0.0,0.0,0.0,"(-16, -15)",1.0615587879407955,_claycode-pscejHqqS.png
 182,False,0.0,1.71,"(380, 482)",0.3,,0.0,0.0,0.0,"(-16, -15)",1.0615587879407955,_claycode-pscejHqqS.png
 183,False,0.0,1.71,"(507, 371)",0.4,,0.0,0.0,0.0,"(-16, -15)",1.0615587879407955,_claycode-pscejHqqS.png
@@ -833,7 +833,7 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 231,True,0.0,1.26,"(213, 339)",0.2,,0.0,0.0,0.0,"(11, 16)",0.9092960269169108,_claycodeart-TtAkZf4j98TBiE.png
 232,False,0.0,1.26,"(488, 405)",0.3,,0.0,0.0,0.0,"(11, 16)",0.9092960269169108,_claycodeart-TtAkZf4j98TBiE.png
 233,False,0.0,1.26,"(346, 441)",0.4,,0.0,0.0,0.0,"(11, 16)",0.9092960269169108,_claycodeart-TtAkZf4j98TBiE.png
-234,True,0.0,1.26,"(485, 317)",0.5,,0.0,0.0,0.0,"(11, 16)",0.9092960269169108,_claycodeart-TtAkZf4j98TBiE.png
+234,False,0.0,1.26,"(485, 317)",0.5,,0.0,0.0,0.0,"(11, 16)",0.9092960269169108,_claycodeart-TtAkZf4j98TBiE.png
 235,True,0.0,1.81,"(97, 122)",0.1,,0.0,0.0,0.0,"(-16, -11)",0.9294201485733237,_claycodeart-TtAkZf4j98TBiE.png
 236,True,0.0,1.81,"(217, 589)",0.2,,0.0,0.0,0.0,"(-16, -11)",0.9294201485733237,_claycodeart-TtAkZf4j98TBiE.png
 237,True,0.0,1.81,"(111, 414)",0.3,,0.0,0.0,0.0,"(-16, -11)",0.9294201485733237,_claycodeart-TtAkZf4j98TBiE.png
@@ -1015,7 +1015,7 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 413,False,0.0,1.64,"(139, 423)",0.4,,0.0,0.0,0.0,"(-12, 19)",0.9426334606165797,qr-DPVvmG0KpNe4E.png
 414,False,0.0,1.64,"(303, 455)",0.5,,0.0,0.0,0.0,"(-12, 19)",0.9426334606165797,qr-DPVvmG0KpNe4E.png
 415,True,0.0,1.85,"(420, 457)",0.1,,0.0,0.0,0.0,"(12, 13)",0.9297235746404511,qr-DPVvmG0KpNe4E.png
-416,False,0.0,1.85,"(218, 608)",0.2,,0.0,0.0,0.0,"(12, 13)",0.9297235746404511,qr-DPVvmG0KpNe4E.png
+416,True,0.0,1.85,"(218, 608)",0.2,,0.0,0.0,0.0,"(12, 13)",0.9297235746404511,qr-DPVvmG0KpNe4E.png
 417,True,0.0,1.85,"(298, 490)",0.3,,0.0,0.0,0.0,"(12, 13)",0.9297235746404511,qr-DPVvmG0KpNe4E.png
 418,False,0.0,1.85,"(467, 176)",0.4,,0.0,0.0,0.0,"(12, 13)",0.9297235746404511,qr-DPVvmG0KpNe4E.png
 419,False,0.0,1.85,"(411, 238)",0.5,,0.0,0.0,0.0,"(12, 13)",0.9297235746404511,qr-DPVvmG0KpNe4E.png
