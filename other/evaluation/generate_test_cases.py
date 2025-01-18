@@ -9,7 +9,7 @@ from itertools import product
 
 ROTATION_MIN = 10
 ROTATION_MAX = 20
-NUMBER_OF_TEST_CASES_PER_EXPERIMENT=1
+NUMBER_OF_TEST_CASES_PER_EXPERIMENT=2
 
 # Min and max frequency of the sin wave that deforms the code
 MIN_WAVE_FREQUENCY = 1
