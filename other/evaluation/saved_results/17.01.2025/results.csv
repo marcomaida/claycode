@@ -1,5 +1,4 @@
 experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_dimension_perc,line_center_coordinates,line_thickness_perc,line_dimension_perc,line_angle,rotation,scale,filename
-0,True,0.0,1.78,"(423, 148)",0.0,,0.0,0.0,0.0,"(12, -18)",1.0069639553986651,_claycode-8E5MS2e.png
 1,True,0.1,1.96,"(659, 36)",0.0,,0.0,0.0,0.0,"(-18, -20)",0.9889385048078567,_claycode-8E5MS2e.png
 2,True,0.2,1.12,"(361, 184)",0.0,,0.0,0.0,0.0,"(-11, 15)",0.9469952194932356,_claycode-8E5MS2e.png
 3,True,0.3,1.19,"(417, 89)",0.0,,0.0,0.0,0.0,"(10, -10)",1.0697729570223118,_claycode-8E5MS2e.png
@@ -10,7 +9,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 8,True,0.8,1.06,"(283, 498)",0.0,,0.0,0.0,0.0,"(-14, 16)",0.9305051545701659,_claycode-8E5MS2e.png
 9,True,0.9,1.52,"(40, 554)",0.0,,0.0,0.0,0.0,"(-12, -14)",1.081085881622954,_claycode-8E5MS2e.png
 10,True,1.0,1.19,"(392, 83)",0.0,,0.0,0.0,0.0,"(15, -19)",0.9723613774253257,_claycode-8E5MS2e.png
-11,True,0.0,1.28,"(187, 539)",0.0,,0.0,0.0,0.0,"(-19, -19)",0.9240274570395505,_claycode-DPVvmG0KpNe4E.png
 12,True,0.1,1.02,"(264, 413)",0.0,,0.0,0.0,0.0,"(-18, -19)",1.0750039647636336,_claycode-DPVvmG0KpNe4E.png
 13,True,0.2,1.22,"(247, 134)",0.0,,0.0,0.0,0.0,"(14, 13)",0.9687653437396972,_claycode-DPVvmG0KpNe4E.png
 14,True,0.3,1.65,"(515, 541)",0.0,,0.0,0.0,0.0,"(18, 11)",1.0897197908023217,_claycode-DPVvmG0KpNe4E.png
@@ -21,7 +19,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 19,True,0.8,1.37,"(565, 156)",0.0,,0.0,0.0,0.0,"(18, -14)",1.0100907202316611,_claycode-DPVvmG0KpNe4E.png
 20,True,0.9,1.01,"(597, 398)",0.0,,0.0,0.0,0.0,"(-13, 15)",0.9703257859147584,_claycode-DPVvmG0KpNe4E.png
 21,True,1.0,1.19,"(21, 38)",0.0,,0.0,0.0,0.0,"(15, -12)",1.032450456023685,_claycode-DPVvmG0KpNe4E.png
-22,True,0.0,1.07,"(276, 223)",0.0,,0.0,0.0,0.0,"(-16, 14)",1.0618943128926368,_claycode-OPuod.png
 23,True,0.1,1.59,"(271, 444)",0.0,,0.0,0.0,0.0,"(15, -15)",1.012420623198627,_claycode-OPuod.png
 24,True,0.2,1.17,"(581, 135)",0.0,,0.0,0.0,0.0,"(-18, -20)",0.9709227978508139,_claycode-OPuod.png
 25,True,0.3,1.61,"(491, 529)",0.0,,0.0,0.0,0.0,"(16, -19)",1.0524316924537338,_claycode-OPuod.png
@@ -32,7 +29,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 30,True,0.8,1.59,"(660, 100)",0.0,,0.0,0.0,0.0,"(-12, -19)",1.0569251033761096,_claycode-OPuod.png
 31,True,0.9,1.61,"(221, 512)",0.0,,0.0,0.0,0.0,"(19, -20)",0.9366082558179603,_claycode-OPuod.png
 32,True,1.0,1.42,"(201, 182)",0.0,,0.0,0.0,0.0,"(10, 14)",1.060292099237904,_claycode-OPuod.png
-33,True,0.0,1.95,"(555, 611)",0.0,,0.0,0.0,0.0,"(10, 16)",0.9260152458304625,_claycode-TtAkZf4j98TBiE.png
 34,True,0.1,1.45,"(659, 632)",0.0,,0.0,0.0,0.0,"(17, -12)",1.0142705979066888,_claycode-TtAkZf4j98TBiE.png
 35,True,0.2,1.79,"(209, 607)",0.0,,0.0,0.0,0.0,"(-16, 19)",1.057830210758616,_claycode-TtAkZf4j98TBiE.png
 36,True,0.3,1.45,"(305, 564)",0.0,,0.0,0.0,0.0,"(11, 20)",1.0144738907537034,_claycode-TtAkZf4j98TBiE.png
@@ -43,7 +39,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 41,True,0.8,1.56,"(674, 624)",0.0,,0.0,0.0,0.0,"(-19, 14)",1.0528858075718555,_claycode-TtAkZf4j98TBiE.png
 42,True,0.9,1.51,"(285, 145)",0.0,,0.0,0.0,0.0,"(-20, 14)",0.999994338823634,_claycode-TtAkZf4j98TBiE.png
 43,True,1.0,1.57,"(343, 390)",0.0,,0.0,0.0,0.0,"(-10, -12)",1.020506108710324,_claycode-TtAkZf4j98TBiE.png
-44,True,0.0,1.38,"(320, 407)",0.0,,0.0,0.0,0.0,"(19, 17)",1.0789383373608754,_claycode-fZ5GWiX8.png
 45,True,0.1,1.38,"(439, 87)",0.0,,0.0,0.0,0.0,"(-11, 10)",0.9233122743035569,_claycode-fZ5GWiX8.png
 46,True,0.2,1.36,"(638, 684)",0.0,,0.0,0.0,0.0,"(-10, 11)",1.0879195354187736,_claycode-fZ5GWiX8.png
 47,True,0.3,1.54,"(14, 71)",0.0,,0.0,0.0,0.0,"(10, -19)",1.0603949328512563,_claycode-fZ5GWiX8.png
@@ -54,7 +49,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 52,True,0.8,1.6,"(42, 426)",0.0,,0.0,0.0,0.0,"(16, -13)",0.9492935863009598,_claycode-fZ5GWiX8.png
 53,True,0.9,1.4,"(412, 605)",0.0,,0.0,0.0,0.0,"(-18, 18)",1.0563897137727685,_claycode-fZ5GWiX8.png
 54,True,1.0,1.75,"(113, 305)",0.0,,0.0,0.0,0.0,"(13, -10)",1.0017262870662098,_claycode-fZ5GWiX8.png
-55,True,0.0,1.79,"(211, 680)",0.0,,0.0,0.0,0.0,"(-20, -18)",0.9201881258880202,_claycode-faRZ0H0PmA.png
 56,True,0.1,1.39,"(421, 343)",0.0,,0.0,0.0,0.0,"(-19, -17)",0.9148792972067823,_claycode-faRZ0H0PmA.png
 57,True,0.2,1.14,"(664, 334)",0.0,,0.0,0.0,0.0,"(16, -18)",1.0498890276411088,_claycode-faRZ0H0PmA.png
 58,True,0.3,1.83,"(597, 43)",0.0,,0.0,0.0,0.0,"(-19, -20)",1.0236962265901337,_claycode-faRZ0H0PmA.png
@@ -65,7 +59,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 63,True,0.8,1.15,"(195, 505)",0.0,,0.0,0.0,0.0,"(19, 11)",0.9972380445818203,_claycode-faRZ0H0PmA.png
 64,True,0.9,1.34,"(111, 470)",0.0,,0.0,0.0,0.0,"(20, 14)",1.0271796892739118,_claycode-faRZ0H0PmA.png
 65,False,1.0,1.98,"(601, 19)",0.0,,0.0,0.0,0.0,"(-10, 12)",0.9045305813148772,_claycode-faRZ0H0PmA.png
-66,True,0.0,1.36,"(510, 671)",0.0,,0.0,0.0,0.0,"(11, 15)",0.9843701936224621,_claycode-fragment-8E5MS2e.png
 67,True,0.1,1.61,"(92, 519)",0.0,,0.0,0.0,0.0,"(-13, 15)",1.0169657898228128,_claycode-fragment-8E5MS2e.png
 68,True,0.2,1.67,"(581, 194)",0.0,,0.0,0.0,0.0,"(-18, -10)",1.006982582064232,_claycode-fragment-8E5MS2e.png
 69,True,0.3,1.81,"(623, 384)",0.0,,0.0,0.0,0.0,"(-15, -14)",1.029871168716395,_claycode-fragment-8E5MS2e.png
@@ -76,7 +69,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 74,True,0.8,1.79,"(29, 683)",0.0,,0.0,0.0,0.0,"(-18, -18)",1.0594913284604022,_claycode-fragment-8E5MS2e.png
 75,True,0.9,1.61,"(69, 546)",0.0,,0.0,0.0,0.0,"(-18, -14)",1.0847212154575185,_claycode-fragment-8E5MS2e.png
 76,True,1.0,1.66,"(614, 655)",0.0,,0.0,0.0,0.0,"(20, 15)",0.9695476468212304,_claycode-fragment-8E5MS2e.png
-77,True,0.0,1.71,"(667, 675)",0.0,,0.0,0.0,0.0,"(-19, 11)",0.9978044127342516,_claycode-fragment-DPVvmG0KpNe4E.png
 78,True,0.1,1.99,"(87, 279)",0.0,,0.0,0.0,0.0,"(13, 12)",1.0807745247704028,_claycode-fragment-DPVvmG0KpNe4E.png
 79,True,0.2,1.34,"(365, 198)",0.0,,0.0,0.0,0.0,"(-16, 15)",0.9936057091269384,_claycode-fragment-DPVvmG0KpNe4E.png
 80,True,0.3,1.6,"(155, 29)",0.0,,0.0,0.0,0.0,"(-15, -20)",1.0981181437279326,_claycode-fragment-DPVvmG0KpNe4E.png
@@ -87,7 +79,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 85,True,0.8,1.9,"(148, 504)",0.0,,0.0,0.0,0.0,"(-10, 17)",0.9702963754992942,_claycode-fragment-DPVvmG0KpNe4E.png
 86,True,0.9,1.37,"(67, 588)",0.0,,0.0,0.0,0.0,"(-13, 20)",1.0788284072297885,_claycode-fragment-DPVvmG0KpNe4E.png
 87,True,1.0,1.08,"(515, 125)",0.0,,0.0,0.0,0.0,"(13, -14)",0.9412103362014494,_claycode-fragment-DPVvmG0KpNe4E.png
-88,True,0.0,1.03,"(620, 517)",0.0,,0.0,0.0,0.0,"(19, 13)",0.9573860115947596,_claycode-fragment-OPuod.png
 89,True,0.1,1.92,"(262, 98)",0.0,,0.0,0.0,0.0,"(-10, -16)",0.9949358773382642,_claycode-fragment-OPuod.png
 90,True,0.2,1.53,"(505, 554)",0.0,,0.0,0.0,0.0,"(-13, 10)",0.9436414018211905,_claycode-fragment-OPuod.png
 91,True,0.3,1.54,"(551, 409)",0.0,,0.0,0.0,0.0,"(-11, -17)",1.0371805802784952,_claycode-fragment-OPuod.png
@@ -98,7 +89,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 96,True,0.8,1.64,"(378, 671)",0.0,,0.0,0.0,0.0,"(-12, 13)",0.9907835937557786,_claycode-fragment-OPuod.png
 97,True,0.9,1.03,"(562, 16)",0.0,,0.0,0.0,0.0,"(18, -15)",1.0853501242361037,_claycode-fragment-OPuod.png
 98,True,1.0,1.12,"(28, 100)",0.0,,0.0,0.0,0.0,"(-17, -12)",0.9966238631749205,_claycode-fragment-OPuod.png
-99,True,0.0,1.74,"(455, 425)",0.0,,0.0,0.0,0.0,"(19, -10)",1.093154149552795,_claycode-fragment-TtAkZf4j98TBiE.png
 100,True,0.1,1.71,"(222, 502)",0.0,,0.0,0.0,0.0,"(-17, 20)",1.028813331701041,_claycode-fragment-TtAkZf4j98TBiE.png
 101,True,0.2,1.42,"(7, 685)",0.0,,0.0,0.0,0.0,"(18, 19)",1.045603764008649,_claycode-fragment-TtAkZf4j98TBiE.png
 102,True,0.3,1.57,"(15, 472)",0.0,,0.0,0.0,0.0,"(-14, 14)",1.081077448377783,_claycode-fragment-TtAkZf4j98TBiE.png
@@ -109,7 +99,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 107,True,0.8,1.07,"(560, 106)",0.0,,0.0,0.0,0.0,"(10, -20)",1.0104844382919278,_claycode-fragment-TtAkZf4j98TBiE.png
 108,True,0.9,1.68,"(374, 562)",0.0,,0.0,0.0,0.0,"(-18, 14)",1.0366655734966852,_claycode-fragment-TtAkZf4j98TBiE.png
 109,True,1.0,1.32,"(474, 183)",0.0,,0.0,0.0,0.0,"(20, -16)",0.9088534682305266,_claycode-fragment-TtAkZf4j98TBiE.png
-110,True,0.0,1.25,"(235, 34)",0.0,,0.0,0.0,0.0,"(17, -11)",1.047783926361278,_claycode-fragment-fZ5GWiX8.png
 111,True,0.1,1.26,"(466, 614)",0.0,,0.0,0.0,0.0,"(-20, 17)",0.9293585363512675,_claycode-fragment-fZ5GWiX8.png
 112,True,0.2,1.02,"(626, 264)",0.0,,0.0,0.0,0.0,"(-11, 12)",1.0847793860106554,_claycode-fragment-fZ5GWiX8.png
 113,True,0.3,1.14,"(368, 59)",0.0,,0.0,0.0,0.0,"(-16, -14)",0.9510991471632376,_claycode-fragment-fZ5GWiX8.png
@@ -120,7 +109,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 118,True,0.8,1.45,"(346, 180)",0.0,,0.0,0.0,0.0,"(-20, -20)",0.9651406899979741,_claycode-fragment-fZ5GWiX8.png
 119,True,0.9,1.09,"(517, 526)",0.0,,0.0,0.0,0.0,"(-11, 17)",0.9989697724151505,_claycode-fragment-fZ5GWiX8.png
 120,True,1.0,1.53,"(600, 425)",0.0,,0.0,0.0,0.0,"(10, 19)",0.950751619760495,_claycode-fragment-fZ5GWiX8.png
-121,True,0.0,1.68,"(350, 13)",0.0,,0.0,0.0,0.0,"(12, 19)",0.9302625469469261,_claycode-fragment-faRZ0H0PmA.png
 122,True,0.1,1.42,"(223, 416)",0.0,,0.0,0.0,0.0,"(10, -17)",1.0712718037554732,_claycode-fragment-faRZ0H0PmA.png
 123,True,0.2,1.25,"(197, 319)",0.0,,0.0,0.0,0.0,"(18, -13)",1.027486921420024,_claycode-fragment-faRZ0H0PmA.png
 124,True,0.3,1.66,"(366, 576)",0.0,,0.0,0.0,0.0,"(-17, 16)",0.9418402565502082,_claycode-fragment-faRZ0H0PmA.png
@@ -131,7 +119,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 129,True,0.8,1.75,"(631, 93)",0.0,,0.0,0.0,0.0,"(16, -10)",1.027727619865042,_claycode-fragment-faRZ0H0PmA.png
 130,True,0.9,1.9,"(433, 283)",0.0,,0.0,0.0,0.0,"(-11, 10)",1.0126989789073293,_claycode-fragment-faRZ0H0PmA.png
 131,False,1.0,1.95,"(496, 483)",0.0,,0.0,0.0,0.0,"(-16, 12)",0.9671426365159146,_claycode-fragment-faRZ0H0PmA.png
-132,True,0.0,1.87,"(512, 470)",0.0,,0.0,0.0,0.0,"(-19, -18)",0.9204007158002194,_claycode-fragment-g5EVtP.png
 133,True,0.1,2.0,"(95, 353)",0.0,,0.0,0.0,0.0,"(-17, -15)",0.9070182641011854,_claycode-fragment-g5EVtP.png
 134,True,0.2,1.91,"(102, 245)",0.0,,0.0,0.0,0.0,"(-13, 13)",0.9965369443357183,_claycode-fragment-g5EVtP.png
 135,True,0.3,1.93,"(257, 141)",0.0,,0.0,0.0,0.0,"(-15, -17)",0.9487124635853413,_claycode-fragment-g5EVtP.png
@@ -142,7 +129,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 140,True,0.8,1.32,"(44, 553)",0.0,,0.0,0.0,0.0,"(16, 18)",0.9240639640110752,_claycode-fragment-g5EVtP.png
 141,True,0.9,1.54,"(443, 578)",0.0,,0.0,0.0,0.0,"(16, 17)",0.954641102891467,_claycode-fragment-g5EVtP.png
 142,True,1.0,1.67,"(149, 109)",0.0,,0.0,0.0,0.0,"(13, 18)",0.9590910675056902,_claycode-fragment-g5EVtP.png
-143,True,0.0,1.91,"(248, 161)",0.0,,0.0,0.0,0.0,"(14, -19)",1.0246168505971545,_claycode-fragment-iO2nTqxQr98.png
 144,True,0.1,1.65,"(633, 330)",0.0,,0.0,0.0,0.0,"(14, -14)",1.0006444851509653,_claycode-fragment-iO2nTqxQr98.png
 145,True,0.2,1.31,"(579, 312)",0.0,,0.0,0.0,0.0,"(-17, -13)",1.0878370266841695,_claycode-fragment-iO2nTqxQr98.png
 146,True,0.3,1.28,"(532, 264)",0.0,,0.0,0.0,0.0,"(-12, 14)",0.9213797961267083,_claycode-fragment-iO2nTqxQr98.png
@@ -153,7 +139,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 151,True,0.8,1.36,"(561, 217)",0.0,,0.0,0.0,0.0,"(10, 18)",1.0953127496125867,_claycode-fragment-iO2nTqxQr98.png
 152,True,0.9,1.47,"(681, 129)",0.0,,0.0,0.0,0.0,"(-13, 12)",0.9701808710189302,_claycode-fragment-iO2nTqxQr98.png
 153,True,1.0,1.59,"(597, 578)",0.0,,0.0,0.0,0.0,"(-14, -15)",1.0941608541015806,_claycode-fragment-iO2nTqxQr98.png
-154,True,0.0,1.33,"(493, 598)",0.0,,0.0,0.0,0.0,"(15, 17)",1.0492751983159274,_claycode-fragment-pscejHqqS.png
 155,True,0.1,1.36,"(163, 272)",0.0,,0.0,0.0,0.0,"(-17, -19)",1.0277907672033506,_claycode-fragment-pscejHqqS.png
 156,True,0.2,1.4,"(347, 234)",0.0,,0.0,0.0,0.0,"(12, 18)",1.0683650619262912,_claycode-fragment-pscejHqqS.png
 157,True,0.3,1.97,"(591, 376)",0.0,,0.0,0.0,0.0,"(12, -15)",1.0667509463858074,_claycode-fragment-pscejHqqS.png
@@ -164,7 +149,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 162,True,0.8,1.79,"(570, 24)",0.0,,0.0,0.0,0.0,"(-14, -14)",1.0136186445744613,_claycode-fragment-pscejHqqS.png
 163,True,0.9,1.61,"(560, 91)",0.0,,0.0,0.0,0.0,"(-14, -20)",1.0968995936493307,_claycode-fragment-pscejHqqS.png
 164,True,1.0,1.54,"(403, 316)",0.0,,0.0,0.0,0.0,"(-11, 20)",1.0017314524520207,_claycode-fragment-pscejHqqS.png
-165,True,0.0,1.22,"(32, 669)",0.0,,0.0,0.0,0.0,"(11, 12)",0.9487596747787955,_claycode-fragment-qwXqOPMnAPwG.png
 166,True,0.1,1.87,"(500, 590)",0.0,,0.0,0.0,0.0,"(13, -19)",0.9313174378166579,_claycode-fragment-qwXqOPMnAPwG.png
 167,True,0.2,1.26,"(48, 213)",0.0,,0.0,0.0,0.0,"(-16, -13)",1.0880876454119937,_claycode-fragment-qwXqOPMnAPwG.png
 168,True,0.3,1.19,"(403, 573)",0.0,,0.0,0.0,0.0,"(-13, 20)",0.9437247790971953,_claycode-fragment-qwXqOPMnAPwG.png
@@ -175,7 +159,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 173,True,0.8,1.36,"(244, 346)",0.0,,0.0,0.0,0.0,"(18, 10)",1.0259417962901445,_claycode-fragment-qwXqOPMnAPwG.png
 174,True,0.9,1.79,"(574, 239)",0.0,,0.0,0.0,0.0,"(-12, -10)",0.9350755132992666,_claycode-fragment-qwXqOPMnAPwG.png
 175,True,1.0,1.88,"(114, 177)",0.0,,0.0,0.0,0.0,"(-11, 11)",1.021908698888084,_claycode-fragment-qwXqOPMnAPwG.png
-176,True,0.0,1.49,"(506, 82)",0.0,,0.0,0.0,0.0,"(-12, -10)",1.0169408364309598,_claycode-g5EVtP.png
 177,True,0.1,1.75,"(135, 425)",0.0,,0.0,0.0,0.0,"(19, -12)",0.9990925998472593,_claycode-g5EVtP.png
 178,True,0.2,1.58,"(149, 209)",0.0,,0.0,0.0,0.0,"(-18, -15)",1.0601069903973392,_claycode-g5EVtP.png
 179,True,0.3,1.04,"(392, 245)",0.0,,0.0,0.0,0.0,"(12, 13)",1.0953610908752351,_claycode-g5EVtP.png
@@ -186,7 +169,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 184,True,0.8,1.43,"(656, 124)",0.0,,0.0,0.0,0.0,"(-12, 16)",1.09606551056459,_claycode-g5EVtP.png
 185,True,0.9,1.21,"(274, 259)",0.0,,0.0,0.0,0.0,"(19, -11)",1.0194287824349841,_claycode-g5EVtP.png
 186,True,1.0,1.35,"(306, 662)",0.0,,0.0,0.0,0.0,"(-15, 10)",0.9900368035281939,_claycode-g5EVtP.png
-187,True,0.0,1.24,"(587, 558)",0.0,,0.0,0.0,0.0,"(13, 19)",1.029423501094588,_claycode-iO2nTqxQr98.png
 188,True,0.1,1.53,"(274, 6)",0.0,,0.0,0.0,0.0,"(14, 19)",1.06465328555081,_claycode-iO2nTqxQr98.png
 189,True,0.2,1.9,"(139, 248)",0.0,,0.0,0.0,0.0,"(15, 14)",1.0031936020904821,_claycode-iO2nTqxQr98.png
 190,True,0.3,1.89,"(61, 644)",0.0,,0.0,0.0,0.0,"(20, 13)",0.9328674442487077,_claycode-iO2nTqxQr98.png
@@ -197,7 +179,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 195,True,0.8,1.69,"(131, 541)",0.0,,0.0,0.0,0.0,"(13, 19)",0.945981540321639,_claycode-iO2nTqxQr98.png
 196,True,0.9,1.21,"(507, 525)",0.0,,0.0,0.0,0.0,"(14, -20)",0.9414567607451407,_claycode-iO2nTqxQr98.png
 197,True,1.0,1.6,"(587, 350)",0.0,,0.0,0.0,0.0,"(-12, 15)",0.9971813292509333,_claycode-iO2nTqxQr98.png
-198,True,0.0,1.44,"(628, 542)",0.0,,0.0,0.0,0.0,"(-19, 12)",0.9097688941448874,_claycode-pscejHqqS.png
 199,True,0.1,1.79,"(457, 616)",0.0,,0.0,0.0,0.0,"(-15, 20)",0.9553414566204851,_claycode-pscejHqqS.png
 200,True,0.2,1.82,"(636, 335)",0.0,,0.0,0.0,0.0,"(12, -19)",1.0792636684888535,_claycode-pscejHqqS.png
 201,True,0.3,1.23,"(584, 256)",0.0,,0.0,0.0,0.0,"(16, 12)",0.9502453599516382,_claycode-pscejHqqS.png
@@ -208,7 +189,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 206,True,0.8,1.69,"(295, 323)",0.0,,0.0,0.0,0.0,"(-11, -15)",1.066664425511639,_claycode-pscejHqqS.png
 207,True,0.9,1.19,"(48, 451)",0.0,,0.0,0.0,0.0,"(16, 15)",1.0439107258877969,_claycode-pscejHqqS.png
 208,True,1.0,1.28,"(510, 245)",0.0,,0.0,0.0,0.0,"(16, 13)",0.9259042990070876,_claycode-pscejHqqS.png
-209,True,0.0,1.33,"(353, 38)",0.0,,0.0,0.0,0.0,"(-14, -12)",0.9815256970755145,_claycode-qwXqOPMnAPwG.png
 210,True,0.1,1.63,"(302, 439)",0.0,,0.0,0.0,0.0,"(17, 17)",1.0884146248284143,_claycode-qwXqOPMnAPwG.png
 211,True,0.2,1.11,"(1, 0)",0.0,,0.0,0.0,0.0,"(-11, 17)",1.0342246762013432,_claycode-qwXqOPMnAPwG.png
 212,True,0.3,1.53,"(377, 672)",0.0,,0.0,0.0,0.0,"(-19, 11)",1.003147095094926,_claycode-qwXqOPMnAPwG.png
@@ -219,7 +199,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 217,True,0.8,1.76,"(618, 251)",0.0,,0.0,0.0,0.0,"(14, 10)",0.9250269065121333,_claycode-qwXqOPMnAPwG.png
 218,True,0.9,1.27,"(577, 404)",0.0,,0.0,0.0,0.0,"(-13, 19)",1.092492233781068,_claycode-qwXqOPMnAPwG.png
 219,True,1.0,1.74,"(539, 636)",0.0,,0.0,0.0,0.0,"(13, -16)",0.9083474588818786,_claycode-qwXqOPMnAPwG.png
-220,True,0.0,1.65,"(302, 451)",0.0,,0.0,0.0,0.0,"(12, 12)",1.0811177454898735,_claycodeart-8E5MS2e.png
 221,True,0.1,1.5,"(13, 137)",0.0,,0.0,0.0,0.0,"(19, -14)",0.9654818812895387,_claycodeart-8E5MS2e.png
 222,True,0.2,1.72,"(4, 319)",0.0,,0.0,0.0,0.0,"(-12, -20)",1.0026521205188814,_claycodeart-8E5MS2e.png
 223,True,0.3,1.52,"(608, 375)",0.0,,0.0,0.0,0.0,"(12, 15)",1.0930032600588762,_claycodeart-8E5MS2e.png
@@ -230,7 +209,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 228,True,0.8,1.9,"(456, 680)",0.0,,0.0,0.0,0.0,"(13, 15)",1.0601558472124786,_claycodeart-8E5MS2e.png
 229,True,0.9,1.08,"(131, 39)",0.0,,0.0,0.0,0.0,"(-10, 16)",0.9365960172992878,_claycodeart-8E5MS2e.png
 230,True,1.0,1.4,"(402, 424)",0.0,,0.0,0.0,0.0,"(-15, 13)",1.040186175681618,_claycodeart-8E5MS2e.png
-231,True,0.0,1.46,"(444, 288)",0.0,,0.0,0.0,0.0,"(-15, 12)",1.0254340577907728,_claycodeart-DPVvmG0KpNe4E.png
 232,True,0.1,1.53,"(423, 639)",0.0,,0.0,0.0,0.0,"(14, -10)",0.9931066256882988,_claycodeart-DPVvmG0KpNe4E.png
 233,True,0.2,2.0,"(456, 534)",0.0,,0.0,0.0,0.0,"(16, -15)",0.9479074912048595,_claycodeart-DPVvmG0KpNe4E.png
 234,True,0.3,1.44,"(274, 616)",0.0,,0.0,0.0,0.0,"(-19, 17)",0.9080420633318744,_claycodeart-DPVvmG0KpNe4E.png
@@ -241,7 +219,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 239,True,0.8,1.93,"(428, 189)",0.0,,0.0,0.0,0.0,"(16, -19)",0.9158554181045508,_claycodeart-DPVvmG0KpNe4E.png
 240,True,0.9,1.35,"(473, 250)",0.0,,0.0,0.0,0.0,"(-14, 18)",1.0628874836309106,_claycodeart-DPVvmG0KpNe4E.png
 241,False,1.0,1.7,"(663, 45)",0.0,,0.0,0.0,0.0,"(-19, 17)",0.929521836804091,_claycodeart-DPVvmG0KpNe4E.png
-242,True,0.0,1.96,"(383, 399)",0.0,,0.0,0.0,0.0,"(-12, -15)",0.9369830828527423,_claycodeart-OPuod.png
 243,True,0.1,1.04,"(678, 211)",0.0,,0.0,0.0,0.0,"(11, 14)",1.0472597165529762,_claycodeart-OPuod.png
 244,True,0.2,1.17,"(104, 263)",0.0,,0.0,0.0,0.0,"(17, 10)",0.9876629994880892,_claycodeart-OPuod.png
 245,True,0.3,1.22,"(205, 530)",0.0,,0.0,0.0,0.0,"(17, 13)",1.0026611387184503,_claycodeart-OPuod.png
@@ -252,7 +229,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 250,True,0.8,1.47,"(638, 96)",0.0,,0.0,0.0,0.0,"(-18, -19)",1.021348903922684,_claycodeart-OPuod.png
 251,True,0.9,1.94,"(338, 486)",0.0,,0.0,0.0,0.0,"(-17, -17)",0.9180364461802669,_claycodeart-OPuod.png
 252,True,1.0,1.68,"(280, 49)",0.0,,0.0,0.0,0.0,"(17, -20)",1.0487560995345366,_claycodeart-OPuod.png
-253,True,0.0,1.33,"(413, 74)",0.0,,0.0,0.0,0.0,"(16, 14)",0.9218366591815719,_claycodeart-TtAkZf4j98TBiE.png
 254,True,0.1,1.49,"(498, 102)",0.0,,0.0,0.0,0.0,"(-20, -19)",0.9799639808493066,_claycodeart-TtAkZf4j98TBiE.png
 255,True,0.2,1.89,"(56, 209)",0.0,,0.0,0.0,0.0,"(14, 11)",0.9941410783137441,_claycodeart-TtAkZf4j98TBiE.png
 256,True,0.3,1.78,"(489, 690)",0.0,,0.0,0.0,0.0,"(-17, -12)",1.0977252325317488,_claycodeart-TtAkZf4j98TBiE.png
@@ -263,7 +239,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 261,True,0.8,1.92,"(55, 427)",0.0,,0.0,0.0,0.0,"(-12, 19)",1.0639507081709592,_claycodeart-TtAkZf4j98TBiE.png
 262,True,0.9,1.29,"(92, 524)",0.0,,0.0,0.0,0.0,"(20, -15)",1.015957857564076,_claycodeart-TtAkZf4j98TBiE.png
 263,True,1.0,1.32,"(654, 466)",0.0,,0.0,0.0,0.0,"(12, 12)",0.9444498603357833,_claycodeart-TtAkZf4j98TBiE.png
-264,True,0.0,1.28,"(78, 623)",0.0,,0.0,0.0,0.0,"(-11, 16)",1.0445391902055408,_claycodeart-fZ5GWiX8.png
 265,True,0.1,1.28,"(445, 281)",0.0,,0.0,0.0,0.0,"(-11, 10)",1.0711752440133517,_claycodeart-fZ5GWiX8.png
 266,True,0.2,1.01,"(116, 4)",0.0,,0.0,0.0,0.0,"(18, 18)",1.0723880357419404,_claycodeart-fZ5GWiX8.png
 267,True,0.3,1.99,"(661, 440)",0.0,,0.0,0.0,0.0,"(-10, -19)",0.9897648728670614,_claycodeart-fZ5GWiX8.png
@@ -274,7 +249,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 272,True,0.8,1.25,"(388, 395)",0.0,,0.0,0.0,0.0,"(14, -10)",1.0148481088746444,_claycodeart-fZ5GWiX8.png
 273,True,0.9,1.16,"(349, 388)",0.0,,0.0,0.0,0.0,"(13, -16)",1.0502166326759987,_claycodeart-fZ5GWiX8.png
 274,True,1.0,1.62,"(649, 71)",0.0,,0.0,0.0,0.0,"(-12, 13)",0.9466161725480292,_claycodeart-fZ5GWiX8.png
-275,True,0.0,1.05,"(429, 92)",0.0,,0.0,0.0,0.0,"(15, 20)",1.0169458884296303,_claycodeart-faRZ0H0PmA.png
 276,True,0.1,1.44,"(429, 612)",0.0,,0.0,0.0,0.0,"(12, 10)",0.9854459037977263,_claycodeart-faRZ0H0PmA.png
 277,True,0.2,1.15,"(410, 51)",0.0,,0.0,0.0,0.0,"(-19, -13)",1.0375444876085493,_claycodeart-faRZ0H0PmA.png
 278,True,0.3,1.98,"(171, 252)",0.0,,0.0,0.0,0.0,"(15, -19)",1.0286743156818952,_claycodeart-faRZ0H0PmA.png
@@ -285,7 +259,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 283,True,0.8,1.17,"(632, 560)",0.0,,0.0,0.0,0.0,"(12, 16)",0.932473422299686,_claycodeart-faRZ0H0PmA.png
 284,True,0.9,1.8,"(402, 449)",0.0,,0.0,0.0,0.0,"(-10, -15)",1.0080632437763626,_claycodeart-faRZ0H0PmA.png
 285,True,1.0,1.12,"(216, 469)",0.0,,0.0,0.0,0.0,"(14, 18)",1.0601818995865946,_claycodeart-faRZ0H0PmA.png
-286,True,0.0,1.38,"(273, 529)",0.0,,0.0,0.0,0.0,"(-20, 15)",0.9082589397350673,_claycodeart-g5EVtP.png
 287,True,0.1,1.05,"(133, 341)",0.0,,0.0,0.0,0.0,"(14, -18)",1.0380593112569623,_claycodeart-g5EVtP.png
 288,True,0.2,1.33,"(538, 276)",0.0,,0.0,0.0,0.0,"(17, 11)",1.035535195419838,_claycodeart-g5EVtP.png
 289,True,0.3,1.28,"(225, 214)",0.0,,0.0,0.0,0.0,"(-10, 16)",1.0771411953200043,_claycodeart-g5EVtP.png
@@ -296,7 +269,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 294,True,0.8,1.05,"(488, 496)",0.0,,0.0,0.0,0.0,"(17, -12)",0.9214344419614932,_claycodeart-g5EVtP.png
 295,True,0.9,1.5,"(44, 28)",0.0,,0.0,0.0,0.0,"(-13, -10)",0.9559744216665753,_claycodeart-g5EVtP.png
 296,True,1.0,1.39,"(132, 227)",0.0,,0.0,0.0,0.0,"(-11, -13)",1.0837105858242433,_claycodeart-g5EVtP.png
-297,True,0.0,1.06,"(445, 590)",0.0,,0.0,0.0,0.0,"(14, 17)",1.0732999009575779,_claycodeart-iO2nTqxQr98.png
 298,True,0.1,1.21,"(344, 393)",0.0,,0.0,0.0,0.0,"(14, -15)",1.0502597018648827,_claycodeart-iO2nTqxQr98.png
 299,True,0.2,1.26,"(608, 542)",0.0,,0.0,0.0,0.0,"(-15, 11)",1.054622184091941,_claycodeart-iO2nTqxQr98.png
 300,True,0.3,2.0,"(170, 186)",0.0,,0.0,0.0,0.0,"(-18, 16)",1.0883891179690028,_claycodeart-iO2nTqxQr98.png
@@ -307,7 +279,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 305,True,0.8,1.36,"(191, 17)",0.0,,0.0,0.0,0.0,"(20, 12)",0.9616918289570224,_claycodeart-iO2nTqxQr98.png
 306,True,0.9,1.26,"(518, 527)",0.0,,0.0,0.0,0.0,"(18, 10)",1.0570550594624726,_claycodeart-iO2nTqxQr98.png
 307,False,1.0,1.55,"(8, 121)",0.0,,0.0,0.0,0.0,"(-18, 18)",1.0996308310063543,_claycodeart-iO2nTqxQr98.png
-308,True,0.0,1.36,"(144, 307)",0.0,,0.0,0.0,0.0,"(-16, 18)",0.9327584773562244,_claycodeart-pscejHqqS.png
 309,True,0.1,1.28,"(353, 373)",0.0,,0.0,0.0,0.0,"(16, -10)",1.0812229672136198,_claycodeart-pscejHqqS.png
 310,True,0.2,1.09,"(391, 449)",0.0,,0.0,0.0,0.0,"(-20, 14)",0.9520479277614703,_claycodeart-pscejHqqS.png
 311,True,0.3,1.6,"(265, 332)",0.0,,0.0,0.0,0.0,"(-14, -20)",1.0062889965734096,_claycodeart-pscejHqqS.png
@@ -318,7 +289,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 316,True,0.8,1.12,"(171, 466)",0.0,,0.0,0.0,0.0,"(-20, 11)",1.0771078128400273,_claycodeart-pscejHqqS.png
 317,True,0.9,1.58,"(125, 269)",0.0,,0.0,0.0,0.0,"(17, -10)",0.9119453509937125,_claycodeart-pscejHqqS.png
 318,True,1.0,1.15,"(128, 239)",0.0,,0.0,0.0,0.0,"(-11, -15)",0.9051094708429658,_claycodeart-pscejHqqS.png
-319,True,0.0,1.2,"(513, 266)",0.0,,0.0,0.0,0.0,"(-16, 17)",0.9426210067946617,_claycodeart-qwXqOPMnAPwG.png
 320,True,0.1,1.88,"(549, 102)",0.0,,0.0,0.0,0.0,"(10, -18)",0.9699251196603953,_claycodeart-qwXqOPMnAPwG.png
 321,True,0.2,1.63,"(420, 530)",0.0,,0.0,0.0,0.0,"(-13, 14)",0.9745056607325158,_claycodeart-qwXqOPMnAPwG.png
 322,True,0.3,1.91,"(202, 190)",0.0,,0.0,0.0,0.0,"(-12, 13)",0.9141516607211249,_claycodeart-qwXqOPMnAPwG.png
@@ -329,7 +299,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 327,True,0.8,1.39,"(152, 234)",0.0,,0.0,0.0,0.0,"(19, -12)",0.9240298551213734,_claycodeart-qwXqOPMnAPwG.png
 328,True,0.9,1.56,"(48, 53)",0.0,,0.0,0.0,0.0,"(11, 17)",0.9637458588633101,_claycodeart-qwXqOPMnAPwG.png
 329,True,1.0,1.13,"(230, 368)",0.0,,0.0,0.0,0.0,"(-12, -19)",0.9781401954528568,_claycodeart-qwXqOPMnAPwG.png
-330,True,0.0,1.57,"(183, 42)",0.0,,0.0,0.0,0.0,"(-17, 15)",0.955685844472352,barcode-8E5MS2e.png
 331,True,0.1,1.76,"(127, 13)",0.0,,0.0,0.0,0.0,"(-16, 18)",1.0742378893815951,barcode-8E5MS2e.png
 332,True,0.2,1.95,"(48, 177)",0.0,,0.0,0.0,0.0,"(-19, -14)",0.9334079175589803,barcode-8E5MS2e.png
 333,True,0.3,1.46,"(145, 211)",0.0,,0.0,0.0,0.0,"(19, 19)",0.9534726269503211,barcode-8E5MS2e.png
@@ -340,7 +309,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 338,True,0.8,1.79,"(56, 1)",0.0,,0.0,0.0,0.0,"(17, -16)",0.9044583794658588,barcode-8E5MS2e.png
 339,True,0.9,1.86,"(176, 9)",0.0,,0.0,0.0,0.0,"(-19, 18)",0.9906691488930004,barcode-8E5MS2e.png
 340,True,1.0,1.07,"(21, 42)",0.0,,0.0,0.0,0.0,"(-20, -11)",1.0062002125348872,barcode-8E5MS2e.png
-341,True,0.0,1.41,"(82, 129)",0.0,,0.0,0.0,0.0,"(-14, 16)",0.9303633050469604,barcode-DPVvmG0KpNe4E.png
 342,True,0.1,1.09,"(293, 38)",0.0,,0.0,0.0,0.0,"(-18, -17)",0.9108152426689816,barcode-DPVvmG0KpNe4E.png
 343,True,0.2,1.62,"(305, 234)",0.0,,0.0,0.0,0.0,"(19, 14)",0.9381197721139725,barcode-DPVvmG0KpNe4E.png
 344,True,0.3,1.7,"(285, 104)",0.0,,0.0,0.0,0.0,"(-15, 12)",0.9748826507731916,barcode-DPVvmG0KpNe4E.png
@@ -351,7 +319,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 349,True,0.8,1.06,"(236, 325)",0.0,,0.0,0.0,0.0,"(-17, -12)",1.065797152994821,barcode-DPVvmG0KpNe4E.png
 350,True,0.9,1.44,"(77, 166)",0.0,,0.0,0.0,0.0,"(-17, -12)",1.0944074181560217,barcode-DPVvmG0KpNe4E.png
 351,False,1.0,1.82,"(99, 200)",0.0,,0.0,0.0,0.0,"(-13, -12)",1.0936018672683725,barcode-DPVvmG0KpNe4E.png
-352,True,0.0,1.94,"(10, 28)",0.0,,0.0,0.0,0.0,"(-13, 14)",1.0132022424626397,barcode-OPuod.png
 353,True,0.1,1.22,"(134, 99)",0.0,,0.0,0.0,0.0,"(-14, -15)",0.9151781478847144,barcode-OPuod.png
 354,True,0.2,1.3,"(177, 38)",0.0,,0.0,0.0,0.0,"(-12, 19)",0.9965695071019475,barcode-OPuod.png
 355,True,0.3,1.1,"(115, 14)",0.0,,0.0,0.0,0.0,"(10, 14)",0.9089416646392336,barcode-OPuod.png
@@ -362,7 +329,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 360,True,0.8,1.36,"(32, 2)",0.0,,0.0,0.0,0.0,"(14, -14)",1.0701181617272628,barcode-OPuod.png
 361,True,0.9,1.15,"(111, 166)",0.0,,0.0,0.0,0.0,"(-10, 19)",1.040159820488634,barcode-OPuod.png
 362,True,1.0,1.1,"(13, 59)",0.0,,0.0,0.0,0.0,"(14, -20)",1.0302257349976582,barcode-OPuod.png
-363,True,0.0,1.25,"(319, 2)",0.0,,0.0,0.0,0.0,"(-15, 13)",1.0454411028262527,barcode-TtAkZf4j98TBiE.png
 364,True,0.1,1.51,"(264, 116)",0.0,,0.0,0.0,0.0,"(11, -10)",0.9859992880750684,barcode-TtAkZf4j98TBiE.png
 365,True,0.2,1.49,"(106, 230)",0.0,,0.0,0.0,0.0,"(-11, -16)",1.0782390313823984,barcode-TtAkZf4j98TBiE.png
 366,True,0.3,1.27,"(219, 334)",0.0,,0.0,0.0,0.0,"(14, 19)",1.0420198972759014,barcode-TtAkZf4j98TBiE.png
@@ -373,7 +339,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 371,True,0.8,1.98,"(161, 217)",0.0,,0.0,0.0,0.0,"(-18, -10)",0.9023154212356495,barcode-TtAkZf4j98TBiE.png
 372,True,0.9,1.57,"(256, 170)",0.0,,0.0,0.0,0.0,"(-11, 11)",1.025383818554173,barcode-TtAkZf4j98TBiE.png
 373,True,1.0,1.61,"(248, 305)",0.0,,0.0,0.0,0.0,"(19, 16)",1.07582003285259,barcode-TtAkZf4j98TBiE.png
-374,True,0.0,1.76,"(82, 92)",0.0,,0.0,0.0,0.0,"(19, -14)",0.9605331096834994,barcode-fZ5GWiX8.png
 375,True,0.1,1.2,"(217, 118)",0.0,,0.0,0.0,0.0,"(-10, -17)",0.9291065113542663,barcode-fZ5GWiX8.png
 376,True,0.2,1.27,"(10, 28)",0.0,,0.0,0.0,0.0,"(-14, 15)",1.0962579659620901,barcode-fZ5GWiX8.png
 377,True,0.3,1.66,"(29, 90)",0.0,,0.0,0.0,0.0,"(-11, -16)",0.9797784459579103,barcode-fZ5GWiX8.png
@@ -384,7 +349,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 382,True,0.8,1.35,"(140, 226)",0.0,,0.0,0.0,0.0,"(11, -13)",0.9555219802618523,barcode-fZ5GWiX8.png
 383,True,0.9,1.02,"(187, 154)",0.0,,0.0,0.0,0.0,"(11, 18)",1.0063901123917098,barcode-fZ5GWiX8.png
 384,True,1.0,1.3,"(35, 55)",0.0,,0.0,0.0,0.0,"(-19, -13)",1.0855496745437834,barcode-fZ5GWiX8.png
-385,True,0.0,1.66,"(235, 9)",0.0,,0.0,0.0,0.0,"(13, 19)",0.9931968691059955,barcode-faRZ0H0PmA.png
 386,True,0.1,1.53,"(19, 283)",0.0,,0.0,0.0,0.0,"(-16, 11)",0.9481828451948519,barcode-faRZ0H0PmA.png
 387,True,0.2,1.93,"(17, 261)",0.0,,0.0,0.0,0.0,"(15, -12)",0.9049285079628986,barcode-faRZ0H0PmA.png
 388,True,0.3,1.35,"(92, 134)",0.0,,0.0,0.0,0.0,"(19, 15)",1.0256897694390954,barcode-faRZ0H0PmA.png
@@ -395,7 +359,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 393,False,0.8,1.94,"(196, 149)",0.0,,0.0,0.0,0.0,"(18, -15)",0.9923291050746572,barcode-faRZ0H0PmA.png
 394,True,0.9,1.78,"(233, 68)",0.0,,0.0,0.0,0.0,"(-10, 12)",0.9620027526821897,barcode-faRZ0H0PmA.png
 395,True,1.0,1.17,"(203, 207)",0.0,,0.0,0.0,0.0,"(-17, -13)",0.9286163765368665,barcode-faRZ0H0PmA.png
-396,True,0.0,1.03,"(17, 12)",0.0,,0.0,0.0,0.0,"(-12, -20)",0.9754533814467933,barcode-g5EVtP.png
 397,True,0.1,1.1,"(146, 40)",0.0,,0.0,0.0,0.0,"(15, 10)",0.9878171765744357,barcode-g5EVtP.png
 398,True,0.2,1.11,"(38, 171)",0.0,,0.0,0.0,0.0,"(-15, 16)",0.9758258162601132,barcode-g5EVtP.png
 399,True,0.3,1.99,"(149, 93)",0.0,,0.0,0.0,0.0,"(-20, 16)",1.0601321710711002,barcode-g5EVtP.png
@@ -406,7 +369,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 404,True,0.8,1.17,"(68, 158)",0.0,,0.0,0.0,0.0,"(-11, -19)",1.0809770172405502,barcode-g5EVtP.png
 405,False,0.9,1.96,"(193, 59)",0.0,,0.0,0.0,0.0,"(-20, -17)",1.0772535195551036,barcode-g5EVtP.png
 406,True,1.0,1.29,"(94, 170)",0.0,,0.0,0.0,0.0,"(-12, -16)",0.9918801908598347,barcode-g5EVtP.png
-407,True,0.0,1.13,"(193, 28)",0.0,,0.0,0.0,0.0,"(19, 14)",1.0161741088899852,barcode-iO2nTqxQr98.png
 408,True,0.1,1.56,"(10, 114)",0.0,,0.0,0.0,0.0,"(16, 19)",0.952474612473765,barcode-iO2nTqxQr98.png
 409,True,0.2,1.26,"(47, 171)",0.0,,0.0,0.0,0.0,"(18, -10)",1.028652199972772,barcode-iO2nTqxQr98.png
 410,True,0.3,1.35,"(266, 141)",0.0,,0.0,0.0,0.0,"(-10, 10)",1.0195986475703265,barcode-iO2nTqxQr98.png
@@ -417,7 +379,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 415,True,0.8,1.14,"(57, 212)",0.0,,0.0,0.0,0.0,"(-14, 20)",1.000922891593573,barcode-iO2nTqxQr98.png
 416,True,0.9,1.26,"(177, 125)",0.0,,0.0,0.0,0.0,"(19, 12)",0.9471355540754663,barcode-iO2nTqxQr98.png
 417,True,1.0,1.97,"(121, 16)",0.0,,0.0,0.0,0.0,"(12, 13)",0.9924837241670721,barcode-iO2nTqxQr98.png
-418,True,0.0,1.43,"(16, 153)",0.0,,0.0,0.0,0.0,"(-11, 20)",1.0721966442415989,barcode-pscejHqqS.png
 419,True,0.1,1.23,"(29, 235)",0.0,,0.0,0.0,0.0,"(10, -19)",1.0366715419123964,barcode-pscejHqqS.png
 420,True,0.2,1.08,"(133, 30)",0.0,,0.0,0.0,0.0,"(-14, 18)",0.9199834158962521,barcode-pscejHqqS.png
 421,True,0.3,1.66,"(148, 25)",0.0,,0.0,0.0,0.0,"(-15, 15)",1.0245320500772128,barcode-pscejHqqS.png
@@ -428,7 +389,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 426,False,0.8,1.68,"(228, 242)",0.0,,0.0,0.0,0.0,"(11, -18)",1.020236559567956,barcode-pscejHqqS.png
 427,True,0.9,1.04,"(158, 214)",0.0,,0.0,0.0,0.0,"(-20, -12)",0.9147085680933439,barcode-pscejHqqS.png
 428,True,1.0,1.58,"(144, 115)",0.0,,0.0,0.0,0.0,"(-18, 11)",0.9934621758374906,barcode-pscejHqqS.png
-429,False,0.0,1.13,"(354, 29)",0.0,,0.0,0.0,0.0,"(10, 17)",1.0198234030866347,barcode-qwXqOPMnAPwG.png
 430,True,0.1,1.61,"(151, 4)",0.0,,0.0,0.0,0.0,"(-10, -10)",1.0659869963334692,barcode-qwXqOPMnAPwG.png
 431,True,0.2,1.7,"(28, 162)",0.0,,0.0,0.0,0.0,"(-16, 15)",1.0843774601810996,barcode-qwXqOPMnAPwG.png
 432,True,0.3,1.21,"(204, 360)",0.0,,0.0,0.0,0.0,"(-18, 14)",1.0132196828587783,barcode-qwXqOPMnAPwG.png
@@ -439,7 +399,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 437,False,0.8,1.92,"(147, 71)",0.0,,0.0,0.0,0.0,"(-17, -16)",0.9098872876873977,barcode-qwXqOPMnAPwG.png
 438,True,0.9,1.94,"(131, 77)",0.0,,0.0,0.0,0.0,"(-17, 13)",0.9620901874166305,barcode-qwXqOPMnAPwG.png
 439,False,1.0,1.55,"(257, 45)",0.0,,0.0,0.0,0.0,"(-17, -18)",0.9699351678937254,barcode-qwXqOPMnAPwG.png
-440,True,0.0,1.55,"(181, 394)",0.0,,0.0,0.0,0.0,"(11, 14)",1.0900789968579927,qr-8E5MS2e.png
 441,True,0.1,1.93,"(353, 132)",0.0,,0.0,0.0,0.0,"(-14, 13)",0.9445746414715994,qr-8E5MS2e.png
 442,True,0.2,1.38,"(24, 384)",0.0,,0.0,0.0,0.0,"(-17, 10)",1.0784305168237498,qr-8E5MS2e.png
 443,False,0.3,1.46,"(340, 114)",0.0,,0.0,0.0,0.0,"(20, -14)",1.079431749385706,qr-8E5MS2e.png
@@ -450,7 +409,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 448,False,0.8,1.77,"(32, 124)",0.0,,0.0,0.0,0.0,"(-17, 17)",0.9387405908709223,qr-8E5MS2e.png
 449,False,0.9,1.98,"(345, 263)",0.0,,0.0,0.0,0.0,"(13, 11)",1.0189484493242735,qr-8E5MS2e.png
 450,False,1.0,1.91,"(598, 212)",0.0,,0.0,0.0,0.0,"(-18, 19)",0.954435159967326,qr-8E5MS2e.png
-451,True,0.0,1.19,"(446, 293)",0.0,,0.0,0.0,0.0,"(11, 12)",1.0837957099853077,qr-DPVvmG0KpNe4E.png
 452,True,0.1,1.3,"(457, 18)",0.0,,0.0,0.0,0.0,"(12, 12)",1.0690868996041323,qr-DPVvmG0KpNe4E.png
 453,True,0.2,1.47,"(524, 59)",0.0,,0.0,0.0,0.0,"(-19, 14)",0.9737012368317546,qr-DPVvmG0KpNe4E.png
 454,True,0.3,1.02,"(513, 82)",0.0,,0.0,0.0,0.0,"(10, 20)",0.9877748214578789,qr-DPVvmG0KpNe4E.png
@@ -461,7 +419,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 459,False,0.8,2.0,"(239, 309)",0.0,,0.0,0.0,0.0,"(-17, -11)",1.0059831040742888,qr-DPVvmG0KpNe4E.png
 460,False,0.9,1.13,"(375, 575)",0.0,,0.0,0.0,0.0,"(14, -12)",0.9471132465020592,qr-DPVvmG0KpNe4E.png
 461,False,1.0,1.49,"(30, 331)",0.0,,0.0,0.0,0.0,"(14, 10)",1.0870722940953734,qr-DPVvmG0KpNe4E.png
-462,True,0.0,1.07,"(78, 51)",0.0,,0.0,0.0,0.0,"(-14, 13)",0.9725476425010088,qr-OPuod.png
 463,True,0.1,1.75,"(105, 553)",0.0,,0.0,0.0,0.0,"(-15, -12)",1.0823510786353296,qr-OPuod.png
 464,True,0.2,1.98,"(313, 377)",0.0,,0.0,0.0,0.0,"(11, -16)",0.9839084726843694,qr-OPuod.png
 465,True,0.3,1.99,"(91, 499)",0.0,,0.0,0.0,0.0,"(-18, 12)",0.9355143087957002,qr-OPuod.png
@@ -472,7 +429,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 470,False,0.8,1.33,"(286, 130)",0.0,,0.0,0.0,0.0,"(-15, -19)",0.9159630474608873,qr-OPuod.png
 471,False,0.9,1.47,"(158, 288)",0.0,,0.0,0.0,0.0,"(-14, 19)",1.0775876645118634,qr-OPuod.png
 472,False,1.0,1.45,"(551, 541)",0.0,,0.0,0.0,0.0,"(19, -11)",1.01117224252582,qr-OPuod.png
-473,True,0.0,1.49,"(115, 180)",0.0,,0.0,0.0,0.0,"(-20, 18)",1.0743480986550216,qr-TtAkZf4j98TBiE.png
 474,True,0.1,1.88,"(478, 393)",0.0,,0.0,0.0,0.0,"(-16, 16)",0.9662370802150194,qr-TtAkZf4j98TBiE.png
 475,True,0.2,1.28,"(688, 55)",0.0,,0.0,0.0,0.0,"(10, 16)",1.0341382072758452,qr-TtAkZf4j98TBiE.png
 476,True,0.3,1.43,"(260, 271)",0.0,,0.0,0.0,0.0,"(-15, 12)",0.996489163500385,qr-TtAkZf4j98TBiE.png
@@ -483,7 +439,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 481,False,0.8,1.36,"(101, 529)",0.0,,0.0,0.0,0.0,"(20, -19)",1.0397608822410023,qr-TtAkZf4j98TBiE.png
 482,False,0.9,1.52,"(539, 531)",0.0,,0.0,0.0,0.0,"(16, 11)",0.9937934290879702,qr-TtAkZf4j98TBiE.png
 483,False,1.0,1.32,"(460, 618)",0.0,,0.0,0.0,0.0,"(11, 19)",0.9614788067785622,qr-TtAkZf4j98TBiE.png
-484,True,0.0,1.51,"(376, 378)",0.0,,0.0,0.0,0.0,"(13, -16)",0.9134125671382144,qr-fZ5GWiX8.png
 485,True,0.1,1.36,"(366, 113)",0.0,,0.0,0.0,0.0,"(16, -15)",0.9569138679235399,qr-fZ5GWiX8.png
 486,True,0.2,1.17,"(410, 389)",0.0,,0.0,0.0,0.0,"(-17, -12)",1.003973421160509,qr-fZ5GWiX8.png
 487,True,0.3,1.48,"(590, 521)",0.0,,0.0,0.0,0.0,"(-12, -15)",0.9608589085681809,qr-fZ5GWiX8.png
@@ -494,7 +449,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 492,False,0.8,1.56,"(386, 545)",0.0,,0.0,0.0,0.0,"(-17, -18)",1.0113314324439024,qr-fZ5GWiX8.png
 493,True,0.9,1.11,"(19, 411)",0.0,,0.0,0.0,0.0,"(-12, -15)",1.0225152283540255,qr-fZ5GWiX8.png
 494,False,1.0,1.4,"(153, 47)",0.0,,0.0,0.0,0.0,"(17, -19)",1.0370172185417927,qr-fZ5GWiX8.png
-495,False,0.0,1.61,"(319, 203)",0.0,,0.0,0.0,0.0,"(18, 17)",0.9542663261220026,qr-faRZ0H0PmA.png
 496,True,0.1,1.41,"(345, 437)",0.0,,0.0,0.0,0.0,"(-19, 12)",1.0387991334963982,qr-faRZ0H0PmA.png
 497,True,0.2,1.73,"(587, 281)",0.0,,0.0,0.0,0.0,"(-11, 19)",1.0204317696080838,qr-faRZ0H0PmA.png
 498,True,0.3,1.85,"(499, 5)",0.0,,0.0,0.0,0.0,"(-16, 17)",1.0383715086008587,qr-faRZ0H0PmA.png
@@ -505,7 +459,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 503,False,0.8,1.46,"(435, 5)",0.0,,0.0,0.0,0.0,"(-12, -15)",0.9877512541513511,qr-faRZ0H0PmA.png
 504,False,0.9,1.32,"(98, 444)",0.0,,0.0,0.0,0.0,"(20, 18)",1.0745547849149277,qr-faRZ0H0PmA.png
 505,False,1.0,1.53,"(201, 261)",0.0,,0.0,0.0,0.0,"(14, 11)",1.0489125231837266,qr-faRZ0H0PmA.png
-506,True,0.0,1.59,"(395, 106)",0.0,,0.0,0.0,0.0,"(-11, -17)",0.9878857271979139,qr-g5EVtP.png
 507,True,0.1,1.41,"(49, 525)",0.0,,0.0,0.0,0.0,"(-11, 19)",0.9219018879432642,qr-g5EVtP.png
 508,True,0.2,1.36,"(552, 281)",0.0,,0.0,0.0,0.0,"(-20, -12)",1.047441313899981,qr-g5EVtP.png
 509,True,0.3,1.86,"(251, 494)",0.0,,0.0,0.0,0.0,"(-18, 11)",0.9113132176817581,qr-g5EVtP.png
@@ -516,7 +469,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 514,False,0.8,1.67,"(423, 7)",0.0,,0.0,0.0,0.0,"(12, -12)",0.9537888090463388,qr-g5EVtP.png
 515,False,0.9,1.22,"(323, 135)",0.0,,0.0,0.0,0.0,"(12, 19)",1.0737509971805073,qr-g5EVtP.png
 516,False,1.0,1.6,"(252, 342)",0.0,,0.0,0.0,0.0,"(-14, -10)",0.9575623857004012,qr-g5EVtP.png
-517,True,0.0,1.62,"(583, 243)",0.0,,0.0,0.0,0.0,"(-19, -13)",0.9529965427812556,qr-iO2nTqxQr98.png
 518,True,0.1,1.34,"(374, 64)",0.0,,0.0,0.0,0.0,"(18, -14)",0.9146729313108266,qr-iO2nTqxQr98.png
 519,True,0.2,1.8,"(424, 80)",0.0,,0.0,0.0,0.0,"(-11, -10)",0.9117919653797248,qr-iO2nTqxQr98.png
 520,True,0.3,1.44,"(510, 398)",0.0,,0.0,0.0,0.0,"(12, -19)",0.9742080249240008,qr-iO2nTqxQr98.png
@@ -527,7 +479,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 525,False,0.8,1.7,"(64, 89)",0.0,,0.0,0.0,0.0,"(14, -11)",1.0156379415794887,qr-iO2nTqxQr98.png
 526,False,0.9,1.52,"(93, 174)",0.0,,0.0,0.0,0.0,"(16, 19)",1.0405937765271318,qr-iO2nTqxQr98.png
 527,False,1.0,1.6,"(72, 8)",0.0,,0.0,0.0,0.0,"(19, -12)",1.0634275312889838,qr-iO2nTqxQr98.png
-528,True,0.0,1.04,"(264, 366)",0.0,,0.0,0.0,0.0,"(15, 20)",1.0278927033621865,qr-pscejHqqS.png
 529,True,0.1,1.23,"(355, 334)",0.0,,0.0,0.0,0.0,"(-13, -17)",1.0373778782660876,qr-pscejHqqS.png
 530,True,0.2,1.92,"(357, 351)",0.0,,0.0,0.0,0.0,"(-13, 15)",1.0585339510621028,qr-pscejHqqS.png
 531,True,0.3,1.4,"(241, 199)",0.0,,0.0,0.0,0.0,"(-17, 13)",0.9709357459270518,qr-pscejHqqS.png
@@ -538,7 +489,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 536,False,0.8,1.78,"(229, 198)",0.0,,0.0,0.0,0.0,"(18, 12)",1.0498338583582445,qr-pscejHqqS.png
 537,False,0.9,1.24,"(569, 554)",0.0,,0.0,0.0,0.0,"(-14, 18)",1.0701734120147617,qr-pscejHqqS.png
 538,False,1.0,1.75,"(345, 417)",0.0,,0.0,0.0,0.0,"(-16, 18)",1.0008305427392254,qr-pscejHqqS.png
-539,True,0.0,1.89,"(434, 534)",0.0,,0.0,0.0,0.0,"(18, -16)",0.9483203841100772,qr-qwXqOPMnAPwG.png
 540,True,0.1,1.44,"(484, 626)",0.0,,0.0,0.0,0.0,"(-13, -19)",0.9953350368473973,qr-qwXqOPMnAPwG.png
 541,True,0.2,1.42,"(502, 548)",0.0,,0.0,0.0,0.0,"(13, 18)",0.9587263332856059,qr-qwXqOPMnAPwG.png
 542,True,0.3,1.85,"(675, 414)",0.0,,0.0,0.0,0.0,"(13, 10)",0.9286829280612195,qr-qwXqOPMnAPwG.png
@@ -549,7 +499,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 547,False,0.8,1.89,"(394, 293)",0.0,,0.0,0.0,0.0,"(-20, 20)",0.9808149497573011,qr-qwXqOPMnAPwG.png
 548,False,0.9,1.86,"(480, 160)",0.0,,0.0,0.0,0.0,"(-19, -17)",1.0554888106897395,qr-qwXqOPMnAPwG.png
 549,False,1.0,1.91,"(657, 342)",0.0,,0.0,0.0,0.0,"(14, 16)",1.0635305645489699,qr-qwXqOPMnAPwG.png
-550,True,0.0,1.08,"(25, 460)",0.0,,0.0,0.0,0.0,"(-11, 19)",0.9943178910904389,qrart-8E5MS2e.png
 551,True,0.1,1.44,"(81, 295)",0.0,,0.0,0.0,0.0,"(-16, 14)",0.9219397855421463,qrart-8E5MS2e.png
 552,False,0.2,1.03,"(469, 403)",0.0,,0.0,0.0,0.0,"(19, -16)",1.0296977881668952,qrart-8E5MS2e.png
 553,False,0.3,1.92,"(567, 462)",0.0,,0.0,0.0,0.0,"(13, -15)",0.9850674165234781,qrart-8E5MS2e.png
@@ -560,7 +509,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 558,False,0.8,1.68,"(453, 140)",0.0,,0.0,0.0,0.0,"(14, 20)",1.0531109247142387,qrart-8E5MS2e.png
 559,False,0.9,1.34,"(487, 367)",0.0,,0.0,0.0,0.0,"(19, -19)",1.0687192182375953,qrart-8E5MS2e.png
 560,False,1.0,1.87,"(539, 347)",0.0,,0.0,0.0,0.0,"(-13, -19)",1.089014461784567,qrart-8E5MS2e.png
-561,True,0.0,1.95,"(108, 180)",0.0,,0.0,0.0,0.0,"(-10, -18)",1.0796993356219773,qrart-DPVvmG0KpNe4E.png
 562,True,0.1,1.32,"(134, 216)",0.0,,0.0,0.0,0.0,"(11, 12)",0.9572790962113938,qrart-DPVvmG0KpNe4E.png
 563,True,0.2,1.68,"(261, 527)",0.0,,0.0,0.0,0.0,"(-16, 11)",1.0213481509880333,qrart-DPVvmG0KpNe4E.png
 564,True,0.3,1.46,"(236, 336)",0.0,,0.0,0.0,0.0,"(-16, 14)",1.0987555469886159,qrart-DPVvmG0KpNe4E.png
@@ -571,7 +519,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 569,False,0.8,1.66,"(322, 209)",0.0,,0.0,0.0,0.0,"(20, -10)",1.0296458909485329,qrart-DPVvmG0KpNe4E.png
 570,False,0.9,1.8,"(578, 26)",0.0,,0.0,0.0,0.0,"(15, 11)",0.9344068872357805,qrart-DPVvmG0KpNe4E.png
 571,False,1.0,1.76,"(411, 480)",0.0,,0.0,0.0,0.0,"(-14, 12)",1.0604791014684394,qrart-DPVvmG0KpNe4E.png
-572,True,0.0,1.53,"(500, 437)",0.0,,0.0,0.0,0.0,"(14, 18)",0.9160871511468898,qrart-OPuod.png
 573,True,0.1,1.3,"(175, 502)",0.0,,0.0,0.0,0.0,"(19, -15)",0.929430294454299,qrart-OPuod.png
 574,True,0.2,1.35,"(446, 180)",0.0,,0.0,0.0,0.0,"(14, 15)",1.0302382757737922,qrart-OPuod.png
 575,True,0.3,1.59,"(478, 33)",0.0,,0.0,0.0,0.0,"(-13, -13)",0.9508208719082984,qrart-OPuod.png
@@ -582,7 +529,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 580,False,0.8,1.68,"(79, 281)",0.0,,0.0,0.0,0.0,"(12, -10)",1.0435454210143333,qrart-OPuod.png
 581,False,0.9,1.53,"(279, 240)",0.0,,0.0,0.0,0.0,"(-15, 15)",1.0437171135757768,qrart-OPuod.png
 582,False,1.0,1.29,"(169, 448)",0.0,,0.0,0.0,0.0,"(-15, -11)",0.9200870760209837,qrart-OPuod.png
-583,True,0.0,1.16,"(53, 602)",0.0,,0.0,0.0,0.0,"(16, 13)",0.9807410654491566,qrart-TtAkZf4j98TBiE.png
 584,True,0.1,1.52,"(465, 618)",0.0,,0.0,0.0,0.0,"(-16, 19)",1.0581223646676547,qrart-TtAkZf4j98TBiE.png
 585,True,0.2,1.14,"(31, 203)",0.0,,0.0,0.0,0.0,"(14, 17)",1.0136697976020175,qrart-TtAkZf4j98TBiE.png
 586,True,0.3,1.65,"(649, 232)",0.0,,0.0,0.0,0.0,"(10, -11)",0.9988147308861367,qrart-TtAkZf4j98TBiE.png
@@ -593,7 +539,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 591,False,0.8,1.6,"(146, 510)",0.0,,0.0,0.0,0.0,"(16, 20)",1.0821276119948227,qrart-TtAkZf4j98TBiE.png
 592,False,0.9,1.3,"(478, 89)",0.0,,0.0,0.0,0.0,"(19, -16)",0.992959782347324,qrart-TtAkZf4j98TBiE.png
 593,False,1.0,1.94,"(399, 330)",0.0,,0.0,0.0,0.0,"(-15, 19)",1.0587560163653054,qrart-TtAkZf4j98TBiE.png
-594,False,0.0,1.22,"(108, 138)",0.0,,0.0,0.0,0.0,"(-18, -13)",0.952907926139487,qrart-fZ5GWiX8.png
 595,False,0.1,1.0,"(301, 85)",0.0,,0.0,0.0,0.0,"(-20, -15)",0.9728602827269481,qrart-fZ5GWiX8.png
 596,True,0.2,1.96,"(457, 97)",0.0,,0.0,0.0,0.0,"(12, -10)",0.9386581493797153,qrart-fZ5GWiX8.png
 597,False,0.3,1.58,"(4, 173)",0.0,,0.0,0.0,0.0,"(19, -19)",1.0947099461867358,qrart-fZ5GWiX8.png
@@ -604,7 +549,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 602,False,0.8,1.86,"(293, 306)",0.0,,0.0,0.0,0.0,"(17, 16)",1.0904202003789216,qrart-fZ5GWiX8.png
 603,False,0.9,1.48,"(517, 343)",0.0,,0.0,0.0,0.0,"(10, -13)",0.9924816048664944,qrart-fZ5GWiX8.png
 604,False,1.0,1.01,"(452, 594)",0.0,,0.0,0.0,0.0,"(-13, -19)",1.0557403429761514,qrart-fZ5GWiX8.png
-605,False,0.0,1.14,"(275, 389)",0.0,,0.0,0.0,0.0,"(20, -15)",0.9720456133770933,qrart-faRZ0H0PmA.png
 606,False,0.1,1.6,"(559, 176)",0.0,,0.0,0.0,0.0,"(12, -20)",1.0486439642851293,qrart-faRZ0H0PmA.png
 607,False,0.2,1.35,"(430, 484)",0.0,,0.0,0.0,0.0,"(10, 13)",1.0966917972443642,qrart-faRZ0H0PmA.png
 608,False,0.3,1.34,"(489, 316)",0.0,,0.0,0.0,0.0,"(14, -20)",1.0678251464295039,qrart-faRZ0H0PmA.png
@@ -615,7 +559,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 613,False,0.8,1.06,"(545, 116)",0.0,,0.0,0.0,0.0,"(16, 18)",0.9825988083642149,qrart-faRZ0H0PmA.png
 614,False,0.9,1.3,"(140, 562)",0.0,,0.0,0.0,0.0,"(11, 12)",1.0507963905255684,qrart-faRZ0H0PmA.png
 615,False,1.0,1.54,"(225, 56)",0.0,,0.0,0.0,0.0,"(11, -18)",0.9205442298550238,qrart-faRZ0H0PmA.png
-616,True,0.0,1.51,"(348, 497)",0.0,,0.0,0.0,0.0,"(11, 11)",1.0125107421840513,qrart-g5EVtP.png
 617,True,0.1,1.99,"(556, 45)",0.0,,0.0,0.0,0.0,"(16, 15)",0.9106048437830978,qrart-g5EVtP.png
 618,True,0.2,1.21,"(574, 95)",0.0,,0.0,0.0,0.0,"(-12, 11)",0.9440459978692611,qrart-g5EVtP.png
 619,True,0.3,1.32,"(154, 396)",0.0,,0.0,0.0,0.0,"(15, 13)",1.0780014405025924,qrart-g5EVtP.png
@@ -626,7 +569,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 624,False,0.8,1.71,"(397, 160)",0.0,,0.0,0.0,0.0,"(-11, 12)",1.0380916660495754,qrart-g5EVtP.png
 625,False,0.9,1.18,"(211, 112)",0.0,,0.0,0.0,0.0,"(13, -13)",0.9447796633629314,qrart-g5EVtP.png
 626,False,1.0,1.08,"(107, 494)",0.0,,0.0,0.0,0.0,"(-16, -20)",1.0718726328291197,qrart-g5EVtP.png
-627,False,0.0,1.23,"(481, 550)",0.0,,0.0,0.0,0.0,"(20, -15)",0.9121416361565688,qrart-iO2nTqxQr98.png
 628,True,0.1,1.25,"(488, 480)",0.0,,0.0,0.0,0.0,"(-13, 13)",0.949715674841446,qrart-iO2nTqxQr98.png
 629,False,0.2,1.57,"(279, 323)",0.0,,0.0,0.0,0.0,"(19, 11)",0.9951832305233738,qrart-iO2nTqxQr98.png
 630,False,0.3,1.46,"(394, 416)",0.0,,0.0,0.0,0.0,"(18, -14)",1.0369707712337422,qrart-iO2nTqxQr98.png
@@ -637,7 +579,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 635,False,0.8,1.16,"(533, 481)",0.0,,0.0,0.0,0.0,"(-15, -17)",0.9997753620846368,qrart-iO2nTqxQr98.png
 636,False,0.9,1.54,"(212, 350)",0.0,,0.0,0.0,0.0,"(14, -20)",0.9026951719425299,qrart-iO2nTqxQr98.png
 637,False,1.0,1.05,"(528, 113)",0.0,,0.0,0.0,0.0,"(-14, -14)",0.9972628138158622,qrart-iO2nTqxQr98.png
-638,True,0.0,1.74,"(2, 170)",0.0,,0.0,0.0,0.0,"(-10, -10)",0.9350242642090479,qrart-pscejHqqS.png
 639,False,0.1,1.29,"(524, 520)",0.0,,0.0,0.0,0.0,"(-12, -19)",1.0062668841965192,qrart-pscejHqqS.png
 640,False,0.2,1.24,"(249, 540)",0.0,,0.0,0.0,0.0,"(18, 20)",1.009976852409914,qrart-pscejHqqS.png
 641,True,0.3,1.54,"(290, 241)",0.0,,0.0,0.0,0.0,"(-11, -15)",0.9316683700209102,qrart-pscejHqqS.png
@@ -648,7 +589,6 @@ experiment_id,successful,wave_amplitude,wave_frequency,square_position,square_di
 646,False,0.8,1.29,"(475, 481)",0.0,,0.0,0.0,0.0,"(-12, 10)",0.9343229325585265,qrart-pscejHqqS.png
 647,False,0.9,1.02,"(117, 230)",0.0,,0.0,0.0,0.0,"(19, 19)",0.9888219851395578,qrart-pscejHqqS.png
 648,False,1.0,1.74,"(222, 575)",0.0,,0.0,0.0,0.0,"(14, 17)",1.0297423742542031,qrart-pscejHqqS.png
-649,True,0.0,1.34,"(332, 517)",0.0,,0.0,0.0,0.0,"(15, -17)",1.0252526524553824,qrart-qwXqOPMnAPwG.png
 650,True,0.1,1.26,"(530, 190)",0.0,,0.0,0.0,0.0,"(10, 11)",0.9242735217872372,qrart-qwXqOPMnAPwG.png
 651,True,0.2,1.19,"(4, 382)",0.0,,0.0,0.0,0.0,"(16, -18)",0.9140948457827709,qrart-qwXqOPMnAPwG.png
 652,True,0.3,1.4,"(604, 540)",0.0,,0.0,0.0,0.0,"(-10, 16)",0.9252496943557027,qrart-qwXqOPMnAPwG.png

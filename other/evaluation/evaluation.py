@@ -7,7 +7,6 @@ import math
 import shutil
 from datetime import datetime
 from pathlib import Path
-from PIL import Image
 from eval_lib.experiment import Experiment
 import eval_lib.scenario as scenario
 
@@ -15,13 +14,12 @@ import eval_lib.scenario as scenario
 #   GLOBAL SETTINGS
 # ----------------------------
 
-MAX_ANIMATION_STEPS = 500
-
-BASELINE_ZOOM = 1.0
+MAX_ANIMATION_STEPS = 500 # Defines how long the zoom animation should last.
+BASELINE_ZOOM = 1.0 # Initial zoom factor for plotter
 
 # The top-level folder holding the template plus scenario subfolders.
-# Example: "results/template-cube-line-rotate"
-EXPERIMENT_FOLDER = "results/template-cube-line-rotate"
+# Example: "results/testing-scenario"
+EXPERIMENT_FOLDER = "results/testing-scenario"
 
 # The base CSV file (e.g., "template.csv") inside that folder
 TEMPLATE_CSV = os.path.join(EXPERIMENT_FOLDER, "template.csv")
@@ -32,9 +30,6 @@ IMAGES_FOLDER = "images/testing-scenario"
 
 # Temporary location for modified textures
 TEMP_TEXTURE = "images/temp/modified_texture.png"
-
-# Optional, rotation, you can define it here (0 means no rotation)
-ROTATION_ANGLE = 0
 
 CAMERA_POSITION = [(0, 0, 30), (0, 0, 0), (0, 1, 0)]
 
@@ -108,7 +103,7 @@ def show_key_popup(key: str):
     else:
         txt = f"KEY: {key}"
 
-    text_actor = plotter.add_text(txt, position="lower_left",
+    plotter.add_text(txt, position="lower_left",
                                   font_size=50, color="white",
                                   font="courier", shadow=True,
                                   name="key_popup")
@@ -129,9 +124,7 @@ def update_experiment_text(exp):
         f"WaveAmp: {exp.wave_amplitude}\n"
         f"WaveFreq: {exp.wave_frequency}\n"
         f"SquarePos: {exp.square_position}\n"
-        f"LinePos: {exp.line_center_coordinates}\n"
         f"Rotation: {exp.rotation}\n"
-        f"Scale: {exp.scale}\n"
     )
     plotter.add_text(txt, position="upper_left", font_size=15,
                      color="white", shadow=False, name="experiment_text")
@@ -141,45 +134,10 @@ def record_experiment_result(outcome: bool, index: int):
     if 0 <= index < len(exps):
         exps[index].edit(successful=outcome)
 
-def rotate_texture(image_path: str, angle: float) -> str:
-    """
-    Rotates the entire 2D image. If angle=0, we skip rotation.
-    """
-    # img = Image.open(image_path)
-    # exif = img._getexif()
-    # orientation = exif.get(274) if exif else None
-    # print(f"Image orientation: {orientation}")
-
-    if angle == 0:
-        return image_path
-    
-    img = cv2.imread(image_path)
-    if img is None:
-        return image_path
-
-    h, w = img.shape[:2]
-    center = (w // 2, h // 2)
-    rot_m = cv2.getRotationMatrix2D(center, angle, 1.0)
-
-    cos_val = abs(rot_m[0, 0])
-    sin_val = abs(rot_m[0, 1])
-    new_w = int(h * sin_val + w * cos_val)
-    new_h = int(h * cos_val + w * sin_val)
-
-    rot_m[0, 2] += (new_w / 2) - center[0]
-    rot_m[1, 2] += (new_h / 2) - center[1]
-
-    rotated = cv2.warpAffine(img, rot_m, (new_w, new_h))
-    out_path = "images/temp/rotated_texture.png"
-    cv2.imwrite(out_path, rotated)
-    return out_path
-
-
 def update_mesh(index: int):
-    
     """
     Loads the experiment at index, updates the 3D wave plane
-    and draws line/square on the correct image. Then updates the texture.
+    and draws square on the correct image. Then updates the texture.
     """
     global current_actor
     if current_actor is not None:
@@ -209,17 +167,12 @@ def update_mesh(index: int):
 
     height, width = img.shape[:2]
 
-    # Draw line or square
+    # Check if it's needed to create a square
     if exp.square_position:
         scenario.draw_square_on_image(img, exp, width, height)
-    elif exp.line_center_coordinates:
-        scenario.draw_line_on_image(img, exp, width, height)
 
     # Save the modified image
     cv2.imwrite(TEMP_TEXTURE, img)
-
-    # Optionally rotate
-    rotated_path = rotate_texture(TEMP_TEXTURE, ROTATION_ANGLE)
 
     # Create or update the plane geometry based on wave
     assert current_actor is None, "Current actor was not deleted"
@@ -231,15 +184,16 @@ def update_mesh(index: int):
     plane.rotate_y(exp.rotation[1], inplace=True)
 
     # Load final texture
-    new_tex = pv.read_texture(rotated_path)
+    new_tex = pv.read_texture(TEMP_TEXTURE)
     # Update the mesh
-    plotter.suppress_rendering=True # Needed to avoid flickering
+    plotter.suppress_rendering = True  # Needed to avoid flickering
     current_actor = plotter.add_mesh(plane, texture=new_tex, ambient=0.6, show_edges=False, opacity=1)
     plotter.camera_position = CAMERA_POSITION
-    plotter.suppress_rendering=False
-    
+    plotter.suppress_rendering = False
+
     # Add experiment text
     update_experiment_text(exp)
+
 
 # ----------------------------
 #   CALLBACKS
@@ -285,7 +239,6 @@ def start_animation_callback():
 #   MAIN
 # ----------------------------
 if __name__ == "__main__":
-
     # 1) Ensure the top-level folder exists
     base_path = Path(EXPERIMENT_FOLDER)
     base_path.mkdir(exist_ok=True, parents=True)
@@ -305,7 +258,7 @@ if __name__ == "__main__":
             dst = new_subfolder / csv_file.name
             shutil.copyfile(csv_file, dst)
 
-    # 3) Find the highest scenario in the new subfolder
+    # 3) Find the highest scenario in the new subfolder (we resume the experiment from the latest CSV file, so that we can resume interrupted experiments)
     sc_csv, sc_index = scenario.find_highest_scenario_csv(new_subfolder)
     if sc_csv:
         print(f"[RESUME] Found scenario file: {sc_csv}")

@@ -3,7 +3,7 @@
 # Square Experiment
 experiment_parameters:
   wave_amplitude_range: [0.2]
-  square_dimension_perc_range: [0.1, 0.2, 0.3, 0.4, 0.5]
+  square_dimension_perc_range: [0.3]
   line_thickness_perc_range: [] # must be empty
   line_dimension_perc_range: [] # must be empty
   line_angle_range: [] # must be empty

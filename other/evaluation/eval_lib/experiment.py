@@ -2,32 +2,22 @@
 import csv
 import os
 import ast
-import unittest
 
 class Experiment:
-    # By default, we assume your folder is "results/template-cube-line-rotate/template.csv".
-    CSV_FILE = "results/template-cube-line-rotate/template.csv"
+    # By default, we assume your folder is "results/testing-scenario/template.csv".
+    CSV_FILE = "results/testing-scenario/template.csv"
     _cached_experiments = None
 
     def __init__(self, experiment_id, successful, wave_amplitude=0.1, wave_frequency=0.2,
-                 square_position=None, square_dimension_perc=0.0, line_center_coordinates=None,
-                 line_thickness_perc=0.0, line_dimension_perc=0.0, line_angle=0.0, rotation=[0,0],
-                 scale=1.0,filename=None):
+                 square_position=None, square_dimension_perc=0.0, rotation=[0,0], filename=None):
         self.experiment_id = int(experiment_id)
         self.successful = successful
         self.wave_amplitude = float(wave_amplitude)
         self.wave_frequency = float(wave_frequency)
         self.square_position = square_position
         self.square_dimension_perc = float(square_dimension_perc)
-        self.line_center_coordinates = line_center_coordinates
-        self.line_thickness_perc = float(line_thickness_perc)
-        self.line_dimension_perc = float(line_dimension_perc)
-        self.line_angle = float(line_angle)
         self.rotation = rotation
-        self.scale = scale
-
-        # NEW: Store which image file is used for this experiment
-        self.filename = filename  # e.g., "some_image.png"
+        self.filename = filename
 
     @staticmethod
     def from_dict(data):
@@ -44,12 +34,7 @@ class Experiment:
             wave_frequency=float(data["wave_frequency"]),
             square_position=safe_literal_eval(data["square_position"]),
             square_dimension_perc=float(data["square_dimension_perc"]),
-            line_center_coordinates=safe_literal_eval(data["line_center_coordinates"]),
-            line_thickness_perc=float(data["line_thickness_perc"]),
-            line_dimension_perc=float(data["line_dimension_perc"]),
-            line_angle=float(data["line_angle"]),
             rotation=safe_literal_eval(data["rotation"]),
-            scale=float(data["scale"]),
             filename=data.get("filename", None)
         )
 
@@ -61,12 +46,7 @@ class Experiment:
             "wave_frequency": self.wave_frequency,
             "square_position": self.square_position,
             "square_dimension_perc": self.square_dimension_perc,
-            "line_center_coordinates": self.line_center_coordinates,
-            "line_thickness_perc": self.line_thickness_perc,
-            "line_dimension_perc": self.line_dimension_perc,
-            "line_angle": self.line_angle,
             "rotation": self.rotation,
-            "scale": self.scale,
             "filename": self.filename
         }
 
@@ -95,9 +75,7 @@ class Experiment:
             if not cls._cached_experiments:
                 fieldnames = [
                     "experiment_id", "successful", "wave_amplitude", "wave_frequency",
-                    "square_position", "square_dimension_perc", "line_center_coordinates",
-                    "line_thickness_perc", "line_dimension_perc", "line_angle", "rotation",
-                    "scale", "filename"
+                    "square_position", "square_dimension_perc", "rotation","filename"
                 ]
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
