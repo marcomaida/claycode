@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                             ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
                         )
                         setImageAnalysisTargetSize(
-                            CameraController.OutputSize(Size(1400, 1920))
+                            CameraController.OutputSize(Size(2000, 2000))
                         )
                         setImageAnalysisAnalyzer(
                             ContextCompat.getMainExecutor(applicationContext)

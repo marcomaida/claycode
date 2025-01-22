@@ -26,6 +26,10 @@ enum class DecodingStack {
 }
 
 val DECODING_STACK: DecodingStack = DecodingStack.OPEN_CV_CONTOURS
+const val USE_PRIVATE_DOMAIN = false
+const val USE_FRAGMENTS = false
+const val PERFORMANCE_LOGS = false
+const val TREE_LOG = false
 
 class ClaycodeDecoder {
     companion object {
@@ -36,9 +40,22 @@ class ClaycodeDecoder {
         public external fun extractTouchGraph(bitmap: Bitmap, left: Int, top: Int, width: Int, height: Int): Array<IntArray>
         public external fun extractParentsArray(bitmap: Bitmap, left: Int, top: Int, width: Int, height: Int): IntArray
 
+        fun logLongMessage(tag: String, message: String) {
+            val maxLogSize = 3000 // Conservative. Hard max is around 4k
+            var startIndex = 0
+            while (startIndex < message.length) {
+                val endIndex = (startIndex + maxLogSize).coerceAtMost(message.length)
+                Log.i(tag, message.substring(startIndex, endIndex))
+                startIndex = endIndex
+            }
+            Log.i(tag, "END-LONG-LOG")
+        }
+
         fun logRelativeTime(tag: String, startTime: Long) {
             val delta = System.currentTimeMillis() - startTime
-            Log.i("Performance", "${tag}:${delta}")
+            if (PERFORMANCE_LOGS) {
+                Log.i("ClaycodePerformance", "${tag}:${delta}")
+            }
         }
 
         fun decode(bitmap: Bitmap, square_size_pct: Float): Triple<Int,Int,String> {
@@ -50,7 +67,9 @@ class ClaycodeDecoder {
             val left = (bitmap.width - squareSize) / 2
             val top = (bitmap.height - squareSize) / 2
 
-            Log.i("Performance", "---------------------")
+            if (PERFORMANCE_LOGS) {
+                Log.i("ClaycodePerformance", "---------------------")
+            }
             val startTime = System.currentTimeMillis()
             logRelativeTime("Start Decode Process (${bitmap.width}x${bitmap.height}, $DECODING_STACK)", startTime);
             val parents = when (DECODING_STACK) {
@@ -69,24 +88,30 @@ class ClaycodeDecoder {
             val potentialClaycodeTrees = ClaycodeFinder.findPotentialClaycodeRoots(topologyTree)
             logRelativeTime("Find Potential Claycodes", startTime);
 
-            // Log longest potential Claycode
-            val longest = potentialClaycodeTrees.maxByOrNull { it.toString().length }
-            if(longest != null) {
-                Log.i("Trees", longest.toString())
+//             Log longest potential Claycode
+//             val longest = potentialClaycodeTrees.maxByOrNull { it.toString().length }
+//             if(longest != null) {
+//                logLongMessage("CandidateTree", longest.toString())
+//             }
+
+            if(TREE_LOG && topologyTree != null) {
+                logLongMessage("Tree", topologyTree.toString())
             }
 
             var results: Array<String> = emptyArray()
 
             // 1 - Check for the private domain
-            for (tree in potentialClaycodeTrees) {
-                when (tree.toString()) {
-                    // NOTE: This is not the correct way to do it -- this is temporary.
-                    // We should check for equivalence in a way that's not dependent on the tree ordering
-                    "((())()()()()()()(()()()())(()))" -> {
-                        results += "Woof \uD83D\uDC36"
-                    }
-                    "((()()())()()()()()()()()()()()()()()()()()()()()()()())" -> {
-                        results += "\uD83C\uDFB5 I am not just a Spotify Code... \uD83C\uDFB5"
+            if (USE_PRIVATE_DOMAIN) {
+                for (tree in potentialClaycodeTrees) {
+                    when (tree.toString()) {
+                        // NOTE: This is not the correct way to do it -- this is temporary.
+                        // We should check for equivalence in a way that's not dependent on the tree ordering
+                        "((())()()()()()()(()()()())(()))" -> {
+                            results += "Woof \uD83D\uDC36"
+                        }
+                        "((()()())()()()()()()()()()()()()()()()()()()()()()()())" -> {
+                            results += "\uD83C\uDFB5 I am not just a Spotify Code... \uD83C\uDFB5"
+                        }
                     }
                 }
             }
@@ -104,7 +129,7 @@ class ClaycodeDecoder {
 
             // 3 - Check for matching fragments
             // NOTE: We use the tree-to-bits function as a temporary replacement for unordered tree equality
-            if (results.isEmpty()) {
+            if (USE_FRAGMENTS && results.isEmpty()) {
                 val countMap: HashMap<BitString, Pair<Int, Tree>> = HashMap()
                 for (tree in potentialClaycodeTrees) {
                     val bits = BitTreeConverter.treeToBits(tree)
