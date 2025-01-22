@@ -1,0 +1,5 @@
+numpy==2.2.2
+plotly==5.24.1
+ipykernel
+jupyter
+kaleido
