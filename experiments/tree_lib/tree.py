@@ -38,6 +38,43 @@ class TreeNode:
 	def __repr__(self) -> str:
 		return f"{str(self.children)}"
 	
+	@staticmethod
+	def from_parentheses(s):
+		"""
+		Parses a string of parentheses and returns the root TreeNode.
+		:param s: A string of well-formed parentheses.
+		:return: TreeNode representing the tree.
+		"""
+		if not s:
+			raise ValueError("The input string is empty.")
+		
+		stack = []
+		root = None
+
+		for char in s:
+			if char == '(':
+				# Create a new node
+				node = TreeNode([])
+				if stack:
+					# Add the new node as a child of the last node on the stack
+					stack[-1].children.append(node)
+				else:
+					# If the stack is empty, this is the root
+					root = node
+				# Push the new node onto the stack
+				stack.append(node)
+			elif char == ')':
+				if not stack:
+					raise ValueError(f"The parentheses string is not well-formed: {s}")
+				# Pop the current node off the stack
+				stack.pop()
+
+		# If the stack is not empty, the string is malformed
+		if stack:
+			raise ValueError(f"The parentheses string is not well-formed: {s}")
+		
+		return root
+	
 def full_tree (layers, max_branches):
 	assert layers > 0
 

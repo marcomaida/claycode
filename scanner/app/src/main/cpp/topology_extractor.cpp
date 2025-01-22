@@ -17,12 +17,16 @@
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, __VA_ARGS__)
 
+const bool LOG_PERFORMANCE = false;
+
 void logRelativeTime(const std::string &tag, std::chrono::time_point<std::chrono::steady_clock> startTime)
 {
     auto currentTime = std::chrono::steady_clock::now();
     auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
 
-    LOGI("Performance", "%s:%lld", tag.c_str(), delta);
+    if (LOG_PERFORMANCE) {
+        LOGI("ClaycodePerformance", "%s:%lld", tag.c_str(), delta);
+    }
 }
 
 AndroidBitmapInfo getImageInfo(JNIEnv *env, void **pixels, const jobject &bitmap)
@@ -64,13 +68,14 @@ cv::Mat prepareInputImage(JNIEnv *env,
     cv::Rect cropRegion(left, top, width, height);
     img = img(cropRegion);
 
-    auto croppedWidth = width-left;
-    auto croppedHeight = height-top;
+    auto croppedWidth = width - left;
+    auto croppedHeight = height - top;
 
     // Generate a random zoom level between 1.0 (no zoom) and 2.0 (200% zoom)
     float zoomFactor = globalZoomFactor;
     globalZoomFactor += 0.1;
-    if (globalZoomFactor > 2) {
+    if (globalZoomFactor > 2)
+    {
         globalZoomFactor = 1.0;
     }
 
@@ -88,8 +93,6 @@ cv::Mat prepareInputImage(JNIEnv *env,
 
     // Resize to original dimensions for consistent processing
     cv::resize(img, img, cv::Size(info.width, info.height));
-
-    
 
     return img;
 }
