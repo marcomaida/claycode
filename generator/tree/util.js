@@ -25,20 +25,8 @@ export function duplicateTreeNTimes(tree, N) {
 
     // Duplicate the original tree N times and add to the new root
     for (let i = 0; i < N; i++) {
-        // Clone tree
         const clonedTree = cloneNode(tree.root);
-
-        if (N > 1) {
-            // Add an intermediate node to make a 2-tower
-            const frameNode = new TreeNode(newRoot, [clonedTree]);
-            clonedTree.father = frameNode;
-            newRoot.children.push(frameNode);
-        }
-        else {
-            // In the N=1 case, we do not need to make a 2-tower; it is
-            // done automatically as there is only 1 child
-            newRoot.children.push(clonedTree);
-        }
+        newRoot.children.push(clonedTree);
     }
 
     // Initialize the new tree
@@ -53,7 +41,9 @@ export function duplicateTreeNTimes(tree, N) {
 // The generation is biased so that trees are large and not tall.
 // A root is created. Then, for each iteration, a random existing node is chosen and a 
 // child is added to it. Naturally, this will bias towards short trees.
-export function generateRandomTree(N) {
+// If `with_extra_root` is true, generates an intermediate node. This is necessary
+// as some application of Claycode require the root to be a "two tower"
+export function generateRandomTree(N, with_extra_root = false) {
     const MIN_LEVEL_1_CHILDREN = 3;
 
     if (N <= 0) return null;
@@ -65,7 +55,18 @@ export function generateRandomTree(N) {
 
     // Create the root node
     const root = createNode();
-    let nodes = [root];
+
+    // Handle eventual extra root
+    let nodes;
+    if (with_extra_root) {
+        const inner_root = createNode(root);
+        root.children.push(inner_root);
+        nodes = [inner_root];
+    }
+    else {
+        nodes = [root];
+    }
+
     for (let n = 0; n < N; n++) {
         // pick a random node, add a child. 
         // This over-represents lower-level nodes, leading to trees that are wider

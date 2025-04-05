@@ -178,7 +178,7 @@ function imagePolygonView(useLastTrees = false) {
     //****  Get tree
     let current_tree = Tree.fromString(inputTreeTopology.value)
     if (!current_tree) {
-      inputTreeTopology.value = generateRandomTree(inputNumNodes.value).toString();
+      inputTreeTopology.value = generateRandomTree(inputNumNodes.value, true).toString();
       current_tree = Tree.fromString(inputTreeTopology.value)
       if (!current_tree) {
         throw `current tree cannot be null after the tree was generated`;
