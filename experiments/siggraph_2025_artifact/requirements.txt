@@ -1,5 +1,12 @@
-numpy==2.2.2
-plotly==5.24.1
+numpy
+plotly
 ipykernel
 jupyter
 kaleido
+pandas
+Pillow
+pyvista
+PyYAML
+opencv-python
+func-timeout
+sympy
