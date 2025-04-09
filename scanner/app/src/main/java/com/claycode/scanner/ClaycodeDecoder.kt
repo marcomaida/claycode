@@ -30,6 +30,7 @@ const val USE_PRIVATE_DOMAIN = false
 const val USE_FRAGMENTS = false
 const val PERFORMANCE_LOGS = false
 const val TREE_LOG = false
+const val SUCCESSFUL_SCAN_TIME_LOG = true
 
 class ClaycodeDecoder {
     companion object {
@@ -126,6 +127,14 @@ class ClaycodeDecoder {
                 }
             }
             logRelativeTime("Bit to Text", startTime);
+
+            if (SUCCESSFUL_SCAN_TIME_LOG && results.isNotEmpty()) {
+                val delta = System.currentTimeMillis() - startTime
+                Log.i("ClaycodeSuccessfulScan", "${delta}:${results[0]}")
+
+                // Short-circuit to avoid user popups upon successful scan
+                return Triple(potentialClaycodeTrees.size, 0, "")
+            }
 
             // 3 - Check for matching fragments
             // NOTE: We use the tree-to-bits function as a temporary replacement for unordered tree equality
