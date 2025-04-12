@@ -480,15 +480,15 @@
               return 0;
             if (2 === f && a.j === g.j)
               return (
-                a.m === g.m &&
-                  console.warn(
-                    "Edges of the same polygon overlap",
-                    a.a,
-                    a.b.a,
-                    g.a,
-                    g.b.a
-                  ),
-                0
+                a.m === g.m //&&
+                  // console.warn(
+                  //   "Edges of the same polygon overlap",
+                  //   a.a,
+                  //   a.b.a,
+                  //   g.a,
+                  //   g.b.a
+                  // )
+                ,0
               );
             if (1 === f)
               return (
