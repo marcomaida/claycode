@@ -23,11 +23,10 @@ export function createCirclePolygon(
     return circle;
 }
 
-export function createMouseHeadPolygon(center, scale) {
+export function createMouseHeadPolygon(center, scale, num_segments = 50) {
     const EARS_RADIUS = 0.65;
     const EARS_OFFSET = 1.05;
-    const NUM_SEGMENTS = 50;
-    const theta = Array.from({ length: NUM_SEGMENTS }, (_, i) => (i * 2 * Math.PI) / NUM_SEGMENTS);
+    const theta = Array.from({ length: num_segments }, (_, i) => (i * 2 * Math.PI) / num_segments);
 
     // Define basic circles
     const headCircle = theta.map(t => [Math.cos(t), Math.sin(t)]);
@@ -88,6 +87,73 @@ export function createStarPolygon(center, outerRadius, numPoints, rotation = (Ma
     }
 
     return star;
+}
+
+export function createHeartPolygon(center, scale, num_segments = 100, lobeSharpness = 1.25) {
+    const theta = Array.from({ length: num_segments }, (_, i) => (i * 2 * Math.PI) / num_segments);
+
+    // The lobeSharpness scales the higher frequency cosine terms.
+    const heart = theta.map(t => {
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y =
+            12 * Math.cos(t) -
+            4 * lobeSharpness * Math.cos(2 * t) -
+            1.5 * lobeSharpness * Math.cos(3 * t) -
+            0.5 * lobeSharpness * Math.cos(4 * t);
+        return new PIXI.Vec(x, y);
+    });
+
+    scalePolygon(heart, new PIXI.Vec(scale / 20, -scale / 20));
+    translatePolygon(heart, center);
+
+    return heart;
+}
+
+export function createSpiralPolygon(
+    center,
+    scale,
+    numTurns = 3,
+    numSegments = 300,
+    spacing = 0.2,
+    thickness = 0.1,
+    taperPower = .3
+) {
+    const thetaMax = numTurns * 2 * Math.PI;
+    const theta = Array.from({ length: numSegments }, (_, i) => (i / (numSegments - 1)) * thetaMax);
+
+    const innerSpiral = [];
+    const outerSpiral = [];
+
+    for (let t of theta) {
+        const r = spacing * t;
+        const x = r * Math.cos(t);
+        const y = r * Math.sin(t);
+
+        // Derivative for tangent
+        const dr = spacing;
+        const dx = dr * Math.cos(t) - r * Math.sin(t);
+        const dy = dr * Math.sin(t) + r * Math.cos(t);
+        const len = Math.hypot(dx, dy);
+        const nx = -dy / len;
+        const ny = dx / len;
+
+        const maxR = spacing * thetaMax;
+        const taper = Math.pow(r / maxR, taperPower);
+        const scaledThickness = thickness * taper;
+
+        outerSpiral.push(new PIXI.Vec(x + scaledThickness * nx, y + scaledThickness * ny));
+        innerSpiral.push(new PIXI.Vec(x - scaledThickness * nx, y - scaledThickness * ny));
+    }
+
+    // remove last point of ourter spiral to avoid overlap with inner spiral
+    // The extra point breaks the padding algorithm
+    outerSpiral.shift();
+
+    const fullSpiral = outerSpiral.concat(innerSpiral.reverse());
+    scalePolygon(fullSpiral, new PIXI.Vec(scale, -scale));
+    translatePolygon(fullSpiral, center);
+
+    return fullSpiral;
 }
 
 export function createUPolygon(center, width, height, thickness, inner_thickness, scale_vec = new PIXI.Vec(1, 1), rotation_deg = 0) {

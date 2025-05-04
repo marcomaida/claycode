@@ -97,7 +97,7 @@ export function splitPolygonInSimplestPartition(
     }
 
     tries_without_improvement += 1;
-    if (tries_without_improvement >= MAX_TRIES_WITHOUT_IMPROVEMENT) {
+    if (best_partition != null && tries_without_improvement >= MAX_TRIES_WITHOUT_IMPROVEMENT) {
       break;
     }
   }

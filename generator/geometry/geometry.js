@@ -189,37 +189,34 @@ export function scalePolygon(polygon, scale_vec) {
   }
 }
 
-// Returns a smaller polygon which is padded a certain amount
+// Returns a smaller polygon which is padded the given amount
 export function padPolygon(polygon, amount) {
-  /* Must do some weird stuff to make the format match with what
-     the library expects. My library does not want the first and last
-     point to be equal, and works with a vector structure instead of
-     with nested arrays. */
-  let polygon_vec = polygon.map((p) => [p.x, p.y]);
-  polygon_vec.push(polygon_vec[0].slice(0)); // copy first element
-  var padded_pols = [];
   try {
-    var offset = new Offset();
-    const offset_data = offset.data(polygon_vec);
-    padded_pols = offset_data.padding(amount);
-  }
-  catch {
+    // Convert polygon to the format required by the offset library
+    const polygon_vec = polygon.map((p) => [p.x, p.y]);
+    polygon_vec.push([...polygon_vec[0]]); // Close the polygon
+
+    const offset = new Offset();
+    const padded_pols = offset.data(polygon_vec).padding(amount);
+
+    if (!padded_pols.length) return null;
+
+    // Select the polygon with the largest area
+    const padded = padded_pols.reduce((a, b) => (area(a) > area(b) ? a : b));
+    padded.pop(); // Remove duplicate closing point
+
+    // Simplify the polygon
+    const simplified = simplify(
+      padded.map(([x, y]) => ({ x, y })),
+      1,
+      false
+    );
+
+    // Convert back to PIXI.Vec format
+    return simplified.map(({ x, y }) => new PIXI.Vec(x, y));
+  } catch {
     return null;
   }
-  if (padded_pols.length == 0) {
-    return null;
-  }
-  // Taking the polygon with the largest area if there are multiple polygons
-  let padded = padded_pols.reduce(function (a, b) { return area(a) > area(b) ? a : b });
-  padded.pop(); // Remove last element
-
-  // Simplify polygon (need simplify.js format)
-  var padded_simplify = padded.map((p) => { return { x: p[0], y: p[1] }; });
-  padded_simplify = simplify(padded_simplify, 1, false);
-  padded = padded_simplify.map((p) => [p.x, p.y]);
-
-  let polygon_padded = padded.map((p) => new PIXI.Vec(p[0], p[1]));
-  return polygon_padded;
 }
 
 // Finds the intersection between segments ab and cd

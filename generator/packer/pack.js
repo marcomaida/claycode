@@ -17,7 +17,7 @@ export function packClaycode(tree, polygon) {
         Math.min(tree.root.numDescendants, 700) / 700
     );
 
-    const MAX_TRIES = 100;
+    const MAX_TRIES = 60;
     let tries = 0;
     while (tries < MAX_TRIES) {
         // Decrease padding if it keeps failing
@@ -54,8 +54,9 @@ function packClaycodeIteration(
 ) {
     /* 
      * Do first padding phase
+     * In the case of the root, we double the padding, to make it consistent.
      */
-    const subPolygon = padPolygon(polygon, padding / 2);
+    const subPolygon = padPolygon(polygon, node.isRoot() ? padding : padding / 2);
     if (subPolygon === null) {
         return false;
     }

@@ -43,6 +43,10 @@ export class TreeNode {
     return this.children.length === 0;
   }
 
+  isRoot() {
+    return this.father === null;
+  }
+
   setPolygon(polygon) {
     this.polygon = polygon;
   }
