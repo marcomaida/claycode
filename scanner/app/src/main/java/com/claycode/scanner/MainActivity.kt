@@ -105,7 +105,10 @@ class MainActivity : ComponentActivity() {
                                     updateLatestDecodedText(outText)
                                     updateShowResult(true)
                                 } else {
-                                    updateInfoText("Potential Claycodes: $potentialCount ")
+                                    val width = currFrame.width;
+                                    val height = currFrame.height;
+
+                                    updateInfoText("(${width}x$height) -- Potential Claycodes: $potentialCount")
                                 }
                                 updateFps(fpsCounter.addSample(System.currentTimeMillis()))
                             }

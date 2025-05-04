@@ -201,7 +201,7 @@ Java_com_claycode_scanner_ClaycodeDecoder_00024Companion_extractParentsArray(
     {
         kernel_size_threshold += 1;
     }
-    cv::adaptiveThreshold(img_bil, img_bil, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, kernel_size_threshold, 2);
+    cv::adaptiveThreshold(img_bil, img_bil, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, kernel_size_threshold, 4);
 
     // Dilate
     // cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(2, 2));
