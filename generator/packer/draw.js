@@ -19,6 +19,12 @@ export function drawPolygon(points, color = DEFAULT_COLOR) {
   graphics.endFill();
 }
 
+export function drawPolygonVertices(points, radius = 5, color = DEFAULT_COLOR) {
+  points.forEach((point) => {
+    drawCircle(point, radius, color);
+  });
+}
+
 export function drawRoundedRect(
   x,
   y,

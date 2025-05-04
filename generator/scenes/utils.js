@@ -1,9 +1,8 @@
 import { textToBits } from "../conversion/convert.js";
-import { clearDrawing, initDrawing } from "../packer/draw.js";
-import { area } from "../geometry/geometry.js";
+import { drawPolygonVertices, initDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
 import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
-import { createMouseHeadPolygon, createCirclePolygon } from "../geometry/shapes.js";
+import { createMouseHeadPolygon, createCirclePolygon, createHeartPolygon, createStarPolygon, createUPolygon, createSpiralPolygon } from "../geometry/shapes.js";
 import { TreeNode } from "../tree/tree_node.js";
 import { packClaycode } from "../packer/pack.js";
 
@@ -75,27 +74,25 @@ export async function showChangeShapeLabel(isVisible, message = "Change Shape") 
 
 // Shape management
 export const POLYGON_SHAPES = [
-  // [num_edges, scale, rotation_deg]
-  [4, new PIXI.Vec(1, 1), 45],
-  [50, new PIXI.Vec(1, 1), 0],
-  [3, new PIXI.Vec(1, 1), 0],
-  [4, new PIXI.Vec(1.5, 0.7), 45],
-  [8, new PIXI.Vec(1, 1), 0],
+  (center, size) => createCirclePolygon(center, size, 4, new PIXI.Vec(1, 1), 45),
+  (center, size) => createCirclePolygon(center, size, 50, new PIXI.Vec(1, 1), 0),
+  (center, size) => createCirclePolygon(center, size, 3, new PIXI.Vec(1, 1), 0),
+  (center, size) => createCirclePolygon(center, size, 4, new PIXI.Vec(1.5, 0.7), 45),
+  (center, size) => createHeartPolygon(center, size, 70),
+  (center, size) => createMouseHeadPolygon(center, size / 2, 30),
+  (center, size) => createStarPolygon(center, size, 5),
+  (center, size) => createSpiralPolygon(center, size, 3, 70, 0.05, 0.15, 0.5),
 ];
 export function getPolygonOfIndex(index, polygonCenter, polygonSize) {
-  return createCirclePolygon(
-    polygonCenter,
-    polygonSize,
-    POLYGON_SHAPES[index][0],
-    POLYGON_SHAPES[index][1],
-    POLYGON_SHAPES[index][2]
-  );
+  return POLYGON_SHAPES[index](polygonCenter, polygonSize);
 }
 
 export function drawPolygonClaycode(
   current_tree,
   polygon
 ) {
+  // Uncomment to see the polygon's vertices
+  // drawPolygonVertices(polygon);
   if (packClaycode(current_tree, polygon)) {
     let brush = new DefaultBrush();
     drawClaycode(current_tree, polygon, brush)
