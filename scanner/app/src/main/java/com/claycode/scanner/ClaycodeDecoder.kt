@@ -33,7 +33,7 @@ const val USE_PRIVATE_DOMAIN = false
 const val USE_FRAGMENTS = false
 const val PERFORMANCE_LOGS = false
 const val TREE_LOG = false
-const val SUCCESSFUL_SCAN_TIME_LOG = true
+const val SUCCESSFUL_SCAN_TIME_LOG = false
 
 class ClaycodeDecoder {
     companion object {
