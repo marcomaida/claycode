@@ -15,7 +15,7 @@ Finally, to produce specific plots, simply run the notebooks located in the subd
 
 ## Scanner latency and tree descendants evaluations
 
-To produce the plots based on the dataset, simply run the notebooks in `scanner_latency` and `tree_descendants`.
+To produce the plots based on the dataset, simply run the notebooks in `scanner_latency`, `scanner_latency_string_length`, and `tree_descendants`.
 
 ## Bit to tree encoding comparison
 
