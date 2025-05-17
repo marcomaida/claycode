@@ -105,3 +105,16 @@ export function drawPolygonClaycode(
     return false;
   }
 }
+
+// This function was used in the evaluation of the paper to generate random alphanumeric strings
+export function getRandomAlphanumericString() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const nums = [70, 70];
+  const idx = Math.ceil(Math.random() * (nums.length - 1));
+  const length = nums[idx];
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}

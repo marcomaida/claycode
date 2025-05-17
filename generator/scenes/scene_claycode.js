@@ -58,22 +58,12 @@ window.onresize = function () {
   timerId = utils.debounce(polygonView, 100, timerId);
 };
 
-function getRandomAlphanumericString() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const nums = [70, 70];
-  const idx = Math.ceil(Math.random() * (nums.length - 1));
-  // const length = (Math.floor(Math.random() * 13) + 1) * 5;
-  const length = nums[idx];
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
-}
-
-// Update inputText every 5 seconds
+// Uncomment the following lines to enable random text input every 5 seconds
+// This is useful for testing purposes
+/*
 setInterval(() => {
-  const randomText = getRandomAlphanumericString();
+  const randomText = utils.getRandomAlphanumericString();
   document.getElementById("inputText").value = randomText;
   polygonView();
 }, 5000);
+*/
