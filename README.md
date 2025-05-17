@@ -1,6 +1,7 @@
 # Claycode: Stylable and Deformable 2D Scannable Codes
 
-**Marco Maida, Alberto Crescini, Marco Perronet, Elena Camuffo**, *Transactions of Graphics (TOG), 2025*.
+**Marco Maida, Alberto Crescini, Marco Perronet, Elena Camuffo** 
+*Transactions of Graphics (TOG), 2025*
 
 [![Read the Paper](https://img.shields.io/badge/Read%20the%20Paper-ArXiv-blue?style=for-the-badge)](https://arxiv.org/abs/2505.08666)  
 
