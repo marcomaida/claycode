@@ -1,3 +1,8 @@
+# MIT License with Commons Clause
+# Copyright (c) 2025 Claycode
+# See LICENSE file in the root of this project for license details.
+# Commercial use is prohibited without a separate license.
+
 """
 A bit string, only accepting 0 and 1 as valid characters
 """

@@ -1,6 +1,9 @@
+# MIT License with Commons Clause
+# Copyright (c) 2025 Claycode
+# See LICENSE file in the root of this project for license details.
+# Commercial use is prohibited without a separate license.
+
 from text_bit.bit_string import BitString
-
-
 
 class Crc:
     POLY32_IEEE = '04C11DB7' # IEEE 802.3 standard

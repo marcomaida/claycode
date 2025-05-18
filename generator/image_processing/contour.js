@@ -1,3 +1,8 @@
+/* MIT License with Commons Clause
+Copyright (c) 2025 Claycode
+See LICENSE file in the root of this project for license details.
+Commercial use is prohibited without a separate license. */
+
 // Given a binary image, computes a set of non-overlapping polygons that covers the image.
 // `size` specifies the size of the image in PIXI's coordinate system.
 //

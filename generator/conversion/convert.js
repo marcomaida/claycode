@@ -1,3 +1,8 @@
+/* MIT License with Commons Clause
+Copyright (c) 2025 Claycode
+See LICENSE file in the root of this project for license details.
+Commercial use is prohibited without a separate license. */
+
 import * as text_bit_UTF8 from "./text_bits/text_bits_UTF8.js";
 import * as square from "./bits_tree/square.js";
 
