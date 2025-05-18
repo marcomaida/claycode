@@ -1,3 +1,8 @@
+/* MIT License with Commons Clause
+Copyright (c) 2025 Claycode
+See LICENSE file in the root of this project for license details.
+Commercial use is prohibited without a separate license. */
+
 // https://reveng.sourceforge.io/crc-catalogue/all.htm
 export const CRC_POLY = [1,0,1,0,0,0,1,0,1,1,0,0,1,1,0,0,1] // (16 bits, 0x4599 - CAN's standard, including leading '1')
 

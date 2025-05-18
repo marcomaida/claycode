@@ -1,3 +1,8 @@
+/* MIT License with Commons Clause
+Copyright (c) 2025 Claycode
+See LICENSE file in the root of this project for license details.
+Commercial use is prohibited without a separate license. */
+
 /*
  (c) 2017, Vladimir Agafonkin
  Simplify.js, a high-performance JS polyline simplification library

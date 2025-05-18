@@ -1,3 +1,8 @@
+/* MIT License with Commons Clause
+Copyright (c) 2025 Claycode
+See LICENSE file in the root of this project for license details.
+Commercial use is prohibited without a separate license. */
+
 import { drawPolygon } from "./draw.js";
 import { area, circularity, matchPolygonsCentroids } from "../geometry/geometry.js";
 import { createStarPolygon, createMouseHeadPolygon, createCirclePolygon, createUPolygon } from "../geometry/shapes.js";

@@ -1,3 +1,7 @@
+# MIT License with Commons Clause
+# Copyright (c) 2025 Claycode
+# See LICENSE file in the root of this project for license details.
+# Commercial use is prohibited without a separate license.
 
 # For more information about using CMake with Android Studio, read the
 # documentation: https://d.android.com/studio/projects/add-native-code.html.
