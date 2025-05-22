@@ -1,7 +1,10 @@
-/* MIT License with Commons Clause
-Copyright (c) 2025 Claycode
-See LICENSE file in the root of this project for license details.
-Commercial use is prohibited without a separate license. */
+/*!
+ * Copyright (c) 2025 Claycode
+ * Licensed under the MIT License with the Commons Clause.
+ * Commercial use is prohibited without a separate license.
+ * See LICENSE in the project root for details.
+ * SPDX-License-Identifier: MIT AND Commons-Clause
+ */
 
 import { Tree } from "../../tree/tree.js"
 import { TreeNode } from "../../tree/tree_node.js";
