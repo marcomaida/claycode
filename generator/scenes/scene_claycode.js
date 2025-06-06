@@ -57,3 +57,13 @@ inputTextBox.addEventListener("input", () => {
 window.onresize = function () {
   timerId = utils.debounce(polygonView, 100, timerId);
 };
+
+// Uncomment the following lines to enable random text input every 5 seconds
+// This is useful for testing purposes
+/*
+setInterval(() => {
+  const randomText = utils.getRandomAlphanumericString();
+  document.getElementById("inputText").value = randomText;
+  polygonView();
+}, 5000);
+*/

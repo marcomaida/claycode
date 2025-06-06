@@ -1,5 +1,6 @@
 package com.claycode.scanner
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
 import com.claycode.scanner.data_structures.BitString
@@ -10,6 +11,8 @@ import com.claycode.scanner.topology_analysis.TopologyAnalyser
 import com.claycode.scanner.topology_decoder.BitTreeConverter
 import com.claycode.scanner.topology_decoder.BitsValidator
 import com.claycode.scanner.topology_decoder.TextBitsConverter
+import java.io.File
+import java.io.IOException
 import kotlin.time.Duration.Companion.seconds
 
 enum class DecodingStack {
@@ -30,6 +33,7 @@ const val USE_PRIVATE_DOMAIN = false
 const val USE_FRAGMENTS = false
 const val PERFORMANCE_LOGS = false
 const val TREE_LOG = false
+const val SUCCESSFUL_SCAN_TIME_LOG = false
 
 class ClaycodeDecoder {
     companion object {
@@ -58,7 +62,7 @@ class ClaycodeDecoder {
             }
         }
 
-        fun decode(bitmap: Bitmap, square_size_pct: Float): Triple<Int,Int,String> {
+        fun decode(context: Context, bitmap: Bitmap, square_size_pct: Float): Triple<Int,Int,String> {
             // Calculate the centered square box size and position
             val squareSize = (square_size_pct * minOf(
                 bitmap.width,
@@ -126,6 +130,25 @@ class ClaycodeDecoder {
                 }
             }
             logRelativeTime("Bit to Text", startTime);
+
+            if (SUCCESSFUL_SCAN_TIME_LOG && results.isNotEmpty()) {
+                val delta = System.currentTimeMillis() - startTime
+                Log.i("ClaycodeSuccessfulScan", "${delta}:${results[0]}")
+
+                val logEntry = "${delta}:${results[0]}\n"
+                val fileName = "claycode_successful_scans.txt"
+                val file = File(context.getExternalFilesDir(null), fileName)
+                try {
+                    file.appendText(logEntry)
+                } catch (e: IOException) {
+                    Log.e("ClaycodeLogging", "Failed to write log", e)
+                }
+
+                Thread.sleep(500)
+
+                // Short-circuit to avoid user popups upon successful scan
+                return Triple(potentialClaycodeTrees.size, 0, "")
+            }
 
             // 3 - Check for matching fragments
             // NOTE: We use the tree-to-bits function as a temporary replacement for unordered tree equality

@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
                             if (analysisEnabled) {
                                 val bitMap = currFrame.toBitmap()
                                 val (potentialCount, foundCount, outText) = ClaycodeDecoder.decode(
-                                    bitMap, TARGET_SIZE_PCT
+                                    applicationContext, bitMap, TARGET_SIZE_PCT
                                 )
                                 if (foundCount > 0) {
                                     // Fix landscape rotation
