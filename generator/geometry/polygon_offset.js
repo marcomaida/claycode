@@ -1,11 +1,3 @@
-/*!
- * Copyright (c) 2025 Claycode
- * Licensed under the MIT License with the Commons Clause.
- * Commercial use is prohibited without a separate license.
- * See LICENSE in the project root for details.
- * SPDX-License-Identifier: MIT AND Commons-Clause
- */
-
 (function (z) {
   "object" === typeof exports && "undefined" !== typeof module
     ? (module.exports = z())
