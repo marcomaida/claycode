@@ -141,7 +141,7 @@ function distributeFragments(polygons, targetNumFragments, minAreaPerc) {
 }
 
 // Debug default picture
-let imageUrl = `${window.location.origin}/images/simplifiedpug.png`
+let imageUrl = `${window.location.origin}/images/astronaut.png`
 PIXI.Loader.shared.add(imageUrl).load(async (loader, resources) => {
   let texture = PIXI.Texture.from(resources[imageUrl].url);
   await loadImage(texture)
