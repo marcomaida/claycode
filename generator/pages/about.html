@@ -3,13 +3,65 @@
 
 <head>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .authors {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 30px;
+      padding-top: 20pt;
+      padding-bottom: 20pt;
+    }
+
+    .author {
+      text-align: center;
+    }
+
+    .author img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+    }
+
+    .paper-section {
+      margin-top: 10pt;
+    }
+
+    .paper-section h2,
+    .recognition-section h2 {
+      margin-bottom: 10pt;
+    }
+
+    .paper-section p,
+    .recognition-section p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.5;
+    }
+
+    .recognition-section {
+      margin-top: 10pt;
+      padding: 10pt 0;
+      text-align: center;
+    }
+
+    .recognition-section ul {
+      list-style-type: none;
+      padding-left: 0;
+      line-height: 1.8;
+    }
+  </style>
 </head>
 
 <body>
   <div id="headerDiv" style="z-index:2;position: absolute;">
     <a href="../index.html">
       <div class="grid-container-simple">
-        <div class="gimage"> <img src='/images/claycode.png' class='clip-circle'> </div>
+        <div class="gimage">
+          <img src='/images/claycode.png' class='clip-circle' alt="Claycode logo">
+        </div>
         <div class="gheader">
           <h1>Claycode.</h1>
         </div>
@@ -17,15 +69,15 @@
     </a>
   </div>
 
-  <div id="aboutDiv" class="about" style="z-index:2;position: absolute; padding-top: 50pt;">
+  <main id="aboutDiv" class="about" style="z-index:2;position: absolute; padding-top: 10pt;">
     <h2>What are Claycodes?</h2>
     <p>
       Claycodes are a new type of scannable visual codes.
     </p>
     <p>
-      Claycodes extend the functionalities of traditional visual codes (e.g., QR-Codes) by allowing an unprecedented
-      degree of customisation, both of the shape of the code and on its style, bridging the
-      world of designers with the needs of machine-readable visual codes.
+      Claycodes extend the functionalities of traditional visual codes (e.g., QR codes) by allowing an unprecedented
+      degree of customisation, both of the shape of the code and on its style, bridging the world of designers with
+      the needs of machine-readable visual codes.
     </p>
     <p>
       The principle behind Claycode's visual encoding makes them the first visual code to be
@@ -33,10 +85,72 @@
       Thanks to this property, they can be placed within any region (provided it is large enough
       to contain the message).
     </p>
+    <div class="paper-section">
+      <h2>Publication</h2>
+      <p><strong>Title:</strong> <em>Claycode: Stylable and Deformable 2D Scannable Codes</em></p>
+      <p><strong>Authors:</strong> Marco Maida, Alberto Crescini, Marco Perronet, Elena Camuffo</p>
+      <p style="margin-bottom: 10pt;"></p>
+      <p>
+        This paper introduces Claycode, a novel 2D scannable code designed for extensive stylization and deformation.
+        Unlike traditional matrix-based codes (e.g., QR codes), Claycodes encode their message in a tree structure.
+        During the encoding process, bits are mapped into a topology tree, which is then depicted as a nesting of
+        color regions drawn within the boundaries of a target polygon shape.
+      </p>
+      <p>
+        When decoding, Claycodes are extracted and interpreted in real-time from a camera stream.
+        We detail the end-to-end pipeline and show that Claycodes allow for extensive stylization without compromising
+        their functionality. We then empirically demonstrate Claycode's high tolerance to heavy deformations,
+        outperforming traditional 2D scannable codes in scenarios where they typically fail.
+      </p>
+      <p align="center" style="margin-top: 20pt;">
+        <a href="https://arxiv.org/abs/2505.08666" target="_blank">
+          <img src="https://img.shields.io/badge/Read%20the%20Paper-ArXiv-blue?style=for-the-badge"
+            alt="Read the Paper on arXiv">
+        </a>
+      </p>
+    </div>
+
+    <div class="recognition-section">
+      <h2>Recognition</h2>
+      <ul>
+        <li><strong>Journal Paper at ACM Transactions on Graphics (TOG)</strong></li>
+        <li><strong>Oral Presentation at SIGGRAPH 2025</strong></li>
+        <li><strong>Part of SIGGRAPH 2025 Computer Animation Festival</strong></li>
+      </ul>
+    </div>
+
+    <div class="authors">
+      <div class="author">
+        <a href="https://marcomaida.com" target="_blank">
+          <img src="/images/authors/marco_maida.jpg" alt="Marco Maida">
+          <div>Marco Maida</div>
+        </a>
+      </div>
+      <div class="author">
+        <a href="https://albertocrescini.com" target="_blank">
+          <img src="/images/authors/alberto_crescini.png" alt="Alberto Crescini">
+          <div>Alberto Crescini</div>
+        </a>
+      </div>
+      <div class="author">
+        <a href="https://marcoperronet.com" target="_blank">
+          <img src="/images/authors/marco_perronet.jpg" alt="Marco Perronet">
+          <div>Marco Perronet</div>
+        </a>
+      </div>
+      <div class="author">
+        <a href="https://elenacamuffo.com" target="_blank">
+          <img src="/images/authors/elena_camuffo.jpg" alt="Elena Camuffo">
+          <div>Elena Camuffo</div>
+        </a>
+      </div>
+    </div>
 
     <div id="footerDiv" style="z-index:2;position: absolute; bottom:0%;left:50%;
-                               transform: translate(-50%, -50%);" align="center" vertical_align="bottom">
+                                  transform: translate(-50%, -50%);" align="center">
     </div>
+  </main>
+
 </body>
 
 </html>
