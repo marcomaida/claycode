@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2025 Claycode
+ * Licensed under the MIT License with the Commons Clause.
+ * Commercial use is prohibited without a separate license.
+ * See LICENSE in the project root for details.
+ * SPDX-License-Identifier: MIT AND Commons-Clause
+ */
+
 import * as text_bit_UTF8 from "./text_bits/text_bits_UTF8.js";
 import * as square from "./bits_tree/square.js";
 

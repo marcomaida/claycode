@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2025 Claycode
+ * Licensed under the MIT License with the Commons Clause.
+ * Commercial use is prohibited without a separate license.
+ * See LICENSE in the project root for details.
+ * SPDX-License-Identifier: MIT AND Commons-Clause
+ */
+
 // Given a binary image, delete each isolated group of pixels whose area is
 // less than `island_percentage_threshold` of the total image area.
 // Writes the result back to the binary binaryImage.
