@@ -5,15 +5,9 @@
 
 [![Read the Paper](https://img.shields.io/badge/Read%20the%20Paper-ArXiv-blue?style=for-the-badge)](https://arxiv.org/abs/2505.08666)  
 
-<!-- Claycodes are an aesthetically pleasing alternative to QR codes. 
-Claycodes can encode arbitrary information inside an image which can be decoded at a later time. -->
+[![Watch the Video](https://img.shields.io/badge/Watch%20the%20Video-YouTube-red?style=for-the-badge)](https://www.youtube.com/watch?v=Sx9k2iyXQhY)
 
-<!-- [![Watch the Video](https://img.shields.io/badge/Watch%20the%20Video-Click%20Here-red?style=for-the-badge)](/Users/elenacamuffo/Documents/repositories/claycode/other/media/Claycode.mp4) -->
-
-<video controls width="100%">
-    <source src="/Users/elenacamuffo/Documents/repositories/claycode/other/media/Claycode.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
+[![Claycode Demo Video](https://img.youtube.com/vi/Sx9k2iyXQhY/0.jpg)](https://www.youtube.com/watch?v=Sx9k2iyXQhY)
 
 ## Abstract
 
