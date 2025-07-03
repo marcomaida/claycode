@@ -121,7 +121,7 @@ class ClaycodeWebScanner {
 
         // Bilateral filter
         const imgBil = new cv.Mat();
-        cv.bilateralFilter(gray, imgBil, 7, 75, 75, cv.BORDER_DEFAULT);
+        cv.bilateralFilter(gray, imgBil, 3, 75, 75, cv.BORDER_DEFAULT);
 
         // Adaptive threshold
         const width = imgBil.cols;
@@ -214,7 +214,8 @@ class ClaycodeWebScanner {
     }
 
     findPotentialClaycodes(parentsArray) {
-        // Build tree from parents array
+        // Build tree fro
+        // m parents array
         const tree = TopologyAnalyzer.buildTreeFromParentsArray(parentsArray, 0);
 
         // Find potential claycode roots
