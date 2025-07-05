@@ -28,7 +28,7 @@ class ClaycodeWebScanner {
                 video: {
                     facingMode: 'environment',
                     width: { ideal: 1920 },
-                    height: { ideal: 1080 }
+                    height: { ideal: 1920 }
                 }
             });
             this.video.srcObject = stream;
