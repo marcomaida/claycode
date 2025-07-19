@@ -5,8 +5,8 @@ import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_polygon_claycode.js";
 import { createCirclePolygon } from "../geometry/shapes.js";
 import * as utils from "./utils.js";
-import { Tree } from "../tree/tree.js";
-import { TreeNode } from "../tree/tree_node.js";
+// Import from common library instead
+import { Tree, TreeNode } from "../common/index.js";
 
 await utils.showChangeShapeLabel(true);
 const app = utils.initPIXI();

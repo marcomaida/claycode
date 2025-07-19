@@ -4,6 +4,7 @@ import { textToTree } from "../conversion/convert.js";
 import * as utils from "./utils.js";
 import { packClaycode } from "../packer/pack.js";
 import { clearDrawing } from "../packer/draw.js";
+import { downloadBlob } from "../common/utils/download.js";
 
 // Update function
 function polygonView() {
@@ -67,3 +68,18 @@ setInterval(() => {
   polygonView();
 }, 5000);
 */
+
+// Download functionality
+function downloadClaycode() {
+  const inputText = document.getElementById("inputText").value;
+  const fileName = inputText.substring(0, 20).replace(/[^a-z0-9]/gi, '_') || 'claycode';
+  
+  // Capture the canvas and convert to blob
+  const image = app.renderer.plugins.extract.canvas(app.stage.children[0]);
+  image.toBlob((blob) => {
+    downloadBlob(blob, `${fileName}.png`);
+  }, 'image/png');
+}
+
+// Add event listener to download button
+document.getElementById("downloadButton").addEventListener("click", downloadClaycode);

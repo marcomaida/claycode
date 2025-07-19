@@ -188,3 +188,21 @@ a {
   width: 100%;
   height: 100%;
 }
+
+.download-button {
+  background-color: #252525;
+  border: 0.2px solid white;
+  color: rgb(213, 213, 213);
+  padding: 10pt 15pt;
+  text-align: right;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12pt;
+  cursor: pointer;
+  border-radius: 4pt;
+  transition: background-color 0.3s;
+}
+
+.download-button:hover {
+  background-color: #444444;
+}

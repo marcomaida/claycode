@@ -13,11 +13,16 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
+        
+        #header-container {
+            width: 100%;
+            background-color: #000;
+        }
 
         #container {
             position: relative;
             width: 100vw;
-            height: 100vh;
+            height: calc(100vh - 80pt);
         }
 
         #video {
@@ -57,24 +62,26 @@
         #fps-counter {
             position: absolute;
             top: 10px;
-            right: 10px;
+            right: 15px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 8px 12px;
             border-radius: 4px;
             font-size: 14px;
+            display: inline-block;
         }
 
         #resolution-label {
             position: absolute;
-            top: 40px;
-            right: 10px;
+            top: 10px;
+            right: 100px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 8px 12px;
             border-radius: 4px;
             font-size: 14px;
             z-index: 10;
+            display: inline-block;
         }
 
         #result-modal {
@@ -132,6 +139,10 @@
 </head>
 
 <body>
+    <div id="header-container">
+        <!-- The header will be loaded by page_loader.js -->
+        <div id="headerDiv"></div>
+    </div>
     <div id="container">
         <video id="video" autoplay muted playsinline></video>
         <canvas id="canvas"></canvas>
@@ -139,14 +150,11 @@
         <div id="target-square"></div>
 
         <div id="fps-counter">0.0 FPS</div>
-        <div id="resolution-label"
-            style="position:absolute;top:40px;right:10px;background:rgba(0,0,0,0.8);color:white;padding:8px 12px;border-radius:4px;font-size:14px;z-index:10;">
-            -- x --
-        </div>
+        <div id="resolution-label">-- x --</div>
         <div id="info-box">Touch to scan...</div>
 
         <button id="toggle-processed-view"
-            style="position:absolute;top:10px;left:10px;z-index:10;padding:8px 12px;border-radius:4px;border:none;background:#222;color:#fff;cursor:pointer;">
+            style="position:absolute;top:10px;left:15px;z-index:10;padding:8px 12px;border-radius:4px;border:none;background:#222;color:#fff;cursor:pointer;">
             Show Processed View
         </button>
         <canvas id="processed-canvas"
@@ -163,20 +171,8 @@
     </div>
 
     <script src="https://docs.opencv.org/4.8.0/opencv.js"></script>
-    <script src="../scan/topology-analyzer.js"></script>
-    <script src="../scan/scanner.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.getElementById('toggle-processed-view');
-            const processedCanvas = document.getElementById('processed-canvas');
-            window.showing = false;
-            btn.addEventListener('click', () => {
-                window.showing = !window.showing;
-                processedCanvas.style.display = window.showing ? 'block' : 'none';
-                btn.textContent = window.showing ? 'Hide Processed View' : 'Show Processed View';
-            });
-        });
-    </script>
+    <script type="module" src="../scan/scanner.js"></script>
+    <!-- Scanner functionality is loaded from scanner.js module -->
 </body>
 
 </html>

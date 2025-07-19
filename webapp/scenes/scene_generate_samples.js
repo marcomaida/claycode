@@ -2,6 +2,7 @@ import {} from "../geometry/vector.js";
 import {} from "../geometry/math.js";
 import { textToTree, getDescription } from "../conversion/convert.js";
 import * as utils from "./utils.js";
+import { downloadBlob } from "../common/utils/download.js";
 
 let CLAYCODE_FILE_PREFIX = "claycode_sample___"
 let SAMPLES = [
@@ -19,18 +20,7 @@ let SAMPLES = [
     //["open.spotify.com/track/0T5iIrXA4p5GsubkhuBIKV?si=9aa280042e824513", 1] // Currently too long :(
 ]
 
-// Given a blob, saves it with the given file name
-function downloadBlob(blob, fileName) {
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = fileName
-    
-    // Trigger the download
-    document.body.appendChild(link);  // Append the link to the document body (required for Firefox)
-    link.click();
-    document.body.removeChild(link); // Remove the link from the document
-    URL.revokeObjectURL(link.href); // Release the blob URL
-}
+
 
 // Save the metadata file
 function saveMetadata() {

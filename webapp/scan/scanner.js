@@ -6,6 +6,14 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
+import { 
+    TopologyAnalyzer, 
+    BitTreeConverter, 
+    BitsValidator, 
+    TextBitsConverter, 
+    FpsCounter 
+} from '../common/index.js';
+
 const ENABLE_ZOOM = true; // Set to false to disable zoom
 
 class ClaycodeWebScanner {
@@ -14,7 +22,7 @@ class ClaycodeWebScanner {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
         this.isScanning = false;
-        this.fpsCounter = new FpsCounter(50);
+        this.fpsCounter = new FpsCounter(50); // Using common FpsCounter
         this.analysisEnabled = true;
         this.zoomFactor = 1.0; // Start at 1.0 (no zoom)
 
@@ -43,7 +51,7 @@ class ClaycodeWebScanner {
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'environment',
-                    width: { exact: 1080 },
+                    width: { exact: 1920 },
                     height: { exact: 1080 }
                 }
             });
@@ -336,37 +344,40 @@ class ClaycodeWebScanner {
     }
 }
 
-class FpsCounter {
-    constructor(maxSamples) {
-        this.maxSamples = maxSamples;
-        this.samples = [];
-        this.lastTime = 0;
-    }
-
-    addSample(currentTime) {
-        if (this.lastTime > 0) {
-            const delta = currentTime - this.lastTime;
-            if (delta > 0) {
-                const fps = 1000 / delta;
-                this.samples.push(fps);
-
-                if (this.samples.length > this.maxSamples) {
-                    this.samples.shift();
+// Initialize scanner when DOM is loaded
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load the header using the same method as page_loader.js
+    const headerDiv = document.getElementById("headerDiv");
+    if (headerDiv) {
+        try {
+            const response = await fetch("/pages/header.html");
+            const html = await response.text();
+            headerDiv.innerHTML = html;
+            
+            // Highlight the current page in the header
+            const currentPath = window.location.pathname;
+            const headerLinks = headerDiv.querySelectorAll('.header-nav a');
+            headerLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('header-element');
                 }
-            }
+            });
+        } catch (error) {
+            console.error('Error loading header:', error);
         }
-
-        this.lastTime = currentTime;
-
-        if (this.samples.length === 0) return 0;
-
-        const sum = this.samples.reduce((a, b) => a + b, 0);
-        return sum / this.samples.length;
     }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+    
     new ClaycodeWebScanner();
+    
+    // Set up toggle button for processed view
+    const btn = document.getElementById('toggle-processed-view');
+    const processedCanvas = document.getElementById('processed-canvas');
+    window.showing = false;
+    if (btn && processedCanvas) {
+        btn.addEventListener('click', () => {
+            window.showing = !window.showing;
+            processedCanvas.style.display = window.showing ? 'block' : 'none';
+            btn.textContent = window.showing ? 'Hide Processed View' : 'Show Processed View';
+        });
+    }
 });
-
-window.showing = false;

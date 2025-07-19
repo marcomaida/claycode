@@ -6,30 +6,33 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
-import * as text_bit_UTF8 from "./text_bits/text_bits_UTF8.js";
-import * as square from "./bits_tree/square.js";
+// Import from common library
+import { TextBitsConverter, BitTreeConverter } from '../common/index.js';
 
 /* This is the external interface of the conversion functions.
    Modify these functions to change the scenes behavior. */
 
 export function textToBits(text) {
-  return text_bit_UTF8.textToBits(text);
+  return TextBitsConverter.textToBits(text);
 }
+
 export function bitsToText(bits) {
-  return text_bit_UTF8.bitsToText(bits);
+  return TextBitsConverter.bitsToText(bits);
 }
 
 export function bitsToTree(bitsArray) {
-  return square.bitsToTree(bitsArray);
+  return BitTreeConverter.bitsToTree(bitsArray);
 }
+
 export function treeToBits(tree) {
-  return square.treeToBits(tree);
+  return BitTreeConverter.treeToBits(tree);
 }
 
 export function textToTree(text) {
   const bitsArray = textToBits(text);
   return bitsToTree(bitsArray);
 }
+
 export function treeToText(tree) {
   const bitsArray = treeToBits(tree);
   return bitsToText(bitsArray);
@@ -37,5 +40,5 @@ export function treeToText(tree) {
 
 // Used by sample webapp
 export function getDescription() {
-  return `Text-bit: ${text_bit_UTF8.getDescription()}, Bit-tree: ${square.getDescription()} `
+  return `Using common library for text-bit and bit-tree conversions`;
 }
