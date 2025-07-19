@@ -10,4 +10,4 @@ experiments/siggraph_2025_artifact/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 experiments/siggraph_2025_artifact/**/*.pdf filter=lfs diff=lfs merge=lfs -text
 
 # Note: Github Pages does not support LFS, so we need to use the non-LFS version for the website.
-# generator/images/**/* filter=lfs diff=lfs merge=lfs -text
+# webapp/images/**/* filter=lfs diff=lfs merge=lfs -text

@@ -9,7 +9,7 @@
 import * as util from "./util.js";
 import {} from "./compression/shoco_en.js";
 
-// Used by sample generator
+// Used by sample webapp
 export function getDescription() {
   return "Shoco"
 }

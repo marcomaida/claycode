@@ -9,7 +9,7 @@
 import { Tree } from "../../tree/tree.js"
 import { TreeNode } from "../../tree/tree_node.js";
 
-// Used by sample generator
+// Used by sample webapp
 export function getDescription() {
     return "Square"
 }

@@ -9,7 +9,7 @@
 import * as util from "./util.js";
 import * as crc from "./crc.js"
 
-// Used by sample generator
+// Used by sample webapp
 export function getDescription() {
   return `UTF8, CRC: ${crc.getDescription()}`
 }

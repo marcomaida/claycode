@@ -1,4 +1,4 @@
-# Claycode Generator
+# Claycode webapp
 
 This folder contains a website that can generate Claycodes.
 

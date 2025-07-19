@@ -4,7 +4,7 @@
 # Commercial use is prohibited without a separate license.
 
 # # Generate samples. 
-# # Note: the `claycode_sample__` prefix must match the prefix in `generator/scenes/scene_generate_samples.js`
+# # Note: the `claycode_sample__` prefix must match the prefix in `webapp/scenes/scene_generate_samples.js`
 
 import subprocess, time, os, glob, json
 from datetime import date
@@ -24,12 +24,12 @@ if files_to_remove:
 
 # Start HTTP server
 print("*** Start HTTP server")
-server_path = os.path.abspath(os.path.join(os.getcwd(), "../../", "generator"))
+server_path = os.path.abspath(os.path.join(os.getcwd(), "../../", "webapp"))
 process = subprocess.Popen(["python3", "-m", "http.server", "731"], cwd=server_path)
 pid = process.pid
 print(f"*** HTTP server started with PID: {pid}")
 
-# Open sample generator scene
+# Open sample webapp scene
 print(f"*** Open website")
 time.sleep(1)
 subprocess.run(["open", "http://localhost:731/pages/scene_generate_samples.html"]) 
@@ -42,7 +42,7 @@ print(f"*** HTTP server killed")
 # Wait for all images to be generated
 while not METADATA_FILE_NAME in os.listdir(DOWNLOAD_DIR):
     files = [img for img in os.listdir(DOWNLOAD_DIR) if img.startswith(SAMPLE_FILE_PREFIX)]
-    print(f"Waiting for generator to finish: {len(files)} files detected.")
+    print(f"Waiting for webapp to finish: {len(files)} files detected.")
     time.sleep(1)
 
 # Count generated images

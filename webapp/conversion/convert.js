@@ -35,7 +35,7 @@ export function treeToText(tree) {
   return bitsToText(bitsArray);
 }
 
-// Used by sample generator
+// Used by sample webapp
 export function getDescription() {
   return `Text-bit: ${text_bit_UTF8.getDescription()}, Bit-tree: ${square.getDescription()} `
 }

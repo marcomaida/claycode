@@ -36,8 +36,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload only contents inside the 'generator' directory
-          path: 'generator'
+          # Upload only contents inside the 'webapp' directory
+          path: 'webapp'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

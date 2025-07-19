@@ -21,14 +21,30 @@ class ClaycodeWebScanner {
         this.initializeCamera();
         this.setupEventListeners();
     }
+    
+    // Check if text is a valid URL
+    isValidUrl(text) {
+        // Simple URL regex that matches with or without http/https/www
+        const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i;
+        return urlRegex.test(text.trim());
+    }
+    
+    // Format URL to ensure it has http:// prefix
+    formatUrl(url) {
+        url = url.trim();
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            return 'https://' + url;
+        }
+        return url;
+    }
 
     async initializeCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'environment',
-                    width: { ideal: 1920 },
-                    height: { ideal: 1920 }
+                    width: { exact: 1080 },
+                    height: { exact: 1080 }
                 }
             });
             this.video.srcObject = stream;
@@ -48,7 +64,7 @@ class ClaycodeWebScanner {
             document.getElementById('loading').style.display = 'none';
             this.startScanning();
         } else {
-            setTimeout(() => this.waitForOpenCV(), 100);
+            setTimeout(this.waitForOpenCV.bind(this), 100);
         }
     }
 
@@ -267,6 +283,20 @@ class ClaycodeWebScanner {
         document.getElementById('result-image').src = resultCanvas.toDataURL();
         document.getElementById('result-text').textContent = decodedText;
         document.getElementById('result-modal').style.display = 'flex';
+        
+        // Check if the decoded text is a URL
+        const isUrl = this.isValidUrl(decodedText);
+        
+        // Show or hide copy button based on whether it's a URL
+        const copyButton = document.getElementById('copy-button');
+        if (isUrl) {
+            if (copyButton) copyButton.style.display = 'none';
+            // Auto-open URL in new tab
+            const url = this.formatUrl(decodedText);
+            window.open(url, '_blank');
+        } else {
+            if (copyButton) copyButton.style.display = 'inline-block';
+        }
 
         // Pause analysis
         this.analysisEnabled = false;
@@ -284,6 +314,25 @@ class ClaycodeWebScanner {
                 this.analysisEnabled = true;
             }
         });
+        
+        // Add event listener for copy button if it exists
+        const copyButton = document.getElementById('copy-button');
+        if (copyButton) {
+            copyButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent closing the modal
+                const text = document.getElementById('result-text').textContent;
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        copyButton.textContent = 'Copied!';
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copy to Clipboard';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+            });
+        }
     }
 }
 

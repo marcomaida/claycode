@@ -17,7 +17,7 @@ This paper introduces Claycode, a novel 2D scannable code designed for extensive
 
 This repository contains all the implementation of the publication. In particular:
 
-- `generator/`: a webpage that can generate Claycodes given some text,
+- `webapp/`: a webpage that can generate Claycodes given some text,
 - `scanner/`: an Android scanner camera app written in Kotlin,
 - `experiments/`: miscellanea experiments related to Claycodes,
 - `other/`: demos and media.

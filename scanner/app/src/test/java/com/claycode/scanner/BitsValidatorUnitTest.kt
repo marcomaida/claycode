@@ -15,7 +15,7 @@ import kotlin.random.Random
 
 class BitsValidatorUnitTest {
 
-    // Ground truth is taken from the Generator's code.
+    // Ground truth is taken from the webapp's code.
     // The format is (message, polynomial, CRC)
     val groundTruth = arrayOf(
         Triple("00110","111","11"),
