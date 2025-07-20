@@ -117,10 +117,12 @@ a {
 }
 
 .tree-gen-footer-div {
-  position: fixed;
-  bottom: 10pt;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: 10pt auto 10pt auto;
+  /* 10pt top margin, auto horizontal centering */
+  text-align: center;
+  /* Center text or inline content if needed */
+  width: fit-content;
+  /* Shrink to fit content, or set specific width */
 }
 
 .tree-gen-label {
@@ -175,11 +177,6 @@ a {
   transform: translate(0, -50%);
 }
 
-.pixi-div {
-  z-index: 0;
-  position: fixed;
-}
-
 .elements-div {
   z-index: 1;
   display: flex;
@@ -193,14 +190,15 @@ a {
   background-color: #252525;
   border: 0.2px solid white;
   color: rgb(213, 213, 213);
-  padding: 10pt 15pt;
-  text-align: right;
+  padding: 10pt 10pt;
+  text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 12pt;
   cursor: pointer;
   border-radius: 4pt;
   transition: background-color 0.3s;
+  margin-right: 20pt;
 }
 
 .download-button:hover {

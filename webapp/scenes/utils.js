@@ -5,15 +5,27 @@ import { DefaultBrush, PackerBrush } from "../packer/packer_brush.js";
 import { createMouseHeadPolygon, createCirclePolygon, createHeartPolygon, createStarPolygon, createUPolygon, createSpiralPolygon } from "../geometry/shapes.js";
 import { TreeNode } from "../tree/tree_node.js";
 import { packClaycode } from "../packer/pack.js";
+import { downloadBlob } from "../common/utils/download.js";
+
 
 export function initPIXI() {
+  // Get the size of the container
+  const width = pixiDiv.offsetWidth;
+  const height = pixiDiv.offsetHeight;
+  const resolution = window.devicePixelRatio * 2;
+
+  // Create the PIXI application with logical size
   const app = new PIXI.Application({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    resolution: 1,
+    width,
+    height,
+    resolution,
     antialias: true,
   });
   initDrawing(app);
+
+  // Set the CSS size to match the container, so the canvas is scaled down/up
+  app.view.style.width = `${width}px`;
+  app.view.style.height = `${height}px`;
 
   pixiDiv.appendChild(app.view);
 
@@ -114,4 +126,15 @@ export function getRandomAlphanumericString() {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
+}
+
+export function downloadClaycode(app) {
+  const inputText = document.getElementById("inputText").value;
+  const fileName = inputText.substring(0, 20).replace(/[^a-z0-9]/gi, '_') || 'claycode';
+
+  // Capture the canvas and convert to blob
+  const image = app.renderer.plugins.extract.canvas(app.stage.children[0]);
+  image.toBlob((blob) => {
+    downloadBlob(blob, `${fileName}.png`);
+  }, 'image/png');
 }

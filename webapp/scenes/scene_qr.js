@@ -26,12 +26,12 @@ function polygonView() {
 
   // Decide size of QR code
   const parent_height =
-    (window.innerHeight -
+    (app.screen.height -
       document.getElementById("headerDiv").clientHeight -
       document.getElementById("footerDiv").clientHeight) *
-    0.65;
+    1;
   const parent_width =
-    document.getElementById("qr-container").clientWidth * 0.9;
+    document.getElementById("qr-container").clientWidth;
   const qr_size = Math.min(parent_height, parent_width);
   updateQR(input_text, qr_size);
 
@@ -52,8 +52,8 @@ function polygonView() {
   // it to be the radius of the enclosing circle, (multiply by `sqrt(2)/2`)
   const polygon_size = (qr_size * 1.41421356) / 2;
   const polygon_center = new PIXI.Vec(
-    window.innerWidth * 0.25,
-    window.innerHeight / 2
+    app.screen.width * 0.5,
+    app.screen.height / 2
   );
   clearDrawing();
   const polygon = utils.getPolygonOfIndex(current_shape, polygon_center, polygon_size);

@@ -29,11 +29,11 @@ function polygonView() {
   current_tree = duplicateTreeNTimes(current_tree, inputNumFragments.value);
 
   const polygon_center = new PIXI.Vec(
-    window.innerWidth * 0.5,
-    window.innerHeight / 2
+    app.screen.width * 0.5,
+    app.screen.height / 2
   );
   const polygon_size =
-    Math.min(window.innerWidth / 2, window.innerHeight / 2) * 0.7;
+    Math.min(app.screen.width / 2, app.screen.height / 2) * 0.7;
 
   clearDrawing();
   const polygon = utils.getPolygonOfIndex(current_shape, polygon_center, polygon_size);

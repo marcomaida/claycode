@@ -1,5 +1,5 @@
-import {} from "../geometry/vector.js";
-import {} from "../geometry/math.js";
+import { } from "../geometry/vector.js";
+import { } from "../geometry/math.js";
 import { clearDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js";
 import { textToTree } from "../conversion/convert.js";
@@ -13,8 +13,8 @@ function doubleView() {
 
   const current_tree = textToTree(inputText);
 
-  const window_width = window.innerWidth;
-  const window_height = window.innerHeight;
+  const window_width = app.screen.width;
+  const window_height = app.screen.height;
 
   const shorter = Math.min(window_width, window_height);
   const bar_width = shorter / 2;

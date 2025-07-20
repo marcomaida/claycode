@@ -11,39 +11,37 @@
   <script src="/image_processing/coloris.min.js"></script>
 </head>
 
-<body>
-  <div id="pixiDiv" style="z-index:0; position: fixed;"></div>
-  <div id="mainDiv" style="z-index:1; position: fixed;">
-    <div class="elements-div">
-      <div id="headerDiv"></div>
-      <div id="spacerDiv" style="flex:auto;"></div>
-      <div class="tree-gen-label" , style="margin-left: 20pt;">
-        Frame:
-        <input class="color_picker" id="frameColorPicker" type="text" data-coloris value="#ffffff">
-        <run style="margin-left: 20pt;"></run>
-        Color A:
-        <input class="color_picker" id="colorAPicker" type="text" data-coloris value="#000000">
-        <run style="margin-left: 20pt;"></run>
-        Color B:
-        <input class="color_picker" id="colorBPicker" type="text" data-coloris value="#ffffff">
-        <run style="margin-left: 20pt;"></run>
-        Leaf A:
-        <input class="color_picker" id="leafColorAPicker" type="text" data-coloris value="#000000">
-        <select name="Leaf Shape A" id="leafShapeAPicker"></select>
-        <run style="margin-left: 20pt;"></run>
-        Leaf B:
-        <input class="color_picker" id="leafColorBPicker" type="text" data-coloris value="#ffffff">
-        <select name="Leaf Shape B" id="leafShapeBPicker"></select>
-        <run style="margin-left: 20pt;"></run>
-        Num Fragments:
-        <input type="number" id="inputNumFragments" maxlength="5" value="1" class="tree_gen_val" />
+<body style="position: relative;">
+  <div id="mainDiv" class="elements-div">
+    <div id="headerDiv"></div>
+    <div id="pixiDiv" class="pixi-div" style="position: relative; flex:auto; display: flex; flex-direction: column;">
+      <div id="spacerDiv" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
       </div>
-      <div id="footerDiv"></div>
     </div>
+
+    <div class="tree-gen-label" style="margin-left: 20pt;">
+      Frame:
+      <input class="color_picker" id="frameColorPicker" type="text" data-coloris value="#ffffff">
+      <run style="margin-left: 20pt;"></run>
+      Color A:
+      <input class="color_picker" id="colorAPicker" type="text" data-coloris value="#000000">
+      <run style="margin-left: 20pt;"></run>
+      Color B:
+      <input class="color_picker" id="colorBPicker" type="text" data-coloris value="#ffffff">
+      <run style="margin-left: 20pt;"></run>
+      Leaf A:
+      <input class="color_picker" id="leafColorAPicker" type="text" data-coloris value="#000000">
+      <select name="Leaf Shape A" id="leafShapeAPicker"></select>
+      <run style="margin-left: 20pt;"></run>
+      Leaf B:
+      <input class="color_picker" id="leafColorBPicker" type="text" data-coloris value="#ffffff">
+      <select name="Leaf Shape B" id="leafShapeBPicker"></select>
+      <run style="margin-left: 20pt;"></run>
+      Num Fragments:
+      <input type="number" id="inputNumFragments" maxlength="5" value="1" class="tree_gen_val" />
+    </div>
+    <div id="footerDiv"></div>
   </div>
-
-
-
   <script type="text/javascript">
     Coloris.setInstance('.color_picker', {
       themeMode: 'dark',
