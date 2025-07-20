@@ -132,9 +132,57 @@ export function downloadClaycode(app) {
   const inputText = document.getElementById("inputText").value;
   const fileName = inputText.substring(0, 20).replace(/[^a-z0-9]/gi, '_') || 'claycode';
 
-  // Capture the canvas and convert to blob
-  const image = app.renderer.plugins.extract.canvas(app.stage.children[0]);
-  image.toBlob((blob) => {
+  const claycodeElement = app.stage.children[0];
+  const bounds = claycodeElement.getBounds();
+
+  // Compute aspect ratio scaling factor
+  const originalWidth = bounds.width;
+  const originalHeight = bounds.height;
+  const maxDimension = Math.max(originalWidth, originalHeight);
+
+  // Scale so that the largest side becomes exactly 2048
+  const targetMax = 2048;
+  const scaleFactor = targetMax / maxDimension;
+
+  const targetWidth = Math.round(originalWidth * scaleFactor);
+  const targetHeight = Math.round(originalHeight * scaleFactor);
+
+  // Create render texture with target dimensions
+  const renderTexture = PIXI.RenderTexture.create({
+    width: targetWidth,
+    height: targetHeight,
+    resolution: 1,
+  });
+
+  // Prepare a temporary container and scale it
+  const tempContainer = new PIXI.Container();
+  const clone = claycodeElement.clone();
+  clone.position.set(-bounds.x * scaleFactor, -bounds.y * scaleFactor);
+  clone.scale.set(scaleFactor);
+
+  tempContainer.addChild(clone);
+
+  // Render the scene
+  app.renderer.render(tempContainer, {
+    renderTexture,
+    clear: true,
+    skipUpdateTransform: false,
+  });
+
+  const canvas = app.renderer.plugins.extract.canvas(renderTexture);
+
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+  }
+
+  canvas.toBlob((blob) => {
     downloadBlob(blob, `${fileName}.png`);
   }, 'image/png');
 }
+
+
+
+
+
