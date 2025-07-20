@@ -14,17 +14,17 @@ import { drawPolygon } from "../packer/draw.js";
 import { packClaycode } from "../packer/pack.js";
 import { PackerBrush } from "../packer/packer_brush.js";
 
-const app = utils.initPIXI();
+let app;
+
 const inputTextBox = await utils.initInputText();
-const infoText = utils.initInfoText();
-const inputNumFragments = document.getElementById("inputNumFragments");
-await utils.showChangeShapeLabel(true, "Repack");
 
 let currentTreesAndPolygons = null;
 let currentTexture = null;
 let currentSprite = null;
 let currentPolygons = null;
 let currentFrameColor = 0xffffff
+let currentLeafShapeA = PackerBrush.Shape.UNSPECIFIED;
+let currentLeafShapeB = PackerBrush.Shape.UNSPECIFIED;
 let currentColorA = 0xffffff
 let currentColorB = 0x000000
 let currentLeafColorA = 0xffffff
@@ -45,28 +45,6 @@ function debounce(func, delay, useLastTrees = false) {
 /****** 
  *  DROP MANAGEMENT
  ******/
-let dropArea = app.view;
-// Prevent default drag behaviors
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, preventDefaults, false);
-  document.body.addEventListener(eventName, preventDefaults, false);
-});
-function preventDefaults(e) {
-  e.preventDefault();
-  e.stopPropagation();
-}
-dropArea.addEventListener('drop', handleDrop, false);
-document.getElementById("spacerDiv").addEventListener('drop', handleDrop, false);
-async function handleDrop(e) {
-  let file = e.dataTransfer.files[0];
-
-  let reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onloadend = async () => {
-    let texture = PIXI.Texture.from(reader.result);
-    await loadImage(texture);
-  }
-}
 
 async function loadImage(texture) {
   if (currentSprite) {
@@ -92,6 +70,21 @@ async function loadImage(texture) {
   debounce(imagePolygonView, 300, false);
 }
 
+async function handleDrop(e) {
+  let file = e.dataTransfer.files[0];
+
+  let reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onloadend = async () => {
+    let texture = PIXI.Texture.from(reader.result);
+    await loadImage(texture);
+  }
+}
+
+function preventDefaults(e) {
+  e.preventDefault();
+  e.stopPropagation();
+}
 
 /*****
  * Leaf Shape Management
@@ -108,41 +101,6 @@ function loadLeafShapePicker(selectElement) {
     selectElement.appendChild(option);
   }
 }
-
-let currentLeafShapeA = PackerBrush.Shape.UNSPECIFIED;
-const leafShapeAPicker = document.getElementById("leafShapeAPicker")
-loadLeafShapePicker(leafShapeAPicker);
-leafShapeAPicker.addEventListener("change", (event) => {
-  currentLeafShapeA = event.target.value;
-  debounce(imagePolygonView, 10, true);
-});
-
-let currentLeafShapeB = PackerBrush.Shape.UNSPECIFIED;
-const leafShapeBPicker = document.getElementById("leafShapeBPicker")
-loadLeafShapePicker(leafShapeBPicker);
-leafShapeBPicker.addEventListener("change", (event) => {
-  currentLeafShapeB = event.target.value;
-  debounce(imagePolygonView, 10, true);
-});
-
-/*****
- * Color management
- */
-document.addEventListener('coloris:pick', event => {
-  const hexString = event.detail.color.replace('#', '');
-  const hexNumber = parseInt(hexString, 16);
-  if (event.detail.currentEl.id == "frameColorPicker")
-    currentFrameColor = hexNumber
-  if (event.detail.currentEl.id == "colorBPicker")
-    currentColorA = hexNumber
-  if (event.detail.currentEl.id == "colorAPicker")
-    currentColorB = hexNumber
-  if (event.detail.currentEl.id == "leafColorBPicker")
-    currentLeafColorA = hexNumber
-  if (event.detail.currentEl.id == "leafColorAPicker")
-    currentLeafColorB = hexNumber
-  debounce(imagePolygonView, 10, true);
-});
 
 // Given a set of polygons, and a target number of fragments, 
 // distributes the framents so that they best fit in the set of polygons.
@@ -167,31 +125,86 @@ function distributeFragments(polygons, targetNumFragments, minAreaPerc) {
   return fragmentsDistribution;
 }
 
-// Debug default picture
-let imageUrl = `${window.location.origin}/images/astronaut.png`
-PIXI.Loader.shared.add(imageUrl).load(async (loader, resources) => {
-  let texture = PIXI.Texture.from(resources[imageUrl].url);
-  await loadImage(texture)
-});
+document.getElementById("spacerDiv").addEventListener('drop', handleDrop, false);
 
-inputNumFragments.addEventListener("input", () => debounce(imagePolygonView, 200, false));
-inputTextBox.addEventListener("input", () => {
-  debounce(imagePolygonView, 200, false);
-});
-window.onresize = function () {
-  debounce(imagePolygonView, 200, false);
-};
-
-document.addEventListener("keydown", function (event) {
-  if (event.key == "Enter") {
-    debounce(imagePolygonView, 100, false);
+async function init() {
+  if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", init);
+    return;
   }
-});
+
+  app = utils.initPIXI();
+  const infoText = utils.initInfoText();
+  const inputNumFragments = document.getElementById("inputNumFragments");
+  await utils.showChangeShapeLabel(true, "Repack");
+
+  let dropArea = app.view;
+  // Prevent default drag behaviors
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+    document.body.addEventListener(eventName, preventDefaults, false);
+  });
+  dropArea.addEventListener('drop', handleDrop, false);
+
+  const leafShapeAPicker = document.getElementById("leafShapeAPicker")
+  loadLeafShapePicker(leafShapeAPicker);
+  leafShapeAPicker.addEventListener("change", (event) => {
+    currentLeafShapeA = event.target.value;
+    debounce(imagePolygonView, 10, true);
+  });
+
+  const leafShapeBPicker = document.getElementById("leafShapeBPicker")
+  loadLeafShapePicker(leafShapeBPicker);
+  leafShapeBPicker.addEventListener("change", (event) => {
+    currentLeafShapeB = event.target.value;
+    debounce(imagePolygonView, 10, true);
+  });
+
+  /*****
+   * Color management
+   */
+  document.addEventListener('coloris:pick', event => {
+    const hexString = event.detail.color.replace('#', '');
+    const hexNumber = parseInt(hexString, 16);
+    if (event.detail.currentEl.id == "frameColorPicker")
+      currentFrameColor = hexNumber
+    if (event.detail.currentEl.id == "colorBPicker")
+      currentColorA = hexNumber
+    if (event.detail.currentEl.id == "colorAPicker")
+      currentColorB = hexNumber
+    if (event.detail.currentEl.id == "leafColorBPicker")
+      currentLeafColorA = hexNumber
+    if (event.detail.currentEl.id == "leafColorAPicker")
+      currentLeafColorB = hexNumber
+    debounce(imagePolygonView, 10, true);
+  });
+
+  // Debug default picture
+  let imageUrl = `${window.location.origin}/images/astronaut.png`
+  PIXI.Loader.shared.add(imageUrl).load(async (loader, resources) => {
+    let texture = PIXI.Texture.from(resources[imageUrl].url);
+    await loadImage(texture)
+  });
+
+  inputNumFragments.addEventListener("input", () => debounce(imagePolygonView, 200, false));
+  inputTextBox.addEventListener("input", () => {
+    debounce(imagePolygonView, 200, false);
+  });
+  window.onresize = function () {
+    debounce(imagePolygonView, 200, false);
+  };
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key == "Enter") {
+      debounce(imagePolygonView, 100, false);
+    }
+  });
+}
 
 function getWindowDimension() {
-  const WINDOW_WIDTH = window.innerWidth;
-  const WINDOW_HEIGHT = window.innerHeight;
-  const SPRITE_DIMENSION = Math.min(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+  const WINDOW_WIDTH = app.screen.width;
+  const WINDOW_HEIGHT = app.screen.height;
+  const SPRITE_DIMENSION = Math.min(WINDOW_WIDTH, WINDOW_HEIGHT) * 0.8;
 
   return [WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_DIMENSION];
 }
@@ -287,3 +300,5 @@ function imagePolygonView(useLastTrees = false) {
     }
   }
 }
+
+await init();

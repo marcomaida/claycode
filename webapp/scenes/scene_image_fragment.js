@@ -159,8 +159,8 @@ window.onresize = function () {
 
 
 function getWindowDimension() {
-  const WINDOW_WIDTH = window.innerWidth;
-  const WINDOW_HEIGHT = window.innerHeight;
+  const WINDOW_WIDTH = app.screen.width;
+  const WINDOW_HEIGHT = app.screen.height;
   const SPRITE_DIMENSION = Math.min(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
   return [WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_DIMENSION];

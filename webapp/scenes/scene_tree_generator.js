@@ -8,13 +8,6 @@ import * as utils from "./utils.js";
 // Import from common library instead
 import { Tree, TreeNode } from "../common/index.js";
 
-await utils.showChangeShapeLabel(true);
-const app = utils.initPIXI();
-const infoText = utils.initInfoText();
-const inputMaxChildren = document.getElementById("inputMaxChildren");
-const inputMaxHeight = document.getElementById("inputMaxHeight");
-const inputGrowProb = document.getElementById("inputGrowProb");
-
 function generateRandomTree(
   maxChildren,
   maxHeight,
@@ -68,11 +61,11 @@ function polygonView() {
     maxNodes
   );
   const polygon_center = new PIXI.Vec(
-    window.innerWidth * 0.5,
-    window.innerHeight / 2
+    app.screen.width * 0.5,
+    app.screen.height * 0.5
   );
   const polygon_size =
-    Math.min(window.innerWidth / 2, window.innerHeight / 2) * 0.7;
+    Math.min(app.screen.width / 2, app.screen.height / 2) * 0.9;
 
   clearDrawing();
   const polygon = utils.getPolygonOfIndex(current_shape, polygon_center, polygon_size);
@@ -107,10 +100,27 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-polygonView();
-inputMaxChildren.addEventListener("input", () => debounce(polygonView, 100));
-inputMaxHeight.addEventListener("input", () => debounce(polygonView, 100));
-inputGrowProb.addEventListener("input", () => debounce(polygonView, 100));
-window.onresize = function () {
-  debounce(polygonView, 50);
+await utils.showChangeShapeLabel(true);
+let app;
+
+async function init() {
+  if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", init);
+    return;
+  }
+
+  app = utils.initPIXI();
+  const infoText = utils.initInfoText();
+  const inputMaxChildren = document.getElementById("inputMaxChildren");
+  const inputMaxHeight = document.getElementById("inputMaxHeight");
+  const inputGrowProb = document.getElementById("inputGrowProb");
+
+  polygonView();
+  inputMaxChildren.addEventListener("input", () => debounce(polygonView, 100));
+  inputMaxHeight.addEventListener("input", () => debounce(polygonView, 100));
+  inputGrowProb.addEventListener("input", () => debounce(polygonView, 100));
+  window.onresize = function () {
+    debounce(polygonView, 50);
+  };
 };
+init();

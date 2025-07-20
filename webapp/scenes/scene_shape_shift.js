@@ -1,5 +1,5 @@
-import {} from "../geometry/vector.js";
-import {} from "../geometry/math.js";
+import { } from "../geometry/vector.js";
+import { } from "../geometry/math.js";
 import { clearDrawing, initDrawing } from "../packer/draw.js";
 import { drawClaycode } from "../packer/draw_rectangle_claycode.js";
 import { textToTree } from "../conversion/convert.js";
@@ -21,20 +21,20 @@ function updateDrawing() {
   const min_div = 10;
   const max_div = 1.6;
   var bar_width = smoothOscillation(
-    window.innerWidth / min_div,
-    window.innerWidth / max_div,
+    app.screen.width / min_div,
+    app.screen.width / max_div,
     anim_cycle_s,
     (x) => Math.sin(x)
   );
   var bar_height = smoothOscillation(
-    window.innerHeight / min_div,
-    window.innerHeight / max_div,
+    app.screen.height / min_div,
+    app.screen.height / max_div,
     anim_cycle_s,
     (x) => Math.sin(x - Math.PI)
   );
 
-  const bar_left = window.innerWidth / 2 - bar_width / 2;
-  var bar_top = window.innerHeight / 2 - bar_height / 2;
+  const bar_left = app.screen.width / 2 - bar_width / 2;
+  var bar_top = app.screen.height / 2 - bar_height / 2;
 
   const code_frame_square = [
     new PIXI.Vec(bar_left, bar_top),

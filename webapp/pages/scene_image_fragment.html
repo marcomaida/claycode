@@ -12,11 +12,13 @@
 </head>
 
 <body>
-  <div id="pixiDiv" style="z-index:0; position: fixed;"></div>
-  <div id="mainDiv" style="z-index:1; position: fixed;">
+  <div class="elements-div" style="position: relative;">
     <div id="headerDiv"></div>
 
-    <div class="tree-gen-info-box" , id="tree-gen-info-box">
+    <div id="pixiDiv" class="pixi-div" style="flex:auto; display: flex; flex-direction: column;">
+    </div>
+
+    <div class="tree-gen-info-box" id="tree-gen-info-box">
       <div id="infoText"></div>
       <div id="changeShapeDiv" class="change_shape_div">
         <img src="/images/enter.png" width="20" height="20" class="change_shape_img" />
@@ -26,7 +28,6 @@
     </div>
 
     <div id="footerDivTreeGen" class="tree-gen-footer-div">
-
       <div class="tree-gen-label">
         Frame:
         <input class="color_picker" id="frameColorPicker" type="text" data-coloris value="#ffffff">
@@ -61,19 +62,10 @@
     Coloris.setInstance('.color_picker', {
       themeMode: 'dark',
       swatches: [
-        '#264653',
-        '#2a9d8f',
-        '#e9c46a',
-        '#f4a261',
-        '#e76f51',
-        '#d62828',
-        '#023e8a',
-        '#0077b6',
-        '#0096c7',
-        '#00b4d8',
-        '#48cae4'
+        '#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51',
+        '#d62828', '#023e8a', '#0077b6', '#0096c7', '#00b4d8', '#48cae4'
       ]
-    })
+    });
   </script>
 </body>
 

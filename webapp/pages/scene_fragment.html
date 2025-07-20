@@ -9,12 +9,25 @@
   <script type="module" src="/scenes/scene_fragment.js"></script>
 </head>
 
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="style.css" />
+  <!-- <script src="https://pixijs.download/release/pixi.min.js"></script> -->
+  <script src="../pixi.mini.js"></script>
+  <script type="module" src="../page_loader.js"></script>
+  <script type="module" src="/scenes/scene_fragment.js"></script>
+</head>
+
 <body>
-  <div id="pixiDiv" style="z-index:0; position: fixed;"></div>
-  <div style="z-index:1; position: fixed;">
+  <div class="elements-div" style="position: relative;">
     <div id="headerDiv"></div>
 
-    <div class="tree-gen-info-box" , id="tree-gen-info-box">
+    <div id="pixiDiv" class="pixi-div" style="flex:auto; display: flex; flex-direction: column;">
+    </div>
+
+    <div class="tree-gen-info-box" id="tree-gen-info-box">
       <div id="infoText"></div>
       <div id="changeShapeDiv" class="change_shape_div">
         <img src="/images/enter.png" width="20" height="20" class="change_shape_img" />
