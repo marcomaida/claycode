@@ -1,4 +1,4 @@
-# Sample Claycode Generator
+# Sample Claycode Webapp
 
 This Script generates a PDF with a number of Claycodes of different shapes. The PDF reports the useful metadata of the Claycode (date of generation, encoding, original input text).
 
@@ -6,10 +6,10 @@ Run `make` to generate. Only tested on Mac.
 
 This script
 - Deletes all old claycode samples in the `~/Downloads` folder
-- Opens a special page of the generator website that generates and downloads all the generated Claycodes
+- Opens a special page of the webapp website that generates and downloads all the generated Claycodes
 - Organises the images into a PDF (saved in the same folder as this README)
 
 ## Under the hood
-The relevant logic on the generator side is in `generator/scenes/scene_generate_samples.js`. This file contains the list of Claycodes that will be generated. 
+The relevant logic on the webapp side is in `webapp/scenes/scene_generate_samples.js`. This file contains the list of Claycodes that will be generated. 
 
-In addition to the Claycodes, the generator produces a `metadata.json` file. This file is the last produced, and it is used by the Python script to detect when the web generator is done. 
+In addition to the Claycodes, the webapp produces a `metadata.json` file. This file is the last produced, and it is used by the Python script to detect when the web webapp is done. 
