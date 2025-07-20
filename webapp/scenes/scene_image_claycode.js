@@ -135,7 +135,7 @@ async function init() {
 
   app = utils.initPIXI();
   const infoText = utils.initInfoText();
-  const inputNumFragments = document.getElementById("inputNumFragments");
+  const inputRedundancy = document.getElementById("inputRedundancy");
   await utils.showChangeShapeLabel(true, "Repack");
 
   let dropArea = app.view;
@@ -186,7 +186,7 @@ async function init() {
     await loadImage(texture)
   });
 
-  inputNumFragments.addEventListener("input", () => debounce(imagePolygonView, 200, false));
+  inputRedundancy.addEventListener("input", () => debounce(imagePolygonView, 200, false));
   inputTextBox.addEventListener("input", () => {
     debounce(imagePolygonView, 200, false);
   });
@@ -230,7 +230,7 @@ function imagePolygonView(useLastTrees = false) {
     if (currentPolygons) {
       //*** Distribute fragments
       let MIN_AREA_PERC = 0.0 // if a polygon occupies less than this percent of the total area, it is ignored
-      let fragmentsDistribution = distributeFragments(currentPolygons, inputNumFragments.value, MIN_AREA_PERC)
+      let fragmentsDistribution = distributeFragments(currentPolygons, inputRedundancy.value, MIN_AREA_PERC)
       infoSuffix += ` - [${fragmentsDistribution}]`;
 
       currentTreesAndPolygons = [];
