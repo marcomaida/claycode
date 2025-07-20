@@ -6,12 +6,12 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
-import { 
-    TopologyAnalyzer, 
-    BitTreeConverter, 
-    BitsValidator, 
-    TextBitsConverter, 
-    FpsCounter 
+import {
+    TopologyAnalyzer,
+    BitTreeConverter,
+    BitsValidator,
+    TextBitsConverter,
+    FpsCounter
 } from '../common/index.js';
 
 const ENABLE_ZOOM = true; // Set to false to disable zoom
@@ -29,14 +29,14 @@ class ClaycodeWebScanner {
         this.initializeCamera();
         this.setupEventListeners();
     }
-    
+
     // Check if text is a valid URL
     isValidUrl(text) {
         // Simple URL regex that matches with or without http/https/www
         const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i;
         return urlRegex.test(text.trim());
     }
-    
+
     // Format URL to ensure it has http:// prefix
     formatUrl(url) {
         url = url.trim();
@@ -51,8 +51,8 @@ class ClaycodeWebScanner {
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'environment',
-                    width: { exact: 1920 },
-                    height: { exact: 1080 }
+                    width: { ideal: 1920 },
+                    height: { ideal: 1920 }
                 }
             });
             this.video.srcObject = stream;
@@ -291,10 +291,10 @@ class ClaycodeWebScanner {
         document.getElementById('result-image').src = resultCanvas.toDataURL();
         document.getElementById('result-text').textContent = decodedText;
         document.getElementById('result-modal').style.display = 'flex';
-        
+
         // Check if the decoded text is a URL
         const isUrl = this.isValidUrl(decodedText);
-        
+
         // Show or hide copy button based on whether it's a URL
         const copyButton = document.getElementById('copy-button');
         if (isUrl) {
@@ -322,7 +322,7 @@ class ClaycodeWebScanner {
                 this.analysisEnabled = true;
             }
         });
-        
+
         // Add event listener for copy button if it exists
         const copyButton = document.getElementById('copy-button');
         if (copyButton) {
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const response = await fetch("/pages/header.html");
             const html = await response.text();
             headerDiv.innerHTML = html;
-            
+
             // Highlight the current page in the header
             const currentPath = window.location.pathname;
             const headerLinks = headerDiv.querySelectorAll('.header-nav a');
@@ -366,9 +366,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error loading header:', error);
         }
     }
-    
+
     new ClaycodeWebScanner();
-    
+
     // Set up toggle button for processed view
     const btn = document.getElementById('toggle-processed-view');
     const processedCanvas = document.getElementById('processed-canvas');
