@@ -4,6 +4,7 @@ import { textToTree } from "../conversion/convert.js";
 import * as utils from "./utils.js";
 import { packClaycode } from "../packer/pack.js";
 import { clearDrawing } from "../packer/draw.js";
+import { duplicateTreeNTimes } from "../tree/util.js";
 
 // Update function
 function polygonView() {
@@ -12,7 +13,9 @@ function polygonView() {
     inputText = " ";
   }
 
-  const current_tree = textToTree(inputText);
+  let current_tree = textToTree(inputText);
+  current_tree = duplicateTreeNTimes(current_tree, inputRedundancy.value);
+
   const polygon_center = new PIXI.Vec(
     app.screen.width * 0.5,
     app.screen.height * 0.5
@@ -35,6 +38,7 @@ function polygonView() {
 
 let app;
 let current_shape = 0;
+const inputRedundancy = document.getElementById("inputRedundancy");
 
 // Setup
 window.addEventListener("DOMContentLoaded", async () => {
@@ -60,6 +64,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   window.onresize = function () {
     timerId = utils.debounce(polygonView, 100, timerId);
   };
+  inputRedundancy.addEventListener("input", () => utils.debounce(polygonView, 100));
 
 
   // Add event listener to download button
