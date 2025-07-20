@@ -1,4 +1,4 @@
-# Sample Claycode webapp
+# Sample Claycode Webapp
 
 This Script generates a PDF with a number of Claycodes of different shapes. The PDF reports the useful metadata of the Claycode (date of generation, encoding, original input text).
 
