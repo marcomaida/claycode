@@ -12,7 +12,7 @@ export function initPIXI() {
   // Get the size of the container
   const width = pixiDiv.offsetWidth;
   const height = pixiDiv.offsetHeight;
-  const resolution = window.devicePixelRatio * 2;
+  const resolution = window.devicePixelRatio || 1;
 
   // Create the PIXI application with logical size
   const app = new PIXI.Application({
