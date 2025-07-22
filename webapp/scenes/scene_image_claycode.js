@@ -136,7 +136,7 @@ async function init() {
   app = utils.initPIXI();
   const infoText = utils.initInfoText();
   const inputRedundancy = document.getElementById("inputRedundancy");
-  inputRedundancyContainer = document.getElementById("inputRedundancyContainer");
+  let inputRedundancyContainer = document.getElementById("inputRedundancyContainer");
   inputRedundancyContainer.style.visibility = "visible";
   await utils.showChangeShapeLabel(true, "Repack");
 
