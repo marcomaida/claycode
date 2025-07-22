@@ -10,19 +10,20 @@
     <div style="margin-left:10pt; background-color: rgba(253, 253, 253, 0.2); border-radius: 10pt; width: 2pt;">
     </div>
     <input type="text" id="inputText" spellcheck="false" value="" placeholder="> write here">
-    <div style="font-size: 5; 
+    <div id ="inputRedundancyContainer", style="font-size: 5; 
             border: 2px solid #272727; 
             border-radius: 5pt;
-            margin-bottom: 10pt;
-            margin-right: 5pt;
+            margin-bottom: 5pt;
+            margin-right: 15pt;
             padding-top: 5pt;
-            text-align: center;">
+            text-align: center;
+            visibility: collapse;">
         Redundancy:
         <input type="number" id="inputRedundancy" maxlength="5" value="1" min="1" class="tree_gen_val"
             style="align-self: center; text-align: center" />
     </div>
     <div id="downloadButtonContainer" class="button-container"
-        style="text-align: center; margin-bottom: 10pt; visibility: hidden; ">
+        style="text-align: center; margin-bottom: 10pt; visibility: collapse; ">
         <button id="downloadButton" class="download-button">Download Claycode</button>
     </div>
 </div>
