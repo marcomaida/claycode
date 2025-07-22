@@ -39,6 +39,7 @@ function polygonView() {
 let app;
 let current_shape = 0;
 let inputRedundancy;
+let inputRedundancyContainer;
 
 // Setup
 window.addEventListener("DOMContentLoaded", async () => {
