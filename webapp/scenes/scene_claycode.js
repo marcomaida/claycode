@@ -38,7 +38,8 @@ function polygonView() {
 
 let app;
 let current_shape = 0;
-const inputRedundancy = document.getElementById("inputRedundancy");
+let inputRedundancy;
+let inputRedundancyContainer;
 
 // Setup
 window.addEventListener("DOMContentLoaded", async () => {
@@ -46,6 +47,10 @@ window.addEventListener("DOMContentLoaded", async () => {
   const inputTextBox = await utils.initInputText();
   utils.initInfoText();
   app = utils.initPIXI();
+
+  inputRedundancy = document.getElementById("inputRedundancy");
+  inputRedundancyContainer = document.getElementById("inputRedundancyContainer");
+  inputRedundancyContainer.style.visibility = "visible";
 
   // Shape change management
   document.addEventListener("keydown", function (event) {
