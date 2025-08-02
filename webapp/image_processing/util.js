@@ -90,16 +90,11 @@ export function closeSmallIslands(binaryImage, island_percentage_threshold, isla
     }
 
     // Remove small islands
-    let removedCount = 0;
-    let keptCount = 0;
     for (const island of islands) {
         if (island.length < threshold) {
             for (const [x, y] of island) {
                 binaryImage[y][x] = fillValue;
             }
-            removedCount++;
-        } else {
-            keptCount++;
         }
     }
 
