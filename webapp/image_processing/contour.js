@@ -6,12 +6,8 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
-// Given a binary image, computes a set of non-overlapping polygons that covers the image.
-// `size` specifies the size of the image in PIXI's coordinate system.
-//
-// Returns an array of arrays of PIXI.Vec point. Each array represents a polygon.
-
-import { closeSmallIslands } from "./util.js";
+import { closeSmallIslands, closeSmallEmptyGaps } from "./util.js";
+import { area } from "../geometry/geometry.js";
 import "./simplify.js"
 
 const EMPTY = 0;
@@ -168,6 +164,10 @@ function posArraysToPixiVecArrays(polygons, center, size) {
 }
 
 /*
+    Given a binary image, computes a set of non-overlapping polygons that covers the image.
+    `size` specifies the size of the image in PIXI's coordinate system.
+    Returns an array of arrays of PIXI.Vec point. Each array represents a polygon.
+    
     INPUT
     [0, 0, 0],
     [0, 0, 0],
@@ -183,12 +183,22 @@ function posArraysToPixiVecArrays(polygons, center, size) {
     [1, 1, 1, 1, 1],
 */
 export function computeContourPolygons(binaryImage, center, size) {
-    binaryImage = closeSmallIslands(binaryImage, 0.01);
+    // Remove noise (small islands of "1"s)
+    binaryImage = closeSmallIslands(binaryImage, 0.01, 1);
+    // Close small gaps in the contours, effectively padding
+    binaryImage = closeSmallEmptyGaps(binaryImage);
+    // Remove negative noise (small islands of "0"s) - these could lead to very small polygons
+    binaryImage = closeSmallIslands(binaryImage, 0.02, 0);
     binaryImage = addPadding(binaryImage);
     binaryImage = markContours(binaryImage);
     let polygons = extractPolygonsFromContours(binaryImage);
     polygons = polygons.map((poly) => simplify(poly, 1, false));
     let pixiPolygons = posArraysToPixiVecArrays(polygons, center, size);
 
+    // Last safety measure: filter out polygons with a very small area
+    const totalImageArea = binaryImage.length * binaryImage[0].length;
+    const minAreaPerc = 0.01;
+    const minPolygonArea = totalImageArea * minAreaPerc;
+    pixiPolygons = pixiPolygons.filter(poly => area(poly) >= minPolygonArea);
     return pixiPolygons;
 }
