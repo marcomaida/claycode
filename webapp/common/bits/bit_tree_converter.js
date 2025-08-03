@@ -10,39 +10,53 @@ import { BitString } from "./bit_string.js";
 import { Tree } from "../tree/tree.js";
 import { TreeNode } from "../tree/tree_node.js";
 
+const MAX_NUMBER = 2n ** 2000n;
+
 /**
  * Common BitTreeConverter class used by both scanner and generator
  */
 export class BitTreeConverter {
     static treeToBits(tree) {
         if (!tree) return new BitString("");
-        
+
         const number = this.treeToNumber(tree);
         return this.numberToBitString(number);
     }
-    
+
     static treeToNumber(tree) {
         if (!tree.children || tree.children.length === 0) {
             return 1n;
         }
-        
+
         const childNumbers = tree.children.map(child => this.treeToNumber(child));
+
+        // Check if any child number is 0 (overflow occurred)
+        if (childNumbers.some(num => num === 0n)) {
+            console.warn("Overflow occurred in treeToNumber, returning 0");
+            return 0n;
+        }
+
         return this.squareDecompositionToNumber(childNumbers);
     }
-    
+
     static squareDecompositionToNumber(decomposition) {
         let sum = 0n;
         for (const num of decomposition) {
             sum += num * num;
+
+            // Check if sum exceeds MAX_NUMBER
+            if (sum + 1n > MAX_NUMBER) {
+                return 0n;
+            }
         }
         return sum + 1n;
     }
-    
+
     static numberToBitString(number) {
         const binaryStr = number.toString(2);
         return new BitString(binaryStr.substring(1));
     }
-    
+
     static bitsToTree(bitsArray) {
         const root = new TreeNode();
         const n = this.bitArrayToInt(bitsArray);
@@ -59,8 +73,8 @@ export class BitTreeConverter {
         else if (typeof bits === 'string') {
             bits = bits.split('').map(b => parseInt(b));
         }
-        
-        let newBits = Array.from(bits); 
+
+        let newBits = Array.from(bits);
         newBits.unshift(1); // Add 1 at beginning to make sure it is an integer
         return Array.from(newBits).reverse().reduce((acc, c, i) => acc + BigInt(c) * 2n ** BigInt(i), 0n);
     }
@@ -117,7 +131,7 @@ export class BitTreeConverter {
 
         return decomposition;
     }
-    
+
     // This is needed for the bitsToTree method
     static squareDecompositionToTree(decomposition, root) {
         root.children = decomposition.map(() => new TreeNode());
@@ -125,7 +139,7 @@ export class BitTreeConverter {
             this.numberToTree(decomposition[i], root.children[i]);
         }
     }
-    
+
     static numberToTree(n, node) {
         if (n === 1n) return;
         const decomposition = this.numberToSquareDecomposition(n);
