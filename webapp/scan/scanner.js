@@ -295,15 +295,22 @@ class ClaycodeWebScanner {
         // Check if the decoded text is a URL
         const isUrl = this.isValidUrl(decodedText);
 
-        // Show or hide copy button based on whether it's a URL
+        // Show appropriate buttons based on content type
         const copyButton = document.getElementById('copy-button');
+        const openUrlButton = document.getElementById('open-url-button');
+        
         if (isUrl) {
-            if (copyButton) copyButton.style.display = 'none';
-            // Auto-open URL in new tab
-            const url = this.formatUrl(decodedText);
-            window.open(url, '_blank');
+            if (copyButton) copyButton.style.display = 'inline-block';
+            if (openUrlButton) {
+                openUrlButton.style.display = 'inline-block';
+                openUrlButton.onclick = () => {
+                    const url = this.formatUrl(decodedText);
+                    window.open(url, '_blank');
+                };
+            }
         } else {
             if (copyButton) copyButton.style.display = 'inline-block';
+            if (openUrlButton) openUrlButton.style.display = 'none';
         }
 
         // Pause analysis
@@ -339,6 +346,14 @@ class ClaycodeWebScanner {
                     .catch(err => {
                         console.error('Failed to copy text: ', err);
                     });
+            });
+        }
+
+        // Add event listener for open URL button if it exists
+        const openUrlButton = document.getElementById('open-url-button');
+        if (openUrlButton) {
+            openUrlButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent closing the modal
             });
         }
     }
