@@ -301,6 +301,36 @@ function imagePolygonView(useLastTrees = false) {
       drawClaycode(tree, polygon, brush)
     }
   }
+
+  // Use this for debugging only
+  // currentPolygons.forEach((polygon) => {
+  //   // Use a set of very bright, distinct colors
+  //   const brightColors = [
+  //     0xff0000, // Red
+  //     0x00ff00, // Green
+  //     0x0000ff, // Blue
+  //     0xffff00, // Yellow
+  //     0xff00ff, // Magenta
+  //     0x00ffff, // Cyan
+  //     0xffffff, // White
+  //     0xff8000, // Orange
+  //     0x00ff80, // Spring Green
+  //     0x8000ff, // Purple
+  //     0xff0080, // Pink
+  //     0x80ff00, // Chartreuse
+  //     0x0080ff, // Azure
+  //     0x80ffff, // Light Cyan
+  //     0xffff80, // Light Yellow
+  //     0xff80ff, // Light Magenta
+  //     0x80ff80, // Light Green
+  //     0x8080ff, // Light Blue
+  //   ];
+  //   currentPolygons.forEach((polygon, i) => {
+  //     const color = brightColors[i % brightColors.length];
+  //     drawPolygon(polygon, color);
+  //   });
+  //   return;
+  // });
 }
 
 await init();

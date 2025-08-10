@@ -8,6 +8,7 @@
 
 import { closeSmallIslands, closeSmallEmptyGaps } from "./util.js";
 import { area } from "../geometry/geometry.js";
+import { drawPolygon } from "../packer/draw.js";
 import "./simplify.js"
 
 const EMPTY = 0;
@@ -192,8 +193,144 @@ export function computeContourPolygons(binaryImage, center, size) {
     binaryImage = addPadding(binaryImage);
     binaryImage = markContours(binaryImage);
     let polygons = extractPolygonsFromContours(binaryImage);
-    polygons = polygons.map((poly) => simplify(poly, 1, false));
-    let pixiPolygons = posArraysToPixiVecArrays(polygons, center, size);
+    polygons = polygons.map((poly) => simplify(poly, 3, false));
+
+    // Convert polygons to martinez format
+    // Input: [{ x: Number, y: Number }, ...]
+    // Output: [ [ [x, y], ... ] ]
+    function toMartinez(poly) {
+        return [poly.map(pt => [pt.x, pt.y])];
+    }
+
+    // Input: [ [ [x, y], ... ] ]
+    // Output: [{ x: Number, y: Number }, ...]
+    function fromMartinez(mtz) {
+        // mtz is array of rings: [ [ [x, y], ... ] ]
+        console.assert(Array.isArray(mtz));
+        console.assert(mtz.length == 1); // Only one ring
+        return mtz.map(ring => ring.map(([x, y]) => ({ x, y })));
+    }
+
+    // Helper: check if polyA is fully inside polyB
+    function isPolygonInside(polyA, polyB) {
+        console.log("Checking polygons:");
+        console.log("polyA:", polyA, "length:", polyA.length);
+        console.log("polyB:", polyB, "length:", polyB.length);
+        // All points of polyA inside polyB
+        return polyA.every(pt => {
+            let x = pt.x, y = pt.y;
+            let inside = false;
+            for (let i = 0, j = polyB.length - 1; i < polyB.length; j = i++) {
+                let xi = polyB[i].x, yi = polyB[i].y;
+                let xj = polyB[j].x, yj = polyB[j].y;
+                let intersect = ((yi > y) !== (yj > y)) &&
+                    (x < (xj - xi) * (y - yi) / (yj - yi + 0.0000001) + xi);
+                if (intersect) inside = !inside;
+            }
+            return inside;
+        });
+    }
+
+    let hackPoly = [[
+        [0, 0],
+        [200, 0],
+        [200, 200],
+        [0, 200],
+        [0, 0]
+    ]];
+
+    console.log(`hackPoly is ${JSON.stringify(hackPoly)}`);
+    const pts = hackPoly[0].map(([x, y]) => ({ x, y }));
+    drawPolygon(pts, 0xff0080);
+    // drawPolygon(fromMartinez(hackPoly), 0xff0080);
+
+    // Subtract contained polygons from containing polygons
+    let toProcess = polygons.slice();
+    let resultPolygons = [];
+    while (toProcess.length > 0) {
+        let poly = toProcess.shift();
+        let found = false;
+        for (let i = 0; i < toProcess.length; i++) {
+            if (isPolygonInside(poly, toProcess[i])) {
+                // poly is inside toProcess[i]
+                // console.log("BRANCH 1 Found contained polygon (poly inside other), subtracting poly from other");
+                // let container = toProcess[i];
+                // let diff = window.martinez.diff(toMartinez(container), toMartinez(poly));
+                // diff = window.martinez.diff(diff, hackPoly); // TEST
+                // console.log("martinez.diff result:", JSON.stringify(diff));
+                // let splitPolys = fromMartinez(diff);
+                // console.log("splitPolys:", JSON.stringify(splitPolys));
+                // toProcess.splice(i, 1);
+                // toProcess.push(...splitPolys);
+                // found = true;
+                break;
+            } else if (isPolygonInside(toProcess[i], poly)) {
+                // toProcess[i] is inside poly
+                console.log("BRANCH 2 Found contained polygon (other inside poly), subtracting other from poly");
+                let container = poly;
+                let contained = toProcess[i];
+                let diff = window.martinez.diff(toMartinez(container), toMartinez(contained));
+                console.assert(diff.length == 1, "Expected only one polygon after diff");
+                diff = window.martinez.diff(diff[0], hackPoly);
+                console.assert(diff.length == 1, "Expected only one polygon after diff");
+                console.log("martinez.diff result:", JSON.stringify(diff[0]));
+                let splitPolys = fromMartinez(diff[0]);
+                console.log("splitPolys:", JSON.stringify(splitPolys));
+
+                splitPolys.forEach((polygon) => {
+                    // Use a set of very bright, distinct colors
+                    const brightColors = [
+                    0xff0000, // Red
+                    0x00ff00, // Green
+                    0x0000ff, // Blue
+                    0xffff00, // Yellow
+                    0xff00ff, // Magenta
+                    0x00ffff, // Cyan
+                    0xffffff, // White
+                    0xff8000, // Orange
+                    0x00ff80, // Spring Green
+                    0x8000ff, // Purple
+                    0xff0080, // Pink
+                    0x80ff00, // Chartreuse
+                    0x0080ff, // Azure
+                    0x80ffff, // Light Cyan
+                    0xffff80, // Light Yellow
+                    0xff80ff, // Light Magenta
+                    0x80ff80, // Light Green
+                    0x8080ff, // Light Blue
+                    ];
+                    splitPolys.forEach((polygon, i) => {
+                    const color = brightColors[i % brightColors.length];
+                    drawPolygon(polygon, color);
+                    });
+                    return;
+                });
+
+                // Remove contained from toProcess
+                toProcess.splice(i, 1);
+                // Add split polygons to toProcess
+                toProcess.push(...splitPolys);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            console.log("Not contained");
+            resultPolygons.push(poly);
+        }
+    }
+
+    resultPolygons = resultPolygons.map((poly) => simplify(poly, 3, false));
+
+    let pixiPolygons = posArraysToPixiVecArrays(resultPolygons, center, size);
+
+    console.log(`Created polygons: len ${pixiPolygons.length}`);
+    pixiPolygons.forEach((poly, idx) => {
+        console.log(`Polygon ${idx}:`);
+        poly.forEach((pt, j) => {
+            console.log(`  [${pt.x}, ${pt.y}]`);
+        });
+    });
 
     // Last safety measure: filter out polygons with a very small area
     const totalImageArea = binaryImage.length * binaryImage[0].length;
