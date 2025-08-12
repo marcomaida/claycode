@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
-import { closeSmallIslands, closeSmallEmptyGaps, drawPolygonsWithColors } from "./util.js";
+import { closeSmallIslands, closeSmallEmptyGaps, drawPolygonsWithColors, openPolygon, closePolygon, toMartinez, fromMartinez } from "./util.js";
 import { area } from "../geometry/geometry.js";
 import "./simplify.js"
 
@@ -165,46 +165,6 @@ function posArraysToPixiVecArrays(polygons, center, size) {
     );
 }
 
-// Utility: add first point to end if not already closed
-function closePolygon(poly) {
-    if (poly.length > 0) {
-        const first = poly[0];
-        const last = poly[poly.length - 1];
-        if (first.x !== last.x || first.y !== last.y) {
-            poly.push({ ...first });
-        }
-    }
-    return poly;
-}
-
-// Utility: remove last point if polygon is closed
-function openPolygon(poly) {
-    if (poly.length > 1) {
-        const first = poly[0];
-        const last = poly[poly.length - 1];
-        if (first.x === last.x && first.y === last.y) {
-            poly.pop();
-        }
-    }
-    return poly;
-}
-
-// Convert polygons to martinez format
-// Input: [{ x: Number, y: Number }, ...]
-// Output: [ [ [x, y], ... ] ]
-function toMartinez(poly) {
-    return [poly.map(pt => [pt.x, pt.y])];
-}
-
-// Input: [ [ [x, y], ... ] ]
-// Output: [{ x: Number, y: Number }, ...]
-function fromMartinez(mtz) {
-    // mtz is array of rings: [ [ [x, y], ... ] ]
-    console.assert(Array.isArray(mtz));
-    console.assert(mtz.length == 1); // Only one ring
-    return mtz.map(ring => ring.map(([x, y]) => ({ x, y })));
-}
-
 // Helper: check if polyA is fully inside polyB
 function isPolygonInside(polyA, polyB) {
     if (debug) {
@@ -212,8 +172,9 @@ function isPolygonInside(polyA, polyB) {
         console.log("polyA:", polyA, "length:", polyA.length);
         console.log("polyB:", polyB, "length:", polyB.length);
     }
+
     // All points of polyA inside polyB
-    return polyA.every(pt => {
+    let result = polyA.every(pt => {
         let x = pt.x, y = pt.y;
         let inside = false;
         for (let i = 0, j = polyB.length - 1; i < polyB.length; j = i++) {
@@ -225,6 +186,11 @@ function isPolygonInside(polyA, polyB) {
         }
         return inside;
     });
+
+    if (debug) {
+        console.log("Is polygon A is inside B:", result);
+    }
+    return result;
 }
 
 // Subtract contained polygon from container and split result
@@ -282,21 +248,20 @@ function subtractContainedPolygon(container, contained) {
 
     if (debug) {
         drawPolygonsWithColors([rectPoints], 0xff0080); // Draw the split rectangle in pink
-        console.log("splittingRect:", JSON.stringify(rectPoints));
+        console.log("splitting rectangle:", JSON.stringify(rectPoints));
     }
 
     // Remove the contained polygon from the container
     let diff = window.martinez.diff(toMartinez(container), toMartinez(contained));
     console.assert(diff.length == 1, "Expected only one polygon after diff");
 
-    // Remove the "splitting" polygon from the diff
+    // Remove the "splitting" rectangle from the diff
     diff = window.martinez.diff(diff[0], splittingRect);
     console.assert(diff.length == 1, "Expected only one polygon after diff");
     if (debug) {
         console.log("martinez.diff result:", JSON.stringify(diff[0]));
     }
 
-    // Split the polygon into multiple polygons
     return fromMartinez(diff[0]);
 }
 
@@ -338,7 +303,16 @@ export function computeContourPolygons(binaryImage, center, size) {
     // Subtract contained polygons from containing polygons
     let toProcess = polygons.slice();
     let resultPolygons = [];
+
+    if (debug) {
+        drawPolygonsWithColors(toProcess);
+    }
+
     while (toProcess.length > 0) {
+        if (debug) {
+            console.log("Current toProcess polygons:", toProcess.map(p => p.length));
+        }
+
         let poly = toProcess.shift();
         let found = false;
         for (let i = 0; i < toProcess.length; i++) {
@@ -358,17 +332,11 @@ export function computeContourPolygons(binaryImage, center, size) {
                 toProcess.splice(removeIdx, 1);
                 toProcess.push(...splitPolys);
                 found = true;
-                if (debug) {
-                    drawPolygonsWithColors(splitPolys);
-                }
                 break;
             }
         }
 
         if (!found) {
-            if (debug) {
-                console.log("Not contained");
-            }
             resultPolygons.push(poly);
         }
     }
@@ -384,13 +352,8 @@ export function computeContourPolygons(binaryImage, center, size) {
     pixiPolygons = pixiPolygons.filter(poly => area(poly) >= minPolygonArea);
 
     if (debug) {
-        console.log(`Created polygons: len ${pixiPolygons.length}`);
-        pixiPolygons.forEach((poly, idx) => {
-            console.log(`Polygon ${idx}:`);
-            poly.forEach((pt, j) => {
-                console.log(`  [${pt.x}, ${pt.y}]`);
-            });
-        });
+        console.log(`Created ${pixiPolygons.length} final polygons`);
+        console.log("-----------------------");
     }
 
     return pixiPolygons;

@@ -103,6 +103,46 @@ export function closeSmallIslands(binaryImage, island_percentage_threshold, isla
     return binaryImage;
 }
 
+// Utility: add first point to end if not already closed
+export function closePolygon(poly) {
+    if (poly.length > 0) {
+        const first = poly[0];
+        const last = poly[poly.length - 1];
+        if (first.x !== last.x || first.y !== last.y) {
+            poly.push({ ...first });
+        }
+    }
+    return poly;
+}
+
+// Utility: remove last point if polygon is closed
+export function openPolygon(poly) {
+    if (poly.length > 1) {
+        const first = poly[0];
+        const last = poly[poly.length - 1];
+        if (first.x === last.x && first.y === last.y) {
+            poly.pop();
+        }
+    }
+    return poly;
+}
+
+// Convert polygons to martinez format
+// Input: [{ x: Number, y: Number }, ...]
+// Output: [ [ [x, y], ... ] ]
+export function toMartinez(poly) {
+    return [poly.map(pt => [pt.x, pt.y])];
+}
+
+// Input: [ [ [x, y], ... ] ]
+// Output: [{ x: Number, y: Number }, ...]
+export function fromMartinez(mtz) {
+    // mtz is array of rings: [ [ [x, y], ... ] ]
+    console.assert(Array.isArray(mtz));
+    console.assert(mtz.length == 1); // Only one ring
+    return mtz.map(ring => ring.map(([x, y]) => ({ x, y })));
+}
+
 // Draws polygons with bright colors, or a single override color if provided
 export function drawPolygonsWithColors(polygons, overrideColor = null) {
     const brightColors = [
@@ -116,7 +156,6 @@ export function drawPolygonsWithColors(polygons, overrideColor = null) {
         0xff8000, // Orange
         0x00ff80, // Spring Green
         0x8000ff, // Purple
-        0xff0080, // Pink
         0x80ff00, // Chartreuse
         0x0080ff, // Azure
         0x80ffff, // Light Cyan
