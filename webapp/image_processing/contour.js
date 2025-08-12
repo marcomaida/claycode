@@ -194,7 +194,7 @@ function isPolygonInside(polyA, polyB) {
 }
 
 // Subtract contained polygon from container and split result
-function subtractContainedPolygon(container, contained) {
+function subtractEnclosedPolygon(container, contained) {
     // Compute center of contained polygon
     let cx = 0, cy = 0;
     for (const pt of contained) {
@@ -265,6 +265,64 @@ function subtractContainedPolygon(container, contained) {
     return fromMartinez(diff[0]);
 }
 
+// Given an array of polygons, subtract all contained polygons from their containers,
+// and split the container to not leave holes. Check each pair in both directions.
+function subtractAllEnclosedPolygons(polygons) {
+    let toProcess = polygons.slice();
+    let resultPolygons = [];
+
+    if (debug) {
+        drawPolygonsWithColors(toProcess);
+    }
+
+    while (toProcess.length > 0) {
+        if (debug) {
+            console.log("Current toProcess polygons:", toProcess.map(p => p.length));
+        }
+
+        let poly = toProcess.shift();
+        let found = false;
+        for (let i = 0; i < toProcess.length; i++) {
+            let container = null, contained = null, removeIdx = null;
+            if (isPolygonInside(poly, toProcess[i])) {
+                container = toProcess[i];
+                contained = poly;
+                removeIdx = i; // Remove container
+            } else if (isPolygonInside(toProcess[i], poly)) {
+                container = poly;
+                contained = toProcess[i];
+                removeIdx = i; // Remove contained
+            }
+
+            if (container && contained) {
+                let splitPolys = subtractEnclosedPolygon(container, contained);
+                toProcess.splice(removeIdx, 1);
+                toProcess.push(...splitPolys);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            resultPolygons.push(poly);
+        }
+    }
+    return resultPolygons;
+}
+
+// Filter out polygons with area smaller than a percentage of the total image area
+function filterSmallPolygons(polygons, binaryImage, minAreaPerc = 0.01) {
+    const totalImageArea = binaryImage.length * binaryImage[0].length;
+    const minPolygonArea = totalImageArea * minAreaPerc;
+    const filtered = polygons.filter(poly => area(poly) >= minPolygonArea);
+
+    if (debug) {
+        console.log(`Created ${filtered.length} final polygons`);
+        console.log("-----------------------");
+    }
+    return filtered;
+}
+
 /*
     Given a binary image, computes a set of non-overlapping polygons that covers the image.
     `size` specifies the size of the image in PIXI's coordinate system.
@@ -295,66 +353,20 @@ export function computeContourPolygons(binaryImage, center, size) {
     binaryImage = markContours(binaryImage);
     let polygons = extractPolygonsFromContours(binaryImage);
 
-    // IMPORTANT: The library assumes that polygons are closed
+    // IMPORTANT: The martinez library assumes that polygons are closed
     // But the packer assumes that polygons are open
     // So we close them first, then open them again
     polygons = polygons.map((poly) => closePolygon(simplify(poly, 3, false)));
 
-    // Subtract contained polygons from containing polygons
-    let toProcess = polygons.slice();
-    let resultPolygons = [];
-
-    if (debug) {
-        drawPolygonsWithColors(toProcess);
-    }
-
-    while (toProcess.length > 0) {
-        if (debug) {
-            console.log("Current toProcess polygons:", toProcess.map(p => p.length));
-        }
-
-        let poly = toProcess.shift();
-        let found = false;
-        for (let i = 0; i < toProcess.length; i++) {
-            let container = null, contained = null, removeIdx = null;
-            if (isPolygonInside(poly, toProcess[i])) {
-                container = toProcess[i];
-                contained = poly;
-                removeIdx = i; // Remove container
-            } else if (isPolygonInside(toProcess[i], poly)) {
-                container = poly;
-                contained = toProcess[i];
-                removeIdx = i; // Remove contained
-            }
-
-            if (container && contained) {
-                let splitPolys = subtractContainedPolygon(container, contained);
-                toProcess.splice(removeIdx, 1);
-                toProcess.push(...splitPolys);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            resultPolygons.push(poly);
-        }
-    }
+    // Subtract contained polygons from containing polygons, splitting the container to not leave holes
+    let resultPolygons = subtractAllEnclosedPolygons(polygons);
 
     // IMPORTANT: Re-open the polygon for the packer to work
     resultPolygons = resultPolygons.map((poly) => openPolygon(simplify(poly, 3, false)));
     let pixiPolygons = posArraysToPixiVecArrays(resultPolygons, center, size);
 
     // Last safety measure: filter out polygons with a very small area
-    const totalImageArea = binaryImage.length * binaryImage[0].length;
-    const minAreaPerc = 0.01;
-    const minPolygonArea = totalImageArea * minAreaPerc;
-    pixiPolygons = pixiPolygons.filter(poly => area(poly) >= minPolygonArea);
-
-    if (debug) {
-        console.log(`Created ${pixiPolygons.length} final polygons`);
-        console.log("-----------------------");
-    }
+    pixiPolygons = filterSmallPolygons(pixiPolygons, binaryImage, 0.01);
 
     return pixiPolygons;
 }
