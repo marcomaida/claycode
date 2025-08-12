@@ -76,6 +76,14 @@ async function handleDrop(e) {
   let reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onloadend = async () => {
+    // Clear PIXI cache for this image to avoid invalid texture errors
+    if (PIXI.utils.TextureCache[reader.result]) {
+      delete PIXI.utils.TextureCache[reader.result];
+    }
+    if (PIXI.utils.BaseTextureCache[reader.result]) {
+      delete PIXI.utils.BaseTextureCache[reader.result];
+    }
+    
     let texture = PIXI.Texture.from(reader.result);
     await loadImage(texture);
   }
