@@ -6,9 +6,8 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
-import { closeSmallIslands, closeSmallEmptyGaps } from "./util.js";
+import { closeSmallIslands, closeSmallEmptyGaps, drawPolygonsWithColors } from "./util.js";
 import { area } from "../geometry/geometry.js";
-import { drawPolygon } from "../packer/draw.js";
 import "./simplify.js"
 
 const EMPTY = 0;
@@ -17,6 +16,8 @@ const CONTOUR = 2;
 const VISITED = -1;
 const cardinalDirections = [[1, 0], [0, 1], [-1, 0], [0, -1]]; // Used for neighbors
 const allDirections = cardinalDirections.concat([[1, 1], [1, -1], [-1, 1], [-1, -1]]); // Used for touching
+
+const debug = false; // Set to true to enable debugging drawings for polygons and logs
 
 function getNeighbors(mat, row, col, directions) {
     let ret = [];
@@ -206,9 +207,11 @@ function fromMartinez(mtz) {
 
 // Helper: check if polyA is fully inside polyB
 function isPolygonInside(polyA, polyB) {
-    console.log("Checking polygons:");
-    console.log("polyA:", polyA, "length:", polyA.length);
-    console.log("polyB:", polyB, "length:", polyB.length);
+    if (debug) {
+        console.log("Checking polygons:");
+        console.log("polyA:", polyA, "length:", polyA.length);
+        console.log("polyB:", polyB, "length:", polyB.length);
+    }
     // All points of polyA inside polyB
     return polyA.every(pt => {
         let x = pt.x, y = pt.y;
@@ -225,15 +228,73 @@ function isPolygonInside(polyA, polyB) {
 }
 
 // Subtract contained polygon from container and split result
-function subtractContainedPolygon(container, contained, hackPoly) {
+function subtractContainedPolygon(container, contained) {
+    // Compute center of contained polygon
+    let cx = 0, cy = 0;
+    for (const pt of contained) {
+        cx += pt.x;
+        cy += pt.y;
+    }
+    cx /= contained.length;
+    cy /= contained.length;
+
+    // Find closest vertex of container to center
+    let minDist = Infinity;
+    let closestIdx = -1;
+    for (let i = 0; i < container.length; i++) {
+        const dx = container[i].x - cx;
+        const dy = container[i].y - cy;
+        const dist = dx * dx + dy * dy;
+        if (dist < minDist) {
+            minDist = dist;
+            closestIdx = i;
+        }
+    }
+    const closestVertex = container[closestIdx];
+
+    // Create a rectangle along the line from center to closest vertex
+    // thickness: how wide the rectangle is (perpendicular to the line)
+    // stickOut: how much the rectangle sticks out past the closest vertex
+    const thickness = 0.9; // Tune this value for rectangle width
+    const stickOut = 0.9;  // Tune this value for how much it sticks out
+    const dx = closestVertex.x - cx;
+    const dy = closestVertex.y - cy;
+    const norm = Math.sqrt(dx * dx + dy * dy);
+    // Perpendicular vector (normalized)
+    const perpX = -dy / norm;
+    const perpY = dx / norm;
+
+    // Start and end points of the line
+    const startX = cx;
+    const startY = cy;
+    const endX = closestVertex.x + (dx / norm) * stickOut;
+    const endY = closestVertex.y + (dy / norm) * stickOut;
+
+    // Four corners of the rectangle
+    const p1 = [startX + perpX * thickness / 2, startY + perpY * thickness / 2];
+    const p2 = [startX - perpX * thickness / 2, startY - perpY * thickness / 2];
+    const p3 = [endX - perpX * thickness / 2, endY - perpY * thickness / 2];
+    const p4 = [endX + perpX * thickness / 2, endY + perpY * thickness / 2];
+    const splittingRect = [[p1, p2, p3, p4, p1]];
+
+    // Convert splittingRect to array of {x, y} objects for drawPolygon
+    const rectPoints = splittingRect[0].map(([x, y]) => ({ x, y }));
+
+    if (debug) {
+        drawPolygonsWithColors([rectPoints], 0xff0080); // Draw the split rectangle in pink
+        console.log("splittingRect:", JSON.stringify(rectPoints));
+    }
+
     // Remove the contained polygon from the container
     let diff = window.martinez.diff(toMartinez(container), toMartinez(contained));
     console.assert(diff.length == 1, "Expected only one polygon after diff");
 
     // Remove the "splitting" polygon from the diff
-    diff = window.martinez.diff(diff[0], hackPoly);
+    diff = window.martinez.diff(diff[0], splittingRect);
     console.assert(diff.length == 1, "Expected only one polygon after diff");
-    console.log("martinez.diff result:", JSON.stringify(diff[0]));
+    if (debug) {
+        console.log("martinez.diff result:", JSON.stringify(diff[0]));
+    }
 
     // Split the polygon into multiple polygons
     return fromMartinez(diff[0]);
@@ -274,19 +335,6 @@ export function computeContourPolygons(binaryImage, center, size) {
     // So we close them first, then open them again
     polygons = polygons.map((poly) => closePolygon(simplify(poly, 3, false)));
 
-    let hackPoly = [[
-        [0, 0],
-        [200, 0],
-        [200, 200],
-        [0, 200],
-        [0, 0]
-    ]];
-
-    console.log(`hackPoly is ${JSON.stringify(hackPoly)}`);
-    // const pts = hackPoly[0].map(([x, y]) => ({ x, y }));
-    // drawPolygon(pts, 0xff0080);
-    // drawPolygon(fromMartinez(hackPoly), 0xff0080);
-
     // Subtract contained polygons from containing polygons
     let toProcess = polygons.slice();
     let resultPolygons = [];
@@ -304,48 +352,23 @@ export function computeContourPolygons(binaryImage, center, size) {
                 contained = toProcess[i];
                 removeIdx = i; // Remove contained
             }
-            
+
             if (container && contained) {
-                let splitPolys = subtractContainedPolygon(container, contained, hackPoly);
+                let splitPolys = subtractContainedPolygon(container, contained);
                 toProcess.splice(removeIdx, 1);
                 toProcess.push(...splitPolys);
                 found = true;
-
-                splitPolys.forEach((polygon) => {
-                    // Use a set of very bright, distinct colors
-                    const brightColors = [
-                    0xff0000, // Red
-                    0x00ff00, // Green
-                    0x0000ff, // Blue
-                    0xffff00, // Yellow
-                    0xff00ff, // Magenta
-                    0x00ffff, // Cyan
-                    0xffffff, // White
-                    0xff8000, // Orange
-                    0x00ff80, // Spring Green
-                    0x8000ff, // Purple
-                    0xff0080, // Pink
-                    0x80ff00, // Chartreuse
-                    0x0080ff, // Azure
-                    0x80ffff, // Light Cyan
-                    0xffff80, // Light Yellow
-                    0xff80ff, // Light Magenta
-                    0x80ff80, // Light Green
-                    0x8080ff, // Light Blue
-                    ];
-                    splitPolys.forEach((polygon, i) => {
-                    const color = brightColors[i % brightColors.length];
-                    drawPolygon(polygon, color);
-                    });
-                    return;
-                });
-
+                if (debug) {
+                    drawPolygonsWithColors(splitPolys);
+                }
                 break;
             }
         }
 
         if (!found) {
-            console.log("Not contained");
+            if (debug) {
+                console.log("Not contained");
+            }
             resultPolygons.push(poly);
         }
     }
@@ -360,13 +383,15 @@ export function computeContourPolygons(binaryImage, center, size) {
     const minPolygonArea = totalImageArea * minAreaPerc;
     pixiPolygons = pixiPolygons.filter(poly => area(poly) >= minPolygonArea);
 
-    console.log(`Created polygons: len ${pixiPolygons.length}`);
-    pixiPolygons.forEach((poly, idx) => {
-        console.log(`Polygon ${idx}:`);
-        poly.forEach((pt, j) => {
-            console.log(`  [${pt.x}, ${pt.y}]`);
+    if (debug) {
+        console.log(`Created polygons: len ${pixiPolygons.length}`);
+        pixiPolygons.forEach((poly, idx) => {
+            console.log(`Polygon ${idx}:`);
+            poly.forEach((pt, j) => {
+                console.log(`  [${pt.x}, ${pt.y}]`);
+            });
         });
-    });
+    }
 
     return pixiPolygons;
 }

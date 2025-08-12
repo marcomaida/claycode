@@ -6,6 +6,8 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
+import { drawPolygon } from "../packer/draw.js";
+
 // Slides a 3x3 kernel over the image.
 // If there are both zeroes and ones in the kernel, set all pixels in the kernel to one.
 export function closeSmallEmptyGaps(binaryImage) {
@@ -99,4 +101,32 @@ export function closeSmallIslands(binaryImage, island_percentage_threshold, isla
     }
 
     return binaryImage;
+}
+
+// Draws polygons with bright colors, or a single override color if provided
+export function drawPolygonsWithColors(polygons, overrideColor = null) {
+    const brightColors = [
+        0xff0000, // Red
+        0x00ff00, // Green
+        0x0000ff, // Blue
+        0xffff00, // Yellow
+        0xff00ff, // Magenta
+        0x00ffff, // Cyan
+        0xffffff, // White
+        0xff8000, // Orange
+        0x00ff80, // Spring Green
+        0x8000ff, // Purple
+        0xff0080, // Pink
+        0x80ff00, // Chartreuse
+        0x0080ff, // Azure
+        0x80ffff, // Light Cyan
+        0xffff80, // Light Yellow
+        0xff80ff, // Light Magenta
+        0x80ff80, // Light Green
+        0x8080ff, // Light Blue
+    ];
+    polygons.forEach((polygon, i) => {
+        const color = overrideColor !== null ? overrideColor : brightColors[i % brightColors.length];
+        drawPolygon(polygon, color);
+    });
 }
