@@ -342,34 +342,6 @@ export function isPointInPolygon(polygon, point) {
   return inside;
 }
 
-// Check if innerPoly is fully inside outerPoly
-export function isPolygonInside(innerPoly, outerPoly, debug = false) {
-    if (debug) {
-        console.log("Checking polygons:");
-        console.log("innerPoly:", innerPoly, "length:", innerPoly.length);
-        console.log("outerPoly:", outerPoly, "length:", outerPoly.length);
-    }
-
-    // All points of innerPoly inside outerPoly
-    let result = innerPoly.every(pt => {
-        let x = pt.x, y = pt.y;
-        let inside = false;
-        for (let i = 0, j = outerPoly.length - 1; i < outerPoly.length; j = i++) {
-            let xi = outerPoly[i].x, yi = outerPoly[i].y;
-            let xj = outerPoly[j].x, yj = outerPoly[j].y;
-            let intersect = ((yi > y) !== (yj > y)) &&
-                (x < (xj - xi) * (y - yi) / (yj - yi + 0.0000001) + xi);
-            if (intersect) inside = !inside;
-        }
-        return inside;
-    });
-
-    if (debug) {
-        console.log("Is polygon A is inside B:", result);
-    }
-    return result;
-}
-
 /**
  * Given two polygons, translates `child` so that its centroid 
  * is the same as `parent`
