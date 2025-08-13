@@ -237,7 +237,7 @@ function imagePolygonView(useLastTrees = false) {
 
     //******* Pack 
     let success = true;
-    if (currentPolygons) {
+    if (currentPolygons && currentPolygons.length > 0) {
       //*** Distribute fragments
       let MIN_AREA_PERC = 0.0 // if a polygon occupies less than this percent of the total area, it is ignored
       let fragmentsDistribution = distributeFragments(currentPolygons, inputRedundancy.value, MIN_AREA_PERC)
@@ -268,15 +268,15 @@ function imagePolygonView(useLastTrees = false) {
           success = false;
           break;
         }
-
-        infoSuffix += (success ? "" : "- Failed to Pack :(");
-        utils.updateInfoText(
-          null,
-          current_tree,
-          infoSuffix,
-        );
       }
     }
+
+    infoSuffix += (success ? "" : "- Failed to Pack :(");
+    utils.updateInfoText(
+      null,
+      current_tree,
+      infoSuffix,
+    );
   }
   let [WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_DIMENSION] = getWindowDimension();
 
