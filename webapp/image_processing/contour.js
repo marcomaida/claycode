@@ -6,8 +6,9 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
-import { closeSmallIslands, closeSmallEmptyGaps, drawPolygonsWithColors, openPolygon, closePolygon, toMartinez, fromMartinez } from "./util.js";
+import { closeSmallIslands, closeSmallEmptyGaps, openPolygon, closePolygon } from "./util.js";
 import { area } from "../geometry/geometry.js";
+import { subtractAllEnclosedPolygons } from "../geometry/polygon_hole_splitting.js";
 import "./simplify.js"
 
 const EMPTY = 0;
@@ -165,151 +166,6 @@ function posArraysToPixiVecArrays(polygons, center, size) {
     );
 }
 
-// Helper: check if polyA is fully inside polyB
-function isPolygonInside(polyA, polyB) {
-    if (debug) {
-        console.log("Checking polygons:");
-        console.log("polyA:", polyA, "length:", polyA.length);
-        console.log("polyB:", polyB, "length:", polyB.length);
-    }
-
-    // All points of polyA inside polyB
-    let result = polyA.every(pt => {
-        let x = pt.x, y = pt.y;
-        let inside = false;
-        for (let i = 0, j = polyB.length - 1; i < polyB.length; j = i++) {
-            let xi = polyB[i].x, yi = polyB[i].y;
-            let xj = polyB[j].x, yj = polyB[j].y;
-            let intersect = ((yi > y) !== (yj > y)) &&
-                (x < (xj - xi) * (y - yi) / (yj - yi + 0.0000001) + xi);
-            if (intersect) inside = !inside;
-        }
-        return inside;
-    });
-
-    if (debug) {
-        console.log("Is polygon A is inside B:", result);
-    }
-    return result;
-}
-
-// Subtract contained polygon from container and split result
-function subtractEnclosedPolygon(container, contained) {
-    // Compute center of contained polygon
-    let cx = 0, cy = 0;
-    for (const pt of contained) {
-        cx += pt.x;
-        cy += pt.y;
-    }
-    cx /= contained.length;
-    cy /= contained.length;
-
-    // Find closest vertex of container to center
-    let minDist = Infinity;
-    let closestIdx = -1;
-    for (let i = 0; i < container.length; i++) {
-        const dx = container[i].x - cx;
-        const dy = container[i].y - cy;
-        const dist = dx * dx + dy * dy;
-        if (dist < minDist) {
-            minDist = dist;
-            closestIdx = i;
-        }
-    }
-    const closestVertex = container[closestIdx];
-
-    // Create a rectangle along the line from center to closest vertex
-    // thickness: how wide the rectangle is (perpendicular to the line)
-    // stickOut: how much the rectangle sticks out past the closest vertex
-    const thickness = 0.9; // Tune this value for rectangle width
-    const stickOut = 0.9;  // Tune this value for how much it sticks out
-    const dx = closestVertex.x - cx;
-    const dy = closestVertex.y - cy;
-    const norm = Math.sqrt(dx * dx + dy * dy);
-    // Perpendicular vector (normalized)
-    const perpX = -dy / norm;
-    const perpY = dx / norm;
-
-    // Start and end points of the line
-    const startX = cx;
-    const startY = cy;
-    const endX = closestVertex.x + (dx / norm) * stickOut;
-    const endY = closestVertex.y + (dy / norm) * stickOut;
-
-    // Four corners of the rectangle
-    const p1 = [startX + perpX * thickness / 2, startY + perpY * thickness / 2];
-    const p2 = [startX - perpX * thickness / 2, startY - perpY * thickness / 2];
-    const p3 = [endX - perpX * thickness / 2, endY - perpY * thickness / 2];
-    const p4 = [endX + perpX * thickness / 2, endY + perpY * thickness / 2];
-    const splittingRect = [[p1, p2, p3, p4, p1]];
-
-    // Convert splittingRect to array of {x, y} objects for drawPolygon
-    const rectPoints = splittingRect[0].map(([x, y]) => ({ x, y }));
-
-    if (debug) {
-        drawPolygonsWithColors([rectPoints], 0xff0080); // Draw the split rectangle in pink
-        console.log("splitting rectangle:", JSON.stringify(rectPoints));
-    }
-
-    // Remove the contained polygon from the container
-    let diff = window.martinez.diff(toMartinez(container), toMartinez(contained));
-    console.assert(diff.length == 1, "Expected only one polygon after diff");
-
-    // Remove the "splitting" rectangle from the diff
-    diff = window.martinez.diff(diff[0], splittingRect);
-    console.assert(diff.length == 1, "Expected only one polygon after diff");
-    if (debug) {
-        console.log("martinez.diff result:", JSON.stringify(diff[0]));
-    }
-
-    return fromMartinez(diff[0]);
-}
-
-// Given an array of polygons, subtract all contained polygons from their containers,
-// and split the container to not leave holes. Check each pair in both directions.
-function subtractAllEnclosedPolygons(polygons) {
-    let toProcess = polygons.slice();
-    let resultPolygons = [];
-
-    if (debug) {
-        drawPolygonsWithColors(toProcess);
-    }
-
-    while (toProcess.length > 0) {
-        if (debug) {
-            console.log("Current toProcess polygons:", toProcess.map(p => p.length));
-        }
-
-        let poly = toProcess.shift();
-        let found = false;
-        for (let i = 0; i < toProcess.length; i++) {
-            let container = null, contained = null, removeIdx = null;
-            if (isPolygonInside(poly, toProcess[i])) {
-                container = toProcess[i];
-                contained = poly;
-                removeIdx = i; // Remove container
-            } else if (isPolygonInside(toProcess[i], poly)) {
-                container = poly;
-                contained = toProcess[i];
-                removeIdx = i; // Remove contained
-            }
-
-            if (container && contained) {
-                let splitPolys = subtractEnclosedPolygon(container, contained);
-                toProcess.splice(removeIdx, 1);
-                toProcess.push(...splitPolys);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            resultPolygons.push(poly);
-        }
-    }
-    return resultPolygons;
-}
-
 // Filter out polygons with area smaller than a percentage of the total image area
 function filterSmallPolygons(polygons, binaryImage, minAreaPerc = 0.01) {
     const totalImageArea = binaryImage.length * binaryImage[0].length;
@@ -359,7 +215,7 @@ export function computeContourPolygons(binaryImage, center, size) {
     polygons = polygons.map((poly) => closePolygon(simplify(poly, 3, false)));
 
     // Subtract contained polygons from containing polygons, splitting the container to not leave holes
-    let resultPolygons = subtractAllEnclosedPolygons(polygons);
+    let resultPolygons = subtractAllEnclosedPolygons(polygons, debug);
 
     // IMPORTANT: Re-open the polygon for the packer to work
     resultPolygons = resultPolygons.map((poly) => openPolygon(simplify(poly, 3, false)));
