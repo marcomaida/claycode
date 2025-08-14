@@ -87,15 +87,15 @@
 
 /* Media queries */
 @media (max-width: 480px) {
+  .header-nav {
+    display: none;
+  }
+  
   .gheader h1 {
     font-size: 16px;
   }
   
   .gimage img {
     width: 28px;
-  }
-  
-  .header-link {
-    font-size: 14px;
   }
 }
