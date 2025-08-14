@@ -6,8 +6,9 @@
  * SPDX-License-Identifier: MIT AND Commons-Clause
  */
 
-import { closeSmallIslands, closeSmallEmptyGaps } from "./util.js";
+import { closeSmallIslands, closeSmallEmptyGaps, openPolygon, closePolygon } from "./util.js";
 import { area } from "../geometry/geometry.js";
+import { subtractAllEnclosedPolygons } from "../geometry/polygon_hole_splitting.js";
 import "./simplify.js"
 
 const EMPTY = 0;
@@ -16,6 +17,8 @@ const CONTOUR = 2;
 const VISITED = -1;
 const cardinalDirections = [[1, 0], [0, 1], [-1, 0], [0, -1]]; // Used for neighbors
 const allDirections = cardinalDirections.concat([[1, 1], [1, -1], [-1, 1], [-1, -1]]); // Used for touching
+
+const debug = false; // Set to true to enable debugging drawings for polygons and logs
 
 function getNeighbors(mat, row, col, directions) {
     let ret = [];
@@ -163,6 +166,19 @@ function posArraysToPixiVecArrays(polygons, center, size) {
     );
 }
 
+// Filter out polygons with area smaller than a percentage of the total image area
+function filterSmallPolygons(polygons, binaryImage, minAreaPerc = 0.01) {
+    const totalImageArea = binaryImage.length * binaryImage[0].length;
+    const minPolygonArea = totalImageArea * minAreaPerc;
+    const filtered = polygons.filter(poly => area(poly) >= minPolygonArea);
+
+    if (debug) {
+        console.log(`Created ${filtered.length} final polygons`);
+        console.log("-----------------------");
+    }
+    return filtered;
+}
+
 /*
     Given a binary image, computes a set of non-overlapping polygons that covers the image.
     `size` specifies the size of the image in PIXI's coordinate system.
@@ -192,13 +208,21 @@ export function computeContourPolygons(binaryImage, center, size) {
     binaryImage = addPadding(binaryImage);
     binaryImage = markContours(binaryImage);
     let polygons = extractPolygonsFromContours(binaryImage);
-    polygons = polygons.map((poly) => simplify(poly, 1, false));
-    let pixiPolygons = posArraysToPixiVecArrays(polygons, center, size);
+
+    // IMPORTANT: The martinez library assumes that polygons are closed
+    // But the packer assumes that polygons are open
+    // So we close them first, then open them again
+    polygons = polygons.map((poly) => closePolygon(simplify(poly, 3, false)));
+
+    // Subtract contained polygons from containing polygons, splitting the container to not leave holes
+    let resultPolygons = subtractAllEnclosedPolygons(polygons, debug);
+
+    // IMPORTANT: Re-open the polygon for the packer to work
+    resultPolygons = resultPolygons.map((poly) => openPolygon(simplify(poly, 3, false)));
+    let pixiPolygons = posArraysToPixiVecArrays(resultPolygons, center, size);
 
     // Last safety measure: filter out polygons with a very small area
-    const totalImageArea = binaryImage.length * binaryImage[0].length;
-    const minAreaPerc = 0.01;
-    const minPolygonArea = totalImageArea * minAreaPerc;
-    pixiPolygons = pixiPolygons.filter(poly => area(poly) >= minPolygonArea);
+    pixiPolygons = filterSmallPolygons(pixiPolygons, binaryImage, 0.01);
+
     return pixiPolygons;
 }
