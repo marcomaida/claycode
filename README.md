@@ -9,6 +9,8 @@
 
 [![Claycode Demo Video](https://img.youtube.com/vi/Sx9k2iyXQhY/0.jpg)](https://www.youtube.com/watch?v=Sx9k2iyXQhY)
 
+[![Buy us a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20us%20a%20coffee&emoji=☕&slug=claycode&button_colour=FFDD00&font_colour=000000&font_family=Bree&outline_colour=000000&coffee_colour=ffffff)](https://buymeacoffee.com/claycode)
+
 ## Abstract
 
 This paper introduces Claycode, a novel 2D scannable code designed for extensive stylization and deformation. Unlike traditional matrix-based codes (e.g., QR codes), Claycodes encode their message in a tree structure. During the encoding process, bits are mapped into a topology tree, which is then depicted as a nesting of color regions drawn within the boundaries of a target polygon shape. When decoding, Claycodes are extracted and interpreted in real-time from a camera stream. We detail the end-to-end pipeline and show that Claycodes allow for extensive stylization without compromising their functionality. We then empirically demonstrate Claycode’s high tolerance to heavy deformations, outperforming traditional 2D scannable codes in scenarios where they typically fail.
