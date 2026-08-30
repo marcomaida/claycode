@@ -25,10 +25,10 @@ let currentPolygons = null;
 let currentFrameColor = 0x223d59
 let currentLeafShapeA = PackerBrush.Shape.STAR;
 let currentLeafShapeB = PackerBrush.Shape.STAR;
-let currentColorA = 0x223d59
-let currentColorB = 0xd3e7ee
-let currentLeafColorA = 0xfaf8a8
-let currentLeafColorB = 0xa05a41
+let currentColorA = 0xd3e7ee
+let currentColorB = 0x223d59
+let currentLeafColorA = 0xfffb8f
+let currentLeafColorB = 0x1c3247
 
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
