@@ -22,13 +22,13 @@ let currentTreesAndPolygons = null;
 let currentTexture = null;
 let currentSprite = null;
 let currentPolygons = null;
-let currentFrameColor = 0xffffff
-let currentLeafShapeA = PackerBrush.Shape.UNSPECIFIED;
-let currentLeafShapeB = PackerBrush.Shape.UNSPECIFIED;
-let currentColorA = 0xffffff
-let currentColorB = 0x000000
-let currentLeafColorA = 0xffffff
-let currentLeafColorB = 0x000000
+let currentFrameColor = 0x223d59
+let currentLeafShapeA = PackerBrush.Shape.STAR;
+let currentLeafShapeB = PackerBrush.Shape.STAR;
+let currentColorA = 0x223d59
+let currentColorB = 0xd3e7ee
+let currentLeafColorA = 0xfaf8a8
+let currentLeafColorB = 0xa05a41
 
 // Helper function to avoid too many calls to the drawing function
 // by fast-repeating keystrokes
@@ -158,6 +158,7 @@ async function init() {
 
   const leafShapeAPicker = document.getElementById("leafShapeAPicker")
   loadLeafShapePicker(leafShapeAPicker);
+  leafShapeAPicker.value = currentLeafShapeA;
   leafShapeAPicker.addEventListener("change", (event) => {
     currentLeafShapeA = event.target.value;
     debounce(imagePolygonView, 10, true);
@@ -165,6 +166,7 @@ async function init() {
 
   const leafShapeBPicker = document.getElementById("leafShapeBPicker")
   loadLeafShapePicker(leafShapeBPicker);
+  leafShapeBPicker.value = currentLeafShapeB;
   leafShapeBPicker.addEventListener("change", (event) => {
     currentLeafShapeB = event.target.value;
     debounce(imagePolygonView, 10, true);
@@ -178,13 +180,13 @@ async function init() {
     const hexNumber = parseInt(hexString, 16);
     if (event.detail.currentEl.id == "frameColorPicker")
       currentFrameColor = hexNumber
-    if (event.detail.currentEl.id == "colorBPicker")
-      currentColorA = hexNumber
     if (event.detail.currentEl.id == "colorAPicker")
+      currentColorA = hexNumber
+    if (event.detail.currentEl.id == "colorBPicker")
       currentColorB = hexNumber
-    if (event.detail.currentEl.id == "leafColorBPicker")
-      currentLeafColorA = hexNumber
     if (event.detail.currentEl.id == "leafColorAPicker")
+      currentLeafColorA = hexNumber
+    if (event.detail.currentEl.id == "leafColorBPicker")
       currentLeafColorB = hexNumber
     debounce(imagePolygonView, 10, true);
   });
