@@ -7,7 +7,7 @@
  */
 
 // Import from common library
-import { TextBitsConverter, BitTreeConverter } from '../common/index.js';
+import { BitString, BitsValidator, TextBitsConverter, BitTreeConverter } from '../common/index.js';
 
 /* This is the external interface of the conversion functions.
    Modify these functions to change the scenes behavior. */
@@ -17,7 +17,12 @@ export function textToBits(text) {
 }
 
 export function bitsToText(bits) {
-  return TextBitsConverter.bitsToText(bits);
+  const bitString = bits instanceof BitString
+    ? bits
+    : new BitString(Array.isArray(bits) ? bits.join('') : bits);
+  const validatedBits = BitsValidator.getValidatedBitString(bitString);
+
+  return validatedBits ? TextBitsConverter.bitsToText(validatedBits) : "";
 }
 
 export function bitsToTree(bitsArray) {
@@ -25,7 +30,7 @@ export function bitsToTree(bitsArray) {
 }
 
 export function treeToBits(tree) {
-  return BitTreeConverter.treeToBits(tree);
+  return BitTreeConverter.treeToBits(tree).toString().split('').map(Number);
 }
 
 export function textToTree(text) {

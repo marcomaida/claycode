@@ -19,7 +19,7 @@ export class BitTreeConverter {
     static treeToBits(tree) {
         if (!tree) return new BitString("");
 
-        const number = this.treeToNumber(tree);
+        const number = this.treeToNumber(tree.root);
         return this.numberToBitString(number);
     }
 
